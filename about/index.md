@@ -1,8 +1,8 @@
 ---
 layout: page
-title: About the Theme
-tags: [about, Jekyll, theme, moon]
-date: 2016-03-21
+title: About Silver Gamer
+tags: [about, SilverGamer, theme, moon]
+date: 2021-09-24
 comments: false
 ---
     
