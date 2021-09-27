@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Silver Gamer"
-date:   2021-09-24
+date:   2016-09-24
 excerpt: "Game Engine Developer. Gamer."
 project: true
 tag:
