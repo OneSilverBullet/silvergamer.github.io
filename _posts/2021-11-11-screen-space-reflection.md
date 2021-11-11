@@ -10,6 +10,7 @@ tag:
 - Global Illumination
 comments: true
 paper: true
+feature: https://github.com/OneSilverBullet/SilverGamer.GitHub.io/blob/gh-pages/_img/blogHead/SSR.jpg?raw=true
 ---
 
 ## Overview
@@ -51,14 +52,15 @@ paper: true
 * These calculated uv coordinates can be saved to a framebuffer, and used later when the scene has been rendered.
 
 
-{% highlight css %}
+{% highlight cpp %}
 uniform mat4 cameraProjection;
 uniform sampler2D viewSpacePositionTex;
 uniform sampler2D normalTex;
 {% endhighlight %}
+
 The Data needed for SSR.
 
-{% highlight css %}
+{% highlight cpp %}
 float maxDistance = 15;
 float resolution = 0.3;
 int steps = 10;
@@ -76,7 +78,7 @@ Some Defination:
 * steps: how many iterations occur during the second pass.
 * thickness: It controls the cutoff between what counts as a possible reflection and what does not.
 
-{% highlight css %}
+{% highlight cpp %}
 vec2 texSize = textureSize(viewSpacePositionTex, 0).xy;
 vec2 texCoord = gl_FragCoord.xy / texSize;
 vec4 positionFrom = texture(viewSpacePositionTex, texCoord);
@@ -89,14 +91,14 @@ vec3 pivot = normalize(reflect(unitPositionFrom, normal));
 * normal: the vector pointing in the direction of the interpolated vertex normal for the current fragment.
 * pivot: the reflection ray or vector pointing in the reflected direction of the positionFrom vector.
 
-{% highlight css %}
+{% highlight cpp %}
 vec4 startViewPoint = vec4(positionFrom.xyz + (pivot * 0), 1);
 vec4 endViewPoint = vec4(positionFrom.xyz + (pivot * maxDistance), 1);
 {% endhighlight %}
 
 Get the start and end point of reflection ray in view space.
 
-{% highlight css %}
+{% highlight cpp %}
 vec4 startFrag = startViewPosition;
 startFrag = cameraProjection * startFrag;
 startFrag.xyz /= startFrag.w;
@@ -114,33 +116,33 @@ Project and transform the start view position and end view position to the scree
 
 Screen Space Reflection uses marching in screen space, which is more efficiently than marching in view space.
 
-{% highlight css %}
+{% highlight cpp %}
 vec2 frag = startFrag.xy;
 uv.xy = frag / texSize;
 {% endhighlight %}
 
 Converting the fragment position to UV coordinate.
 
-{% highlight css %}
+{% highlight cpp %}
 float deltaX = endFrag.x - startFrag.x;
 float deltaY = endFrag.y - startFrag.y;
 {% endhighlight %}
 
 Calculate the delta or difference between the X and Y coordinates of the end and start fragments.
 
-{% highlight css %}
+{% highlight cpp %}
 float useX = abs(deltaX) >= abs(deltaY) ? 1 : 0;
 float delta = mix(abs(deltaY), abs(deltaX), useX) * clamp(resolution, 0, 1);
 {% endhighlight %}
 To handle all of various different ways, we should keep track of the larger difference. The larger difference help us to determine how much to travel in X and Y direction each iteration.
 
-{% highlight css %}
+{% highlight cpp %}
 vec2 increment = vec2(deltaX, deltaY) / max(delta, 0.001);
 {% endhighlight %}
 
 The increment is the step we move every iteration.
 
-{% highlight css %}
+{% highlight cpp %}
 float search0 = 0;
 float search1 = 0;
 current_position_x = start_x * (1 - search1) + end_x * search1;
@@ -150,7 +152,7 @@ current_position_y = start_y * (1 - search1) + end_y * search1;
 * search1 is  the linear interpolation factor.
 * search0 is used to remember the last position on the line where the ray missed or didnt intersect with any geometry.
 
-{% highlight css %}
+{% highlight cpp %}
 int hit0 = 0;
 int hit1 = 0;
 {% endhighlight %}
@@ -158,7 +160,7 @@ int hit1 = 0;
 * hit0: there was an intersection during the first pass.
 * hit1: there was an intersection during the second pass.
 
-{% highlight css %}
+{% highlight cpp %}
 float viewDistance = startView.y;
 float depth = thickness;
 {% endhighlight %}
@@ -166,7 +168,7 @@ float depth = thickness;
 * viewDistance: how far away from the camera to the current fragment.
 * depth: the view distance difference between the current ray point and scene position. It tells us how far behind or in front of the scene the ray currently is.
 
-{% highlight css %}
+{% highlight cpp %}
 //The first pass: to get a cursory point.
 for (int i = 0; i < int(delta); ++i) {
     frag += increment;
@@ -204,7 +206,7 @@ The first pass is the process of advancing the current fragment position closer 
 - Be attention, the viewdistance is calculated by  perspective-correct interpolation.
 - Seach0 record the last iteration
 
-{% highlight css %}
+{% highlight cpp %}
 //The second pass
 search1 = search0 + ((search1 - search0) / 2.0);
 steps *= hit0;
@@ -231,7 +233,7 @@ for (i = 0; i < steps; ++i) {
 - Search1 is initialized as a value between the search0 and search1.
 - The whole process is just like a dicotomizing search. In steps iterations, we can get a refinement for the hit point position.
 
-{% highlight css %}
+{% highlight cpp %}
 //final step: calculate the visible of the current hit point.
   float visibility =
       hit1 //step1
@@ -273,7 +275,7 @@ The visible of the reflection point is affected by five factors:
 * step5: Fade out the reflection based on how far way the reflected point is from the initial start point.
 * step6: the point out of clip space.
 
-{% highlight css %}
+{% highlight cpp %}
   uv.ba = vec2(visibility);
   fragColor = uv;
 {% endhighlight %}
@@ -292,7 +294,7 @@ In my opinion, to make ssr support PBR material, we should calculate specular te
 
 Once we get the reflected uv texture, looking up the reflected colors is fairly easy. 
 
-{% highlight css %}
+{% highlight cpp %}
 //get current fragment's uv
 vec2 texSize  = textureSize(uvTexture, 0).xy;
 vec2 texCoord = gl_FragCoord.xy / texSize;
@@ -317,7 +319,7 @@ Blur the reflected colors and store the blur texture in a framebuffer. The blurr
 
 The final SSR effect is influenced by reflected color and blur reflected color.
 
-{% highlight css %}
+{% highlight cpp %}
 //Input texture.
 uniform sampler2D colorTexture; 
 uniform sampler2D colorBlurTexture;
