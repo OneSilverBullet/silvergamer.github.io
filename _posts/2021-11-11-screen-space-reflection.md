@@ -10,7 +10,7 @@ tag:
 - Global Illumination
 comments: true
 paper: true
-feature: https://github.com/OneSilverBullet/SilverGamer.GitHub.io/blob/gh-pages/_img/blogHead/SSR.jpg?raw=true
+feature: https://github.com/OneSilverBullet/SilverGamer.GitHub.io/blob/gh-pages/_img/blogHead/SSR.jpg
 ---
 
 ## Overview
