@@ -9,7 +9,7 @@ tag:
 - Graphics
 - Global Illumination
 comments: true
-paper: true
+blog: true
 feature: https://github.com/OneSilverBullet/SilverGamer.GitHub.io/blob/gh-pages/_img/blogHead/SSR.jpg
 ---
 

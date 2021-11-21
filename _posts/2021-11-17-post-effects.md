@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Dilation & Depth of Field"
+title:  "Post Effects"
 date:   2021-11-17
 excerpt: "The post effects that you cant live without once you have used."
 tag:
@@ -8,7 +8,7 @@ tag:
 - Screen Space
 - Graphics
 comments: true
-paper: true
+blog: true
 feature: https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/blogHead/DOF.jpg
 ---
 ## Overview
@@ -144,5 +144,139 @@ The vertex position in view space.
 
 We can determine current fragment color by mixing the focus color and out of focus color, according to the blur factor. The blur factor can be calculated by the depth difference between the focus point and current fragment.
 
+
+
+
+## Motion Blur
+
+### Overview
+
+The motion blur technique is divide into two categories. The less involved implementation will only blur the screen in relation with camera. The more involved implementation will blur any moving objcet even with camera remaining still.
+
+This paper talks about the less involved version, the principle is the same with the more involved version.
+
+### Implementation
+
+#### Preparation
+
+{% highlight cpp %}
+uniform sampler2D positionTexture;
+uniform sampler2D colorTexture;
+uniform mat4 previousViewWorldMat;
+uniform mat4 worldViewMat;
+uniform mat4 lensProjection;
+{% endhighlight %}
+
+* positionTexture: vertex position in view space.
+* colorTexture: normal render texture.
+* previousViewWorldMat: the previous frame's view to world matrix.
+* worldViewMat: the current world to view matrix.
+* lensProjection: the camera lens' projection matrix.
+
+{% highlight cpp %}
+uniform int size;
+uniform float separation;
+{% endhighlight %}
+
+The adjustment factors.
+
+* size: how many samples are taken along the blur direction.
+* separation: increases the amount of blur at the cost of accuracy.
+
+#### Core
+
+{% highlight cpp %}
+  vec2 texSize  = textureSize(colorTexture, 0).xy;
+  vec2 texCoord = gl_FragCoord.xy / texSize;
+
+  vec4 position1 = texture(positionTexture, texCoord);
+  vec4 position0 = worldViewMat * previousViewWorldMat * position1;
+{% endhighlight %}
+
+Firstly, we calculate the texCoord in current fragment. 
+
+* position1: where the things are now, sample the current vertex position.
+* position0: this fragment's previous interpolated vertex position.
+
+
+{% highlight cpp %}
+  position0      = lensProjection * position0;
+  position0.xyz /= position0.w;
+  position0.xy   = position0.xy * 0.5 + 0.5;
+
+  position1      = lensProjection * position1;
+  position1.xyz /= position1.w;
+  position1.xy   = position1.xy * 0.5 + 0.5;=
+{% endhighlight %}
+
+Get the fragment's coordinate in screen space.
+
+{% highlight cpp %}
+  vec2 direction    = position1.xy - position0.xy;
+
+  if (length(direction) <= 0.0) { return; }
+{% endhighlight %}
+
+Get the direction from previous frame's uv to current frame's uv.
+
+{% highlight cpp %}
+ direction.xy *= separation;
+
+  vec2 forward  = texCoord;
+  vec2 backward = texCoord;
+
+  float count = 1.0;
+
+  for (int i = 0; i < size; ++i) {
+    forward  += direction;
+    backward -= direction;
+
+    fragColor +=
+      texture
+        ( colorTexture
+        , forward
+        );
+    fragColor +=
+      texture
+        ( colorTexture
+        , backward
+        );
+
+    count += 2.0;
+  }
+
+  fragColor /= count;
+{% endhighlight %}
+ From current fragment, we will extend the forward direction and backward direction.
+ Finally, we will make an average among these sample colors.
+ 
+ 
+## Pixelization
+
+### Overview
+ 
+ Pixelization helps you to save you time by not having to create all of the pixel art.
+ 
+ ### Implementation
+ 
+{% highlight cpp %}
+ int pixelSize = 5;
+{% endhighlight %}
+ * pixelSize: the level of the scene's pixelization.
+ 
+{% highlight cpp %}
+  float x = int(gl_FragCoord.x) % pixelSize;
+  float y = int(gl_FragCoord.y) % pixelSize;
+
+  x = floor(pixelSize / 2.0) - x;
+  y = floor(pixelSize / 2.0) - y;
+
+  x = gl_FragCoord.x + x;
+  y = gl_FragCoord.y + y;
+  
+  fragColor = texture(colorTexture, vec2(x, y) / texSize);
+{% endhighlight %}
+
+In one word, we will sample the screen color in a block way. The center of the window fragments determine the color the other fragments in their window.
 
 
