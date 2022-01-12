@@ -66,7 +66,14 @@ WNDCLASS wc;
 	UpdateWindow(m_mainWnd);
 {% endhighlight %}
 
-
+{% highlight cpp %}
+ fragColor.rgb =
+    mix
+      ( fragColor.rgb
+      , cmx.rgb
+      , smoothstep(minThreshold, maxThreshold, mx)
+      );
+{% endhighlight %}
 <figure>
     <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/DirectXP1Fig/DataStructure.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/DirectXP1Fig/DataStructure.png" align="center"></a>
     <figcaption>DirectX12 Basic Data Structure.</figcaption>
