@@ -1,33 +1,68 @@
 ---
 layout: page
-title: About Silver Gamer
-tags: [about, SilverGamer, theme, moon]
-date: 2021-09-24
+title: SILVER ALEX
+tags: [CV]
+date: 2023-09-15
+
 comments: false
 ---
     
-<center><a href="https://github.com/OneSilverBullet?tab=repositories"><b>I</b></a> am a Game Engine Developer and Graphics coder.</center>
+<center>email: silveralex2023820@gmail.com</center>
 
-## About My Name
-This name comes from the Silver Expeditionary Army by Warcraft. Warcraft had a profound influence on me, which threw me into game development. Without the support of my parents, teachers, and society, I have been sticking to the road of game development for seven years. Though the game industry is criticized in China, I still firmly believe that game development is the intention I possess pursued all my life. I hope I have the same courage as the Silver Expeditionary Army, no matter the ending, as a silver player until the end of life.
+## SKILLS
+Skills: Computer Graphics • Video Game Development • Deep Learning  
 
-## About My Experience
-* 2021 - now   Game Engine Developer, Netease.
-* 2018 - 2021  Master Degree, Tianjin University.
-* 2014 - 2018  Bachelor Degree, Northeast University.
+Programming: C++(Advanced) • C#(Intermediate) • Python(Intermediate)  
 
-## About My Skill
+Frameworks: OpenGL • DirectX12 • Unreal Lightmass • Pytorch • Recast Lib 
 
-{% capture images %}
-    https://cloud.githubusercontent.com/assets/754514/14509720/61c61058-01d6-11e6-93ab-0918515ecd56.png
-    https://cloud.githubusercontent.com/assets/754514/14509716/61ac6c8e-01d6-11e6-879f-8308883de790.png
-{% endcapture %}
-{% include gallery images=images caption="Screenshots of Moon Theme" cols=2 %}
+Developer Tools: Visual Studio • Unity • Pycharm • Renderdoc • Git • Photoshop  
 
-See a [live version of Moon](http://taylantatli.github.io/Moon) hosted on GitHub.
+Languages: French(Basic) • English(CLB Level 7) • Chinese(Mother tongue) 
 
-## Getting Started
+## WORK EXPERIENCE 
 
-To learn how to install and use this theme check out the [Setup Guide](http://taylantatli.me/Moon/moon-theme/) for more information.
-      
-[Install Moon](https://github.com/TaylanTatli/Moon){: .btn}
+### Game Engine Programmer, Netease Game `2021.2 - 2023.8`
+_Hangzhou, Zhejiang, China_
+
+- Decreased the **memorizer cost of Baked Global Illumination Data** by using Moving Basis Decomposition Method which achieved **10 times compact rate**. 
+
+- Boosted the **performance of compacted light probe** by merging Machine Learning Method and Spherical Harmonics Rebuild Process without more cost. 
+
+- Decreased the influence of **Light Leak Problem** by designing Machine Learning method. The solution matched  requirements of open world global illumination, which was used in Game: Once Human. 
+
+- Developed a **space navigation solution** by designing tetrahedron space navigation algorithm, which is **5 times** faster than 3D Flight Navigation Using Sparse Voxel Octree. 
+
+- Core Competencies: Problem Solving, Research, Innovation, Communication(Oral). 
+
+
+## EDUCATION
+
+### Concordia University  `2023.9 - Present` 
+_Montreal, QC, Canada_
+- Master of Engineering – Electrical and Computer Engineering Co-op
+
+### Tianjin University  `2018.9 - 2021.1` 
+_Tianjin, China_
+- Master of Engineering(Academic) – Software Engineering
+- Relevant Courses: Software Architecture, Advanced Computer Graphics, Data Mining 
+- Research Orientation:  Medical Images Processing with Deep Learning 
+
+
+### Northeastern University  `2014.9 - 2018.6` 
+_Shenyang, China_
+- Relevant Courses: Computer Graphics, Programming of Computer Game, Data Structure 
+- GPA 3.86/5.00 (top 5%) 
+- Awards: Outstanding graduates of Northeastern University  
+
+
+## Publications
+
+### [__Cascade Marker Removal Algorithm for Thyroid Ultrasound Image__](https://pubmed.ncbi.nlm.nih.gov/32840765/)
+ _Med Biol Eng Comput. 2020 Nov;58(11):2641-2656._ <br>
+
+
+### [__MSDAN: Multi-Scale Self-Attention Unsupervised Domain Adaptation Network for Thyroid Ultrasound Images__](https://ieeexplore.ieee.org/document/9313202)
+ _2020 IEEE International Conference on Bioinformatics and Biomedicine (BIBM)_ <br>
+
+
