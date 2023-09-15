@@ -1,6 +1,6 @@
 # Site
-title:              Silver Gamer
-bio:                'Game Engine Developer. Graphics and Game Coder.'
+title:              Silver Alex
+bio:                'Graphics Programmer & Game Developer.'
 description:        "That which does not kill us makes us stronger."
 reading_time:       true
 words_per_minute:   200
@@ -9,7 +9,7 @@ background:         'assets/img/placeholder-big.jpg'
 tiled_bg:           false   # Set this true if you want to tile your background image, otherwise it will be covered
 locale:             en_US
 #url:                http://127.0.0.1:4000/
-url:               https://onesilverbullet.github.io/SilverGamer.GitHub.io
+url:               https://onesilverbullet.github.io/silvergamer.github.io
 
 # Jekyll
 permalink:          /:title/
