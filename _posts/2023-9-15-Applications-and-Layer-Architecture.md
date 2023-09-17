@@ -1,18 +1,18 @@
 ---
 layout: post
-title:  ""
-date:   2023-9-15
+title:  "The Application and Layer Archinecture of Communication Network"
+date:   2023-9-17
 excerpt: "The basic conceptions of network."
 tag:
 - Network
-comments: true
+comments: false
 blog: true
-feature: https://github.com/OneSilverBullet/SilverGamer.GitHub.io/blob/gh-pages/_img/blogHead/directX12partI.jpg
+feature: https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/blogHead/directX12partI.jpg
 ---
 
 ## 1.Overview
 
-### Conceptions
+### 1.1 Conceptions
 
 Network Architecture: a set of protocols that specify how every layer is to function.
 
@@ -42,20 +42,18 @@ Globally Unique IP Address: each host is identified by it.
 
 Router: a node that is attached to two or more physical networks.
 
-
-
-### HTTP & Web Browsing Example
+### 1.2 HTTP & Web Browsing Example
 
 HyperText Transfer Protocal(HTTP): specifies rules by which the client and server interact to retrieve a document.
 
-### DNS Query
+### 1.3 DNS Query
 
-### SMTP & E-mail
+### 1.4 SMTP & E-mail
 
 Simple Mail Transfer Protocal(SMTP):
 
 
-### TCP and UDP Transport Layer Services
+### 1.5 TCP and UDP Transport Layer Services
 
 Both the TCP and UDP protocols operate by using **the connectionless packet network service** porivided by IP.
 
@@ -88,10 +86,14 @@ The OSI Reference Model:
 Each Layer adds a header, and also a trailer.
 
 <figure>
-    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/DirectXP1Fig/DataStructure.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/DirectXP1Fig/DataStructure.png" align="center"></a>
-    <figcaption>DirectX12 Basic Data Structure.</figcaption>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/OSI.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/OSI.png" align="center"></a>
+    <figcaption>OSI Reference Model.</figcaption>
 </figure>
 
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/OSI2.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/OSI2.png" align="center"></a>
+    <figcaption>OSI Reference Model.</figcaption>
+</figure>
 
 ## 3. Unified View of Layers, Protocols, Services
 
@@ -105,6 +107,11 @@ Layer n entities: the processes at layer n.
 Layer n entities proporties:
 * Layer n entities communicate by exchanging protocol data unit(PDU).
 Communication between the entities is usually virtual in the scense that no direct communication links exists between them.
+
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/Peer2Peer.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/Peer2Peer.png" align="center"></a>
+    <figcaption>Peer to Peer Connection.</figcaption>
+</figure>
 
 
 For communication to take place, **the layer n+1 entities make use of the service provided by layer n.**
@@ -125,6 +132,13 @@ A: The block of information passed between layer n and layer n+1 entities consis
 Layer n+1 as a user of the service provided by layer n, is only interested in the correct execution of the service required to transfer its PDUs. The implement details below layer n+1 are irrelevant.
 
 The service provided by the layer involves accepting a block of information from layer n+1, transfering the information to its peer process, which in turn delivers the block to the user at layer n+1.
+
+
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/EntitiesService.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/EntitiesService.png" align="center"></a>
+    <figcaption>Entities Connection.</figcaption>
+</figure>
+
 
 ### 3.2 Service Type
 
@@ -147,6 +161,9 @@ The service provided by the layer n can be confirmed or unconfirmed depending on
 * The connectionless service can  be confirmed or unconfirmed depending on **whether the sending entity needs to receive an acknowledgement**.
 
 
+
+
+
 ### 3.3 Segmentation & Reassembly
 
 If the layer n SDU is too large:
@@ -161,6 +178,12 @@ If the layer n SDU is too small:
 Blocking: the layer n entity block several layer n SDUs int oa single layer n PDU.
 
 Unblocking: the other layer n entity must unblock the received PDU into the individual layer n SDUs.
+
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/Seg.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/Seg.png" align="center"></a>
+    <figcaption>Segmentation & Reassembly, Blocking & Unblocking.</figcaption>
+</figure>
+
 
 
 ### 3.4 Multiplexing
@@ -183,6 +206,15 @@ Splitting: the use of several layer n services to support a single layer n+1 use
 Recombination: take place at the destination where the SDUs recovered from each of the layer n entities are passed to the layer n+1 user.
 
 Usage: Increase reliability.
+
+
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/Multiplexing.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/Multiplexing.png" align="center"></a>
+    <figcaption>Multiplexing Situation.</figcaption>
+</figure>
+
+
+
 
 
 
@@ -209,6 +241,19 @@ The TCP/IP model does not require strict layering, and it contains four layers:
 (4) the network interface layer: is connected with the network-specific aspects of the transfer of packets.
 * the network interface layer is particularly concerned with the protocols that access the intermediate networks.
 
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/TCPIP.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/TCPIP.png" align="center"></a>
+    <figcaption>TCP/IP Model.</figcaption>
+</figure>
+
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/TCPIP2.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/TCPIP2.png" align="center"></a>
+    <figcaption>TCP/IP Model.</figcaption>
+</figure>
+
+
+
+
 ## 4.2 TCP/IP Protocol: The process of layers working together
 
 On a LAN the attachment of a device to the network is often identified by a phisical address.
@@ -233,6 +278,13 @@ Receiver information transfer between layers:
 End-to-end process-to-process connection: let the receiver know which connection the message correspond to.
 * socket address: the port number, the IP address, the protocol type.
 * the source socket address and the destination socket address together uniquely specify the connection between the server process and client process.
+
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/EthernetPDU.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/EthernetPDU.png" align="center"></a>
+    <figcaption>TCP/IP Model.</figcaption>
+</figure>
+
+
 
 ## 4.3 TCP/IP Protocol: Sending and Receiving IP Datagrams
 
