@@ -74,13 +74,19 @@ The OSI Reference Model:
 
 (1) Physical Layer: deals with the transfer of bits over a communication channel.
 * concern with the procedures to set up and release the physical connection.
+
 (2) Data Link Layer: provides for the transfer of frames(blocks of information) across a transmission link that directly connects two nodes. Insert framing information.
+
 (3)Network Layer: provides for the transfer of data in the form of packets across a communication network.
+
 (4) Transport Layer: is responsible for the end-to-end transfer of messages from a process in the source machine to  a process in the destination machine.
 * accepts messages from higher layers
 * prepare segments or datagrams
+
 (5) Session Layer: control the manner in which data are exchanged.
+
 (6) Presentation Layer: provide the application layer with independence from differences in the representation of data.
+
 (7) Application Layer: provide services that are frequently required by applications that involve communications.
 
 Each Layer adds a header, and also a trailer.
@@ -117,11 +123,13 @@ Communication between the entities is usually virtual in the scense that no dire
 For communication to take place, **the layer n+1 entities make use of the service provided by layer n.**
 
 Q: How to transmit the layer n+1 PDU?
+
 A: pass a block of information from layer n+1 through **the layer n access point(SAP)** across a service interface.
 * SAP is a software port.
 * Each SAP is identified by a unique identifier.
 
 Q: What is the block of information?
+
 A: The block of information passed between layer n and layer n+1 entities consists of **control information** and **a layer n service data unit(SDU)**.
 * The layer n SDU is the layer n+1 PDU, and the layer n SDU is **encapsulated** in the layer n PDU.
 * The layer n entity uses the control information to form a header that is attached to the SDU to produce **the layer n PDU**.
@@ -145,14 +153,19 @@ The service provided by the layer involves accepting a block of information from
 The service provided by the layer can be **connection oriented** or **connectionless**.
 
 Connection-Oriented Service Phases:
+
 (1) Establishing  a connection between two layer n SAPs.
 * intializing state information: the sequence number, flow control variables, buffer allocation.
+
 (2) Transferring layer n-SDU using the layer n protocol.
+
 (3) Tearing down the connection and releasing the resources.
 Example: the HTTP and the TCP.
 
 Connectionless service：
+
 (1) Each SDU transmitted directly through the SAP.
+
 (2) The control information that is passed from layer n+1 to layer n must contain all the address information required to transfer the SDU.
 Example: the DNS and the UDP.
 
@@ -228,6 +241,7 @@ The TCP/IP model does not require strict layering, and it contains four layers:
 (1) Application Layer: provide services that can be used by other applications.
 * incorporate the function of the top three layer of OSI Layers.
 * application layer programs are intended to run directly over the transport layer.
+
 (2) Transport Layer:
 * have two types of services:
 	* Transmission Control Protocol(TCP): consists of reliable connection-oriented transfer of a byte stream.
@@ -268,11 +282,14 @@ Sender information transfer between layers:
 	* protocol field: designate the layer that is operating above IP.
 	* IP Address of sender.
 	* IP Address of destination.
+
 (2) The IP datagram is then encapsulated using PPP and then sent to the server.
 
 Receiver information transfer between layers:
 (1) The server NIC captures the Ethernet frame and extracts the IP datagram and passes it to IP entity. 
+
 (2) The protocal field in IP header indicates that a TCP segment is to be extracted and passed on to the TCP layer.
+
 (3) The TCP layer uses the port number to find out that the message is likely to be passed to the HTTP server process.
 
 End-to-end process-to-process connection: let the receiver know which connection the message correspond to.
@@ -293,11 +310,14 @@ End-to-end process-to-process connection: let the receiver know which connection
 (1) The IP entity of client looks at its routing table to see whether it has an entry for the compelete IP address.
 * find the server is connected to the same Ethernet.
 * find the physical address of the server
+
 (2) The IP datagram is passed to the Ethernet Device Driver, and prepare the Ethernet Frame.
 * source physical address w.
 * destination physical address s.
 * protocol control field
+
 (3) The Ethernet frame is broadcast over the LAN.
+
 (4) The server's NIC recognizes that the frame is intended for its host, so the card captures the frame and examines it.
 
 
@@ -306,10 +326,13 @@ End-to-end process-to-process connection: let the receiver know which connection
 * The IP entity of client looks at its routing table to see whether it has an entry for the complete IP address of the PC.
 * The IP entity then checks to see whether it has a routing table entry that matches the network id portion of the IP portion of the IP address of the PC.
 * The IP entity then checks to see whether it has an entry that specifies a default router.
+
 (2) The IP datagram is passed to the Ethernet device driver, and prepares an Ethernet Frame, and broadcast the LAN.
 * source physical address
 * destination physical address
+
 (3) The router's NIC captures the Ethernet frame and examines it.
+
 (4) The router finds out the routing table, ecapsulates the examined IP datagram into Ethernet frame and sends it directly to the target.
 
 
