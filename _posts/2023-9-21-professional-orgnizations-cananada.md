@@ -13,6 +13,7 @@ feature: https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io
 ## 1. The professional  system in Canada
 
 The two factors of professional system in Canada:
+
 (1) One of the factors that make it very unique is **the formal nature of control over individual professionals**. 
 * the formal control created by professional associations statutory bodies.
 
@@ -92,6 +93,13 @@ Members govern the order by financing, creating professional regulations, and cr
 * Verifing competence and integrity for admission.
 * Maintenance of professional competence.
 * Supervision of professional practice.
+
+
+
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Law/process.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Law/process.png" align="center"></a>
+    <figcaption>The process flow diagram.</figcaption>
+</figure>
 
 
 ### 3.4 Management of Professional Orders
