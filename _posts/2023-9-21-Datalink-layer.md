@@ -209,3 +209,156 @@ $$2(t_{prop} + t_{proc})R$$
     <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/performanceARQ2.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/performanceARQ2.png" align="center"></a>
     <figcaption>The performance of ARQ.</figcaption>
 </figure>
+
+* P_f: the probability that a frame has errors.
+
+The Stop-and-wait ARQ on average time cost of transferring a frame:
+
+$$t_{SW} = t_0 / (1 - P_f)$$
+
+The transmission efficiency with the error probability:
+
+$$η_{SW} = (n_f - n_o) / t_{SW} / R$$
+
+$$η_{SW} = ((1 - n_o / n_f) / (1 +  n_a / n_f  + 2(t_{prop} + t_{proc})R / n_f))(1-P_f)$$
+
+
+The probability that a single bit gets through without error:
+
+$$1- p$$
+
+The probability that all nf get through assuming random bit errors:
+
+$$1-P_f = (1 - p) ^{n_f}$$
+
+
+
+### 2.3 GO-BACK-N ARQ
+
+#### 2.3.1 Interaction Process of GO-BACK-N ARQ
+
+The go-back-n ARQ forms the basis of HDLC Data Link Protocol.
+
+The transmitter has a limit on the number of frames Ws.
+
+Window size Ws is choosen larger than the delay-bandwidth product to ensure that the channel or pipe is kept full.
+
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/Goback4.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/Goback4.png" align="center"></a>
+    <figcaption>The GO-BACK-N ARQ.</figcaption>
+</figure>
+
+
+
+Pipelined: A procedure where the processing of a new task is begun before the completion of the previous task.
+
+Go-back-N ARQ base on pipelined mechanism. If there is a frame in error, the transmitter will reaches the maximum number of outstanding frames. Then it is **forced to go back N(Ws) frames**.
+
+* Go-back-N ARQ as stated above depends on the transmitter exhausting its maximum number of oustanding frames to trigger the retransmission of a frame.
+
+
+Q: If packets arrive sporadically, there may not be Ws - 1 subsequent transmissions.
+
+A: a timer is associated with each transmitted frame.
+* the transmitter maintain a list of the frames that it is processing.
+* S_last is the number of last transmitted frame that remain unacknowledged.
+* S_recent is the number of the most recently transmitted frame.
+* The lower end of the window is given by S_last, the upper limit of the transmitter window is S_last + Ws - 1.
+
+If S_recent reaches the upper limit of the window, the transmitter is not allowed to transmit further new frames until the send window "slides" foward with the receipt of a new acknowledgement.
+
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/TrueARQ.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/TrueARQ.png" align="center"></a>
+    <figcaption>The true mechanism of ARQ: every frame associate with a timer.</figcaption>
+</figure>
+
+
+Go-back-n ARQ is an example of **sliding-window protocol**.
+
+**Attention**: When the transmitter receives an ACK with a given value R_next, it can assume that all the prior frames have been received correctly. **Even if the sender has not received ACK for those frames, either because they were lost or the receiver chose not to send them**.
+
+$$S_{last} <= R_{next} <= S_{recent}$$
+
+
+The process of transmission:
+
+(1) Transmitter
+
+**ready state**
+* The transmitter is in **ready state**.
+* Hight layer request the service of current layer, a packet from higher layer is received.
+* The transmitter prepare a **frame**: a header with sequence number S_recent, the packet, a CRC. **A timer is started**.
+* The transmitter starts a timer and transmitted the frame using the services of the layer below.
+* If S_recent = S_last + Ws - 1, the transmitter enters a **blocking state**.
+* Otherwise The transmitter enters a **ready state**.
+
+**blocking state**
+* the transmitter wait until **an acknowledgement is received** or the **time-out period expires**.
+    * time-out: retransmitted S_last and all subsequence frames, all frame timers are restarted.
+    * outside ACK: ignored ACK and stay in blocking state.
+    * correct ACK: S_last = R_next, set maximum send window number to S_last + Ws - 1. **update S and enter ready-state**.
+
+(2) Receiver
+
+The receiver always in **ready-state** waiting for a notification of an arriving frame from the layer below.
+
+* a frame arrive, the receiver accepts the frame and check errors.
+    * no error: update R_next and accept the frame, transmitted a ACK. package is deliveried to the higher layer.
+    * wrong sequence number: the frame is discarded and send a ACK with old R_next.
+    * error frame: the frame is discarded and no further action is taken.
+
+
+Q: the window size of duplicate transmission
+
+In general, the window size Ws is 2^m - 1 or less and assume that the current sent window is 0 up to Ws - 1.
+
+**Curcially, the receiver will not receive frame Ws until the acknowledgement for frame 0 has been received at the transmitter**.
+
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/windowSize.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/windowSize.png" align="center"></a>
+    <figcaption>The correct window size.</figcaption>
+</figure>
+
+
+When the information flow is bidirection, the transmitter and receiver functions of the modified GO-BACK-N protocol are implemented in both A and B process.
+* Many control frames can be eliminated by **piggybacking** the acknowledgments.
+
+
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/bidirection.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/bidirection.png" align="center"></a>
+    <figcaption>The bidirection ARQ .</figcaption>
+</figure>
+
+
+**ACK Timer**: The receiver can set a ACK timer that defines the maximum time it will wait for the availability for an information frame. When the time expires a control frame will be used to convey the acknowledgement.
+
+
+#### 2.3.2 Performance Issues
+
+Conceptions:
+
+* t_GBN： the time takes to get a frame through.
+* P_f: the error frame probability. If P_f is 0.9, which means that 1 in 10 frames get through without error.
+* t_f: the time takes to transmit a frame.
+
+The average number of transmissions:
+
+$$ 1/ (1 - P_f)$$
+
+The total average time required to transmit a frame in GO-BACK-N:
+
+
+$$t_f = n_f / R$$
+
+$$t_{GBN} = t_f +  P_f W_S t_f / (1 - P_f)$$
+
+The efficiency of GO-BACK-N:
+
+$$η_{GBN} = (n_f - n_o) / t_{GBN} / R$$
+
+
+$$η_{GBN} = ((1 - n_o / n_f) / (1 +  (W_S - 1) P_f))(1-P_f)$$
+
+
+
+
