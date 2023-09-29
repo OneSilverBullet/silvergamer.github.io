@@ -361,4 +361,166 @@ $$η_{GBN} = ((1 - n_o / n_f) / (1 +  (W_S - 1) P_f))(1-P_f)$$
 
 
 
+### 2.4 Selective Repeat ARQ
+
+#### 2.4.1 Interaction Process of GO-BACK-N ARQ
+
+**Conception**
+
+The Go-Back-N ARQ's protocol is inefficient because of the need to **retransmit the frame in error and all the subsequent frames**.
+
+The Selective Rpeat ARQ:
+* the receive window is made larger than one frame so that the receiver can **accept frames that are out of order but error free**.
+* the retransmission mechanism is modified that **only individual frames are retransmitted**.
+ 
+ When an out-of-sequence frame is observed at the receiver, a NAK frame is sent with sequence number R_next. When the transmitter receive the NAK with sequence number R_next, the transmitter retransmits the R_next frame. **the piggybacked acknowledgement in the information frame continues to carry R_next**.
+
+**The Interaction Process**
+
+(1) Initialize
+
+The transmitter send window set to {0, 1, 2, ..., Ws - 1} and S_last = 0. The receiver window set to {0, 1, ..., Wr - 1} and R_next = 0.
+
+(2) Transmitter
+
+Sending Packages:
+* When the send window is nonempty, the transmitter is in **ready state** waiting for a request from higher layers.
+* When a request occurs, the transmitter accept a packet from higher layers and prepare a frame(header, packet, CRC). Update **the lowest available number** of send window to S_recent and start a timer.
+    * If S_recent = S_last + Ws - 1, the send window has been empty and transmitter enter **blocking state**.
+
+Ready State Receiving ACK:
+* If an error-free ACK frame is received with R_next in range of S_last and S_recent, the send window slides forward by setting S_last = R_next, and maximum of slide window is S_last + Ws - 1. 
+* If an error-free NAK frame with R_next(between S_last and S_recent) is received, the frame with sequence number R_next is retransmitted. Update S_last to R_next (the NAK means that the fames before R_next has been received) and maximum of slide window is S_last + Ws - 1.
+* If a timer expires, then the transmitter **resends the corresponding frame and resets the timer**.
+
+Blocking State Receiving ACK:
+* Reject to accept packet transferred from above layers. If timer is expires, the transmitter resends the corresponding frame and reset S_recent.
+* If an error-free ACK is received with R_next in range of S_last and S_recent, the send window slides forward by setting S_last = R_next, and maximum of slide window is S_last + Ws - 1. The transmitter enter **ready state**.
+* If an error-free NAK frame with R_next(between S_last and S_recent) is received, the frame with sequence number R_next is retransmitted. Update slide window's range and the transmitter enter **ready state**.
+* If an error-free ACK is received with sequence number outside the range of S_last and S_recent, the frame is discarded and no further action is taken.
+
+(3) Receiver
+
+When a frame arrive, the receiver checks the frame for errors.
+
+* If no errors are detected and the sequence number in the range of R_next to R_next + Wr - 1. Then the frame is accepted and buffered. **An acknowledgement frame is transmitted**.
+* If the received frame's sequence number is R_next, and if R_next + 1 up to  R_next + k - 1 has been received, then the receive sequence number is incremented to R_next + k, **the reciever window slides forward** and the packets are delivered to the higher layer.
+* If an arriving frame has no errors but the sequence number is outside the receive window, then the frame is **discarded** and an acknowledgement with sequence number R_next is sent to transmitter.
+* If an arriving frame has errors, then the frame is discarded and no further action is taken.
+
+
+**Maximum Window Size**
+
+B
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Error free frames out of expected sequence number are accepted by receiver.
+
+Only individual frames are retransmitted. Not all of the buffer is retransmitted.
+
+The maximum window size 2^m - 1 is not enough for Selective Repeat ARQ. The window size should be 2^(m-1).
+
+The performance of Selective ARQ: in textbook and ppt.
+
+Framing is essential in Data Link Layers. A Frame:
+* Start Bit 
+* Information 
+* Stop Bit
+
+Framing example:
+
+(1) T1 Frame Length: 192 bit, 24 channel, each channel have 8 bit.
+
+(2) Sonet Frame: 2bits beginning.
+
+fixed length block transfer.
+
+STX: 02, beginning of frame.
+
+ETX: 03, end of frame.
+
+DLE: 10, data link escaped character.
+
+**A framing method is not considered to be transparent, if any sequence of bits cannot be transmitted.**
+
+* bit stuffering
+
+Fig5.34: method of transfering numbers bits.
+
+HDLC Flag: 01111110 7E. Start with flag, end with flag.
+
+For transparency perform bit staffering, insert a 0 after 5 ones in the data.
+
+PPP: point-to-point protocol.
+* Control escape character: 7D. 7D->7D5D; 7E->7D5E. 7E never occur in the information.
+
+GFP: Generic Framing Procedure.
+
+ATM: Aynschronous Transfer Method.
+
+GFP payload: User Information.
+
+Fig 5.39:
+
+PLI: the next two bytes contains the CRC of this two bytes.
+
+Fig 5.43: How ARQ implement.
+
+HDLC Protocol: High Level Data-link Control.
+
+HDLC can operate two configuration:
+* unbalanced configuration.
+* balanced configuration.
+
+Mode of transparency:
+* Normal response mode
+* Used with unbalanced (NRM)
+* Asynchronised Mode (ABM) used with balanced configuration.
+
+FCS: frame check sequence.
+* 0: information frame.
+* 1: supervisory frame.
+* 11: unnumbered frame
+
+Supervisor Frame: Control Frame.
+
+SS = 00: receive ready.
+SS = 01: reject control frame used in Go-Back-N ARQ.
+SS = 10: receive not ready or it is RNR. flow control.
+SS = 11: for SR ARQ.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
