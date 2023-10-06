@@ -654,9 +654,82 @@ In the transparent-mapped mode, GFP carries synchronous information streams with
 
 
 
+## 4. HDLC Data Link Control
+
+High-Level Data Link Control(HDLC) provides a rich set of standards for operating a data link over bit synchronous physical layers.
 
 
+### 4.1 Data Link Services
 
+The **data link control** as a set of functions whose role is  to provide a communication service to the network layer.
+
+The network layer entity is involved in an exchange of packets with a peer network layer entity located at a neighbor packet-switching node. **To exchange these packets the network layer must rely on the service that is provided by the data link layer**. The data link layer itself **transmit frames and make use of the bit transport service** that is provided by the physical layer, that is, the actual digital transmission system.
+
+**Transmission**
+
+The network layer passes **its packets(network layer PDU / NLPDU)** to the data link layer in the form of **a data link SDU**. The data link layers adds **a header and CRC check bits** to the SDU to form **a data link PDU**. The frame is transmitted using the physical layer.
+
+**Receiver**
+
+The data link layer at the other end recovers the frame from the physical layer, **performs the error checking, and when appropriate delivers the SDU(packet) to its network layer**.
+
+Data link layers can be configured to provide several types of services to the network layer.
+* connection-oriented service: provide error-free, ordered delivery of packets. involves three phase:
+    * setting up the connection: service access point(SAP).
+    * the actual transfer of packet encapsulated in data link frames.
+    * release the connection and free up the variable and buffers. 
+
+* connectionless service: there is no connection setup, and the network layer is allowed to pass a packet across **its local SAP together with the address of the destination SAP** to witch packet is being sent.
+    * acknowledged service.
+    * unacknowledged service.
+
+
+### 4.2 HDLC Configurations and Transfer Modes
+
+HDLC provides for a variety of data transfer modes that can be used in a number of different configurations. 
+
+The **normal response mode(NRM)** of HDLC defiens the set of procedures that are to be used with **the unbalanced configurations**.
+
+the unbalanced configurations: use **a command/response interaction** whereby the primary station sends command frames to secondary stations and interrogates or polls the secondaries to provide them with transmission opportunities. The secondary stations reply using **response frame**.
+
+the balanced point-to-point link configuration: two stations implement the data link control, acting as peers. 
+* application: asynchronous balanced mode(ABM)
+* information frames can be transmitted in full-duplex manner.
+
+
+### 4.3 HDLC Frame Format
+
+The HDLC Frame Format:
+* HDLC frame is delineated by two 8-bit flags. 
+* The frame has a field for only one address. 
+* 8- or 16- bit control field.
+
+The control fields type:
+* 0 in the first bit: an information frame.(I-frame)
+* 10 in the first two bits : supervisory frame.
+* 11 in the first twor bits: unnumbered frame.
+
+the information frame and supervisory frame **implement the main functions of data link control, which is to provide error and flow control**.
+
+Poll/Final bit(P/F): In unbalanced mode this bit indicates a poll when being sent from a primary to a secondary. The bit indicates **a final frame** when being sent from a secondary to a primary. 
+* To poll a given secondary, a host sends a frame to the secondary, indicated by **the address field with the P/F bit set to 1**. Only the last frame transmitted from the secondary has the P/F bit set to 1 to indicate that it is the final frame.
+
+N(S) field in I-frame provides **the send sequence number** of the I-frame. The N(R) field is used to piggyback acknowledgements and to indicate the next frame that is expected at the given station.
+
+Supervisory frames have 4 values if the S bits in the control field:
+* SS = 00: receive ready frame(RR). RR frames are used to acknowledge frames when no I-frames are available to piggyback the acknowledgment
+* SS = 01: reject(REJ) frame, which used by reciever to send a negative acknowledgement. REJ frame indicates that an error has been detected and that the transmitter should go back and retransmit frames from N(R) onwards(Go-Back-N ARQ).
+* SS = 10: indicates a receive not ready frame(RNR), which indicates that receiver not accept any more frames, with temporary problem.
+* SS = 11: indicates a selective reject frame(SREJ). The transmitter should retransmit the frame indicated in the N(R) subfield(Selective Repeat ARQ).
+
+**The combination of I-frame and supervisory frames allow HDLC to implement Stop-and-Wait, Go-back-N and Selective Repeat ARQ.**
+
+HDLC has two options for sequence numbering.
+* default 3 bits. 7 for WS and GBN.
+* 7 bits. 127 for WS and GBN.
+* for selective repeat arq, the send and receive window sizes are 4 and 64 respectively.
+
+The unnumbered frames implement a number of control functions.
 
 
 
