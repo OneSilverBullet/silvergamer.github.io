@@ -160,6 +160,168 @@ The **transfer delay versus load curve** varies with parameter a, which defined 
 
 
 
+## 3. Random Access
+
+### 3.1 ALOHA
+
+
+Difference between noraml transmission errors and frame collision:
+* Transmission Error: noise affect only a single station.
+* Frame Collision: more than one retransmission.
+
+Aloha scheme requires stations to use a **backoff algorithm**, which typically chooses a **random number in a certain retransmission time interval**. This randomization is intended to 
+* spread out the retransmissions.
+* reduce the likelihood of additional collisions between the stations.
+
+ALOHA protocol: If no acknowledgment is received after a time-out period, a backoff algorithm is used to **select a random retransmission time**. In the ALOHA scheme the network can swing between two modes:
+* The first mode: frame transmissions from the station **traverse the network successfully** on the first try and collide only from time to time.
+* The second mode: a snowball effects when there is a surge of collisions. The increaed number of backlogged stations, stations waiting to retransmit a message, increase the likelihood of additional collisions.
+
+Assume that a frame has a constant length L and constant transmission time:
+$$X = L/R$$
+
+This frame will be transmitted successfully at time t0 and completed at time t0+X.
+
+Vulnerable period: t0-X to t0+X. Any frames begin its transmission in the period of vulnerable period will be collided with reference frame.
+
+**arrival rate of new frames(S)**: in units of frames/X seconds.
+
+**total arrival rate(G)**: in units of frames/X seconds. also called total laod.
+
+
+The key simplifying assumption: the backoff algorithm spreads the retransmissions so that frame transmissions, new and repeated, are **equally likely to occur at any instant in time**.
+
+
+The number of frames transmitted in a time interval has a poisson distribution:
+
+$$P[k  transmissions in 2X seconds] = ((2G)^k/k!)e^{-2G}$$
+
+The theoughput S is equal to the total arrival rate G times the probability of a successful transmission.
+
+$$S = GP[NoCollision] = GP[0transmissionin2Xseconds]$$
+$$S = Ge^{-2G}$$
+
+
+
+### 3.2 Slotted ALOHA
+
+The performance of the ALOHA scheme can be improved by reducing the probability of collisions.
+
+Slotted ALOHA: reduces collisions by **constraining the stations to transmit in synchronized fashion**. 
+* All the transmission keep track of transmission time slots.
+* are allowed to initiate transmissions only at the beginning of a time slot.
+* Frasmes are assumed to be constant and to occupy one time slot.
+
+Vulnerable period: from t0-X to t0.
+
+$$S = GP[no collision] = GP[0transmissionsinXseconds]$$
+
+$$S = Ge^{-G}$$
+
+Aloha and Slotted Aloha show how low-delay frame transmission is possible using essentially uncoordinated access to a media.
+
+### 3.3 Carrier Sense Multiple Access
+
+Carrier Scense Multiple Access(CSMA) MAC: By sensing the meduim for the **presence of a carrier signal** from other stations, a station can **determine whether there is an ongoing transmission**.
+
+CSMA basic process; How the **vulnerable period** is determined in a CSMA.
+
+(1) At time t = 0, station A begins transmission at one extreme end of a broadcast medium.
+
+(2) As the signal propagates through the medium, stations become aware of the transmission from station A.
+
+(3) At time t = t_prop, transmission from station A reaches to the other end of the medium.
+
+The vulnerable period consists of **one propagation delay**. If no other station initiates a transmission during this period, station A will in effect capture the channel.
+
+### 3.3.1 1-Persistent CSMA
+
+In 1-Persistent CSMA, stations with a frame to transmit sense the channel. If the channel is busy, **they sense the channel continuously**, waiting until the channel becomes idle. As soon as the channel is sensed idle, they transmit their frames. 
+
+Collisions Occur:
+* **If more than one stations is waiting, a collision will ocur.**
+* stations that have a frame arrive within t_prop of the preceding transmission will also transmit and possibly be involved in a collision.
+
+
+ 1-Persistent CSMA act in a  greedy fashion, attemping to access the medium as soon as possible. As a result, 1-Persistent CSMA has a relatively **high collision rate**.
+
+ ### 3.3.2 Non-Persistent CSMA
+
+If the channel is busy, the stations immediately **run the backoff algorithm and reschedule a future resensing time**. If the channel is idle, the stations transmit. 
+
+By immediately rescheduling a resensing time and not persisting, the incidence of collisions is reduced.
+
+
+ ### 3.3.3 p-Persistent CSMA
+
+Stations with a frame to transmit sense the channel. If the channel is busy, they **persist with sensing until the channel becomes idle**. If the channel is idle:
+* with probability p, the station transmits its frame.
+* with probability 1-p, the station decides to **wait an additional propagation delay t_prop before again sensing the channel**.
+
+
+This behavior is intended to **spread out the transmission attempts** by the stations that have been waiting for a transmission to be completed and hence to **increase the likelihood that a waiting station successfully seizes the medium**.
+
+ ### 3.3.4 Conclusion
+
+All the variations of CSMA are sensitive to the end-to-end propagation delay of the medium that constitues the vulnerable period.
+
+It can also be seen that the **normalized propagation delay a = t_prop / X has a significant impact on the maximum achievable throughput**.
+
+The CSMA schemes improve over the ALOHA schemes by reducing the vulnerable period from one- or two-frame transmission times to a single propagation delay t_prop.
+
+### 3.4 Carrier Sense Multiple Access with Collision Detection
+
+The carrier sensing multiple access with collision detection(CSMA-CD): a station can determine whether a collision is taking place, then **the amount of wasted bandwidth can be reduced by aborting the transmission when a collision is taking place**.
+
+If a collision is detected during transmission, then **a short jamming signal is transmitted** to ensure that other stations know that collision has occurred before aborting the transmission, and **the backoff algorithm is used to schedule a future resensing time**.
+
+
+The channel can be in three states: 
+* busy transmitting a frame.
+* idle.
+* in a contention period where stations attempt to capture the channel. 
+
+The **throughput performance of 1-persistent CSMA-CD** can be analyzed by assuming that time is divide into **minislots of length 2t_prop seconds** to ensure that stations can always detect a collision. 
+
+**Stations content for the channel by transmitting and listening to the channel to see if they have successfully captured the channel.**
+
+
+Each station transmits during a contention minislot with probability p. The probability of a successful transmission is given by the probability that only one station transmits:
+
+$$P_{success} = np(1-p)^{n-1}$$
+
+To find the maximum achieveable throughput, we find the probability is maximized when p=1/n. The maximum probability of success is:
+
+$$P_{success}^{max}=(1-1/n)^{n-1}=1/e$$
+
+If the probability of success in one minislot is P {max}{success}, the **average number of minislots that elapse until a station successfully captures the cahnnel** is 1/P{max}{success}. Assuming a large value of n, and so the average number of minislots until a station successfully captures the channel  is:
+
+$$1/P_{success}^{max}=e= 2.718minislots$$
+
+The maximum throughput in the CSMA-CD system occurs when all of the channel time is spent in frame transmissions followed by contention intervals. Each frame transmission time X is followed by a period t_prop during which stations find out that the frame transmission is completed and then a contention interval of average duration 2et_prop, the maximum throughput:
+
+$$ρ_{max}=X/(X+t_{prop}+2et_{prop})=1/(1+(2e+1)a)=1/(1+(2e+1)Rd/vL)$$
+
+$$a = t_prop/X$$
+
+* a is the propagation delay normalized to the frame transmission time.
+* R: bit rate of the medium.
+* d: diameter of the medium.
+* v: propagation speed over the medium.
+* L: frame length.
+
+CSMA-CD can achieve throughputs that are close to 1 when a is much smaller than 1. 
+
+CSMA-CA provide the basis of **Ethernet LAN** protocol.
+
+It should be emphasized that CSMA-CD does not provide an orderly transfer of frames. The random backoff mechanism and the random occurrence of collisions imply that frames need not be transmitted in the order that they arrived.
+
+
+
+
+
+ALOHA and slotted ALOHA are not sensitive to a since their operation does not depend on the
+reaction time.
 
 
 
@@ -178,3 +340,7 @@ The **transfer delay versus load curve** varies with parameter a, which defined 
 
 
 
+
+
+
+ 
