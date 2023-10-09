@@ -169,6 +169,14 @@ Difference between noraml transmission errors and frame collision:
 * Transmission Error: noise affect only a single station.
 * Frame Collision: more than one retransmission.
 
+
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/6aloharandom.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/6aloharandom.png" align="center"></a>
+    <figcaption>The aloha.</figcaption>
+</figure>
+
+
+
 Aloha scheme requires stations to use a **backoff algorithm**, which typically chooses a **random number in a certain retransmission time interval**. This randomization is intended to 
 * spread out the retransmissions.
 * reduce the likelihood of additional collisions between the stations.
@@ -212,6 +220,14 @@ Slotted ALOHA: reduces collisions by **constraining the stations to transmit in 
 * are allowed to initiate transmissions only at the beginning of a time slot.
 * Frasmes are assumed to be constant and to occupy one time slot.
 
+
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/SlottedALOHA.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/SlottedALOHA.png" align="center"></a>
+    <figcaption>The slotted aloha.</figcaption>
+</figure>
+
+
+
 Vulnerable period: from t0-X to t0.
 
 $$S = GP[no collision] = GP[0transmissionsinXseconds]$$
@@ -223,6 +239,12 @@ Aloha and Slotted Aloha show how low-delay frame transmission is possible using 
 ### 3.3 Carrier Sense Multiple Access
 
 Carrier Scense Multiple Access(CSMA) MAC: By sensing the meduim for the **presence of a carrier signal** from other stations, a station can **determine whether there is an ongoing transmission**.
+
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/6CSMA.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/6CSMA.png" align="center"></a>
+    <figcaption>The CSMA.</figcaption>
+</figure>
+
 
 CSMA basic process; How the **vulnerable period** is determined in a CSMA.
 
@@ -237,6 +259,9 @@ The vulnerable period consists of **one propagation delay**. If no other station
 ### 3.3.1 1-Persistent CSMA
 
 In 1-Persistent CSMA, stations with a frame to transmit sense the channel. If the channel is busy, **they sense the channel continuously**, waiting until the channel becomes idle. As soon as the channel is sensed idle, they transmit their frames. 
+
+
+
 
 Collisions Occur:
 * **If more than one stations is waiting, a collision will ocur.**
@@ -258,12 +283,25 @@ Stations with a frame to transmit sense the channel. If the channel is busy, the
 * with probability p, the station transmits its frame.
 * with probability 1-p, the station decides to **wait an additional propagation delay t_prop before again sensing the channel**.
 
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/6ppCSMA.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/6ppCSMA.png" align="center"></a>
+    <figcaption>The pp CSMA.</figcaption>
+</figure>
+
 
 This behavior is intended to **spread out the transmission attempts** by the stations that have been waiting for a transmission to be completed and hence to **increase the likelihood that a waiting station successfully seizes the medium**.
 
  ### 3.3.4 Conclusion
 
 All the variations of CSMA are sensitive to the end-to-end propagation delay of the medium that constitues the vulnerable period.
+
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/6CSMAComp.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/6CSMAComp.png" align="center"></a>
+    <figcaption>Comparison.</figcaption>
+</figure>
+
+
+
 
 It can also be seen that the **normalized propagation delay a = t_prop / X has a significant impact on the maximum achievable throughput**.
 
@@ -272,6 +310,12 @@ The CSMA schemes improve over the ALOHA schemes by reducing the vulnerable perio
 ### 3.4 Carrier Sense Multiple Access with Collision Detection
 
 The carrier sensing multiple access with collision detection(CSMA-CD): a station can determine whether a collision is taking place, then **the amount of wasted bandwidth can be reduced by aborting the transmission when a collision is taking place**.
+
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/6CSMACD.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/6CSMACD.png" align="center"></a>
+    <figcaption>CSMA-CD.</figcaption>
+</figure>
+
 
 If a collision is detected during transmission, then **a short jamming signal is transmitted** to ensure that other stations know that collision has occurred before aborting the transmission, and **the backoff algorithm is used to schedule a future resensing time**.
 
@@ -316,6 +360,11 @@ CSMA-CA provide the basis of **Ethernet LAN** protocol.
 
 It should be emphasized that CSMA-CD does not provide an orderly transfer of frames. The random backoff mechanism and the random occurrence of collisions imply that frames need not be transmitted in the order that they arrived.
 
+
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/6CSMAaCurve.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/6CSMAaCurve.png" align="center"></a>
+    <figcaption>All comparision.</figcaption>
+</figure>
 
 
 
