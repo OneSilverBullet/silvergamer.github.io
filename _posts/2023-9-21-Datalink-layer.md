@@ -711,43 +711,84 @@ The control fields type:
 
 the information frame and supervisory frame **implement the main functions of data link control, which is to provide error and flow control**.
 
-Poll/Final bit(P/F): In unbalanced mode this bit indicates a poll when being sent from a primary to a secondary. The bit indicates **a final frame** when being sent from a secondary to a primary. 
-* To poll a given secondary, a host sends a frame to the secondary, indicated by **the address field with the P/F bit set to 1**. Only the last frame transmitted from the secondary has the P/F bit set to 1 to indicate that it is the final frame.
+Poll/Final bit(P/F): In unbalanced mode this bit indicates a poll when being sent from a primary to a secondary. The bit indicates a final frame when being sent from a secondary to a primary. 
+* To **poll a given secondary**, a host sends a frame to the secondary, indicated by the address field with the P/F bit set to 1. Only the last frame transmitted from **the secondary has the P/F bit set to 1 to indicate that it is the final frame**.
 
-N(S) field in I-frame provides **the send sequence number** of the I-frame. The N(R) field is used to piggyback acknowledgements and to indicate the next frame that is expected at the given station.
+N(S) field in I-frame provides **the send sequence number** of the I-frame. 
+
+N(R) field is used to **piggyback acknowledgements and to indicate the next frame that is expected at the given station**.
 
 Supervisory frames have 4 values if the S bits in the control field:
-* SS = 00: receive ready frame(RR). RR frames are used to acknowledge frames when no I-frames are available to piggyback the acknowledgment
-* SS = 01: reject(REJ) frame, which used by reciever to send a negative acknowledgement. REJ frame indicates that an error has been detected and that the transmitter should go back and retransmit frames from N(R) onwards(Go-Back-N ARQ).
-* SS = 10: indicates a receive not ready frame(RNR), which indicates that receiver not accept any more frames, with temporary problem.
-* SS = 11: indicates a selective reject frame(SREJ). The transmitter should retransmit the frame indicated in the N(R) subfield(Selective Repeat ARQ).
+* SS = 00: **receive ready frame(RR)**. RR frames are used to acknowledge frames when no I-frames are available to piggyback the acknowledgment
+* SS = 01: **reject(REJ) frame**, which used by reciever to send a negative acknowledgement. REJ frame indicates that an error has been detected and that the transmitter should go back and retransmit frames from N(R) onwards(Go-Back-N ARQ).
+* SS = 10: indicates a **receive not ready frame(RNR)**. The RNR frame acknowledges all frames up to N(R)-1 and inform the transmitter that receiver not accept any more frames with temporary problem. 
+* SS = 11: indicates a **selective reject frame(SREJ)**. The transmitter should retransmit the frame indicated in the N(R) subfield(Selective Repeat ARQ).
 
 **The combination of I-frame and supervisory frames allow HDLC to implement Stop-and-Wait, Go-back-N and Selective Repeat ARQ.**
 
-HDLC has two options for sequence numbering.
-* default 3 bits. 7 for WS and GBN.
-* 7 bits. 127 for WS and GBN.
-* for selective repeat arq, the send and receive window sizes are 4 and 64 respectively.
+HDLC has two options for sequence numbering. In default HDLC uses a three-bit sequence numbering.
+* default 3 bits. window size is 7 for Stop-and-Wait and Go-Back-N ARQ.
+* In the extended sequence numbering option, the control field is increased to 16 bits. The sequence numbers are increased to 7 bits. The maximum send window size is 127 for Stop-and-Wait and Go-Back-N ARQ. For Selective Repeat ARQ, the maximum send and receive window sizes are 4 and 64 respectively.
 
-The unnumbered frames implement a number of control functions.
+The unnumbered frames implement a number of control functions. Each type of unnumbered frame is identified by a specific set of M bits. During call setuop ir rekease
 
+During call setup or release, specific unnumbered frames are used to set the **data transfer mode**.
+* The **Set Asynchronous Balanced Mode(SABM)** frame indicates that the sender wishes to set up an asynchronous balanced mode connections.
+* The **Set Normal Response Mode(SNRM)** frame indicates a desire to set up a normal response mode connection.
+* The **disconnect(DISC)** frame indicates that a station wishes to terminate a connection.
+* The **Unnumbered Acknowledgement(UA)** frame acknowledges frames during call setup and call release.
+* The **Frame reject(FRMR)** unnumbered frame reports receipt of an unacceptable frame.
 
+### 4.4 Typical Frame Exchanges
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+We use the following convention to specifiy the frame types:
+* The first entry indicates the **contents of the address field**;
+* The second entry specifies the **type of frame**, I for information, RR for receive ready, etc.
+* The third entry is N(S) in the case of I frame only, **the send sequence number**. 
+* The following entry is N(R), **the recieve sequence number**.
+* A P or F at the end of an entry indicates **that Poll or Final bit** is set.
 
 
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/5ed.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/5ed.png" align="center"></a>
+    <figcaption>Exchange of frames for connection establishment and release.</figcaption>
+</figure>
 
 
+The above figure shows the exchange of frames that occurs for connection establishment and release. 
+* Station A send SAMB frame to indicate that it wishes to setup an **ABM mode connection**.
+* Station B send a Unnumbered Acknowledgement to indicate its readiness to proceed with the connection.
+* A bidirectional flow of information and supervisory frames then take place.
+* The station with to disconnect, and it sends a DISC frame.
+
+
+#### 4.4.1 Normal Response Mode
+
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/5ed2.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/5ed2.png" align="center"></a>
+    <figcaption>Exchange of frames using normal response mode.</figcaption>
+</figure>
+
+The primary station A is communicating with the secondary stations B and C.
+* Station A begins by sending a frame to station B with **poll** bit set and the sequence number N(R) = 0 (**the next frame it is expecting from B is frame 0**).
+* Error occurs, station A sends an SREJ frame with N(R) = 1 without poll bit. This frame indicates that **Station B should be prepared to retransmit frame 1**.
+
+
+#### 4.4.2 Asynchronous Balanced Mode 
+
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/5ed3.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/5ed3.png" align="center"></a>
+    <figcaption>Exchange of frames using asynchronous balanced mode.</figcaption>
+</figure>
+
+
+The address field always contains the address of the secondary station. There are some conventions: 
+* If a frame is **command** then the address field contains **the address of receiving station**.
+* If a frame is a **response**, the address field contains **the address of the sending station**.
+* Information frames are always commands, RR and RNR frames can be either command or response frame, REJ frames are always response frames.
+
+Important Process Stage:
+* Frame 1 from station A has undergone transmission errors, and when station B receives a frame with N(S)_A = 2, it finds that the frame is out of sequence.
+* Station B then sends a negative acknowledgement by transmitting an REJ frame with N(R)_B = 1.
+* After receiving the REJ frame, station A goes back and begins retransmitting from frame 1 onwards.
+* Station B does not have **additional I-frames for transmission**, it sends **acknowledgements by using RR frame in response form**.
