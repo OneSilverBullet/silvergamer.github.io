@@ -458,86 +458,10 @@ $$η_{SW} = (1-P_f)/ (1 + L)$$
 
 $$L = 2(t_{prop} + t_{proc})R / n_f$$
 
-The L is the size of the pipe in multiples of frames, and we assume the window size is Ws = L - 1.
+The L is the size of the pipe in multiples of frames, and we assume the window size is Ws = L + 1.
 
 Adaptivity and Robustness are equally important attributes of ARQ.
 
-
-
-Error free frames out of expected sequence number are accepted by receiver.
-
-Only individual frames are retransmitted. Not all of the buffer is retransmitted.
-
-The maximum window size 2^m - 1 is not enough for Selective Repeat ARQ. The window size should be 2^(m-1).
-
-The performance of Selective ARQ: in textbook and ppt.
-
-Framing is essential in Data Link Layers. A Frame:
-* Start Bit 
-* Information 
-* Stop Bit
-
-Framing example:
-
-(1) T1 Frame Length: 192 bit, 24 channel, each channel have 8 bit.
-
-(2) Sonet Frame: 2bits beginning.
-
-fixed length block transfer.
-
-STX: 02, beginning of frame.
-
-ETX: 03, end of frame.
-
-DLE: 10, data link escaped character.
-
-**A framing method is not considered to be transparent, if any sequence of bits cannot be transmitted.**
-
-* bit stuffering
-
-Fig5.34: method of transfering numbers bits.
-
-HDLC Flag: 01111110 7E. Start with flag, end with flag.
-
-For transparency perform bit staffering, insert a 0 after 5 ones in the data.
-
-PPP: point-to-point protocol.
-* Control escape character: 7D. 7D->7D5D; 7E->7D5E. 7E never occur in the information.
-
-GFP: Generic Framing Procedure.
-
-ATM: Aynschronous Transfer Method.
-
-GFP payload: User Information.
-
-Fig 5.39:
-
-PLI: the next two bytes contains the CRC of this two bytes.
-
-Fig 5.43: How ARQ implement.
-
-HDLC Protocol: High Level Data-link Control.
-
-HDLC can operate two configuration:
-* unbalanced configuration.
-* balanced configuration.
-
-Mode of transparency:
-* Normal response mode
-* Used with unbalanced (NRM)
-* Asynchronised Mode (ABM) used with balanced configuration.
-
-FCS: frame check sequence.
-* 0: information frame.
-* 1: supervisory frame.
-* 11: unnumbered frame
-
-Supervisor Frame: Control Frame.
-
-SS = 00: receive ready.
-SS = 01: reject control frame used in Go-Back-N ARQ.
-SS = 10: receive not ready or it is RNR. flow control.
-SS = 11: for SR ARQ.
 
 
 
@@ -584,6 +508,13 @@ Byte Stuffing: to solve the transparent problem.
 * DLE: data link escape control with HEX value 10. 
 
 DLE STX indicate the beginning of the frame and DLE ETX denotes the end. Extra DLE is inserted or stuffed before **the occurence of a DLE inside the frame**.
+
+
+#### 3.1.1  About T-1 Carrier
+
+The T-1 carrier system uses **a framing bit to identify the beginning of each frame**. This is done by **alternating the value of the framing bit at each frame**, assuming that no other bits can sustain an alternating pattern indefinitely. Framing is done by examining each of 193 possible bit positions successively **until an alternating pattern of sufficient duration is detected**. Assume that each information bit takes a value of 0 or 1 independently and with equal probability.
+
+
 
 
 ### 3.2 Flags, Bit Stuffing and Byte Stuffing
