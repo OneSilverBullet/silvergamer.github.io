@@ -11,18 +11,19 @@ feature: https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io
 ---
 
 
-## 1.Overview
+## 1.Peer-to-Peer Protocols and Service Models
 
 * Layer n peer processes carry out a protocol to provide servcie to layer n+1.
 * Layer n protocol uses the services of layer n-1.
 
-A Peer-to-Peer Model: involves the interaction of two or more processes or entities through the exchange of **Protocol Data Units(PDU)**.
+A Peer-to-Peer Model: involves the interaction of **two or more processes or entities** through **the exchange of Protocol Data Units(PDU)**.
 
 
 
 ### 1.1 Service Model
 
 Service Model: specifies the manner in which information is transferred.
+
 (1)Connection-oriented services
 
 Def: a connection **setup** procedure precedes the transfer of  information.
@@ -723,3 +724,39 @@ Important Process Stage:
 * Station B then sends a negative acknowledgement by transmitting an REJ frame with N(R)_B = 1.
 * After receiving the REJ frame, station A goes back and begins retransmitting from frame 1 onwards.
 * Station B does not have **additional I-frames for transmission**, it sends **acknowledgements by using RR frame in response form**.
+
+
+
+
+## 5. Conception Analysis
+
+##### The difference between connectionless unacknowledged service and connectionless acknowledged service
+
+In connectionless acknowledged service:
+* Reliable delivery can be achieved through the 
+user of ACK and NAK control messages. 
+* Such protocols are suited for communication over networks in whcih **higher layers are sensitive to loss** and **the underlying network is inherently unreliable with a significant probability of loss or error**.
+* HDLC provides for unnumbered acknowledgement service for connection setup and release.
+
+In connectionless unacknowledged service:
+* Unacknowledged networks provide **simpler and faster communication for networks** that are inherently reliable or **provide service to higher layer that can tolerate information loss or have built-in error recovery mechanisms**.
+
+##### The difference between connection-oriented acknowledged service and connectionless acknowledged service
+
+
+The use of acknowledgements can provide a reliable transfer over links or networks that are prone to error, loss, and or resequencing.
+
+In connection-oriented acknowledgement network, a setup phase between the sending user and receiving user establishes a context for the thransfer of information. **Acknowledgements are provided to the sending user for all SDUs**.
+* requires the use of stateful protocols that keep track of sequence numbers, acknowledgements and timers.
+
+In connectionless acknowledge, there is no prior context for transfer of information between the sending user and receiving user. **The sending user requires an acknowledgment of delivery of its PDU.**
+* use stateless protocols. 
+* requires a transmitting protocols that track the acknowledgement of PDU.
+
+Connectionless Acknowlegement Example: the receiver would be required to send an acknowledgemnt for correctly received PDU, and the transmitter would keep timer. If an ACK was not received in time, the transmitter ould inform the user of a failure or deliver.
+
+
+
+
+
+
