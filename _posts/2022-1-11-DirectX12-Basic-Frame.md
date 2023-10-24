@@ -122,6 +122,35 @@ A Fence is an interface for a CPU/GPU synchronization object. The fence interal 
     <figcaption>The synchronization functions.</figcaption>
 </figure>
 
+The fence mechanism is as following figure. The fence divide the command queue to several part. Meanwhile, the fence notify CPU the process of the GPU in command queue. The fence is unique for a command queue, and CPU and GPU can both read/write it.
+
+
+
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/DirectXP1Fig/fence2.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/DirectXP1Fig/fence2.png" align="center"></a>
+    <figcaption>The fence mechanism.</figcaption>
+</figure>
+
+The CPU call a Signal function in X_cpu, which will add a command at the end of the command queue in GPU. When GPU process this command, the fence value will become n+1. 
+
+So the basic synchronization of CPU and GPU:
+
+{% highlight cpp %}
+
+	UINT64 mCurrentFence = 0;
+	mCurrentFence++;
+	ThrowIfFailed(mCommandQueue->Signal(mFence.Get(), mCurrentFence));
+
+	if (mFence->GetCompletedValue() < mCurrentFence)
+	{
+		HANDLE eventHandle = CreateEventEx(nullptr, false, false, EVENT_ALL_ACCESS);
+		ThrowIfFailed(mFence->SetEventOnCompletion(mCurrentFence, eventHandle));
+		WaitForSingleObject(eventHandle, INFINITE);
+		CloseHandle(eventHandle);
+	}
+	
+{% endhighlight %}
+
 
 ### 2.2 Resource Objects
 

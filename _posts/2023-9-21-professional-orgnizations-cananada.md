@@ -325,8 +325,46 @@ A:
 
 ### Lesson 4
 
+#### 4.1 Ethical Reasoning
 
-E
+Three dimension:
+
+ * First, ethical reasoning requires individuals to reflect on the nature of the choice one has to make. 
+ * Second, after reflection one is ready to analyze the nature of the choice that the person faces. 
+ * Third, after analysis the person is ready to make the choice.
+
+##### Reflecting on Choices
+
+In order to decide on the ethical nature of the choice we have to make, we need to first reflect on the nature of the choice we face
+
+In reflecting on choices, a key point to bear in mind is that **ethics provides a means to justify in a rational manner**, the actions we take in a professional (or personal) context. 
+
+ Deontological Theory basically suggests that **an action is only as valid as the means adopted to accomplish the action**. If the means are not good, then the action that comes about is not ethically good.
+
+##### Analyzing Choices
+
+ Some of these choices have major consequences for your career or the company you work for. Therefore, it is important to take the time to analyze the choice carefully. From this analysis, you should be able to **present a clear reason to support the decision you make**. It is this clear justification that demonstrates to your colleagues, your company, and your clients that you have thought through the decision very carefully and then arrived at the choice. 
+
+
+##### Making the choice
+
+Now you must be wondering why it is important to spend so much time on thinking about professional choices. 
+
+The answer is that the reputation that you have built up in your career is very fragile. You want to create a reputation for yourself that is favorable. Any unethical actions could undermine your reputation and severely damage your career and your personal life. 
+
+
+#### 4.2 Ethical Theories
+
+
+
+
+#### 4.3 Ethical Analysis
+
+##### 
+
+
+
+
 
 
 

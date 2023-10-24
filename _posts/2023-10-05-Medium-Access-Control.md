@@ -372,6 +372,244 @@ It should be emphasized that CSMA-CD does not provide an orderly transfer of fra
 ALOHA and slotted ALOHA are not sensitive to a since their operation does not depend on the
 reaction time.
 
+## 4 Scheduling Approaches To Medium Access Control
+
+The random access approaches:
+* Advantages: The random access approaches provide **low-delay frame transfer** in broadcast networks.
+* Disadvantages: The random access approaches **limit the maximum achievable throughput** and can **result in large variability in frame delays** under traffic loads.
+
+**The scheduling approaches to medium access control** attempt to produce **an orderly access** to the transmission medium.
+
+### 4.1 Reservation System
+
+The stations take turns transmitting a single frame at the full rate R bps, and the transmissions from the stations are organised into cycles that are variable in length.
+
+* Each cycle begins with **a reservation interval**.
+
+In the simplest case, the reservation interval **consists of M minislots, one minislot per station**. Stations use their corresponding minislot to indicate that **they have a frame to transmit in  a corresponding cycle**. The stations announce their intention to transmit a frame by broadcasting their reservation bit during the appropriate minislot.
+
+**By listening to the reservation interval, the stations can determine the order of frame transmissions in the corresponding cycle**. The length of the cycle will then correspond to **the number of stations that have a frame to transmit**.
+* Variable-length frames can be handled if the reservation message includes frame-length information.
+
+About Efficiency:
+* The frame transmission time: X = 1.
+* Each frame transmission requires 1+v time units.
+
+Suppose the propagation time is negligible, The maximum throughput occurs when all stations are busy, and hence the maximum thoughput is:
+$$ρ_{max} = 1/(1 + v)$$
+
+
+Suppose that the propagation delay is not negligible. If the stations transmit their reservations in the same way as before, but the reservations do not take effect until some fixed number of cycles later.
+
+The basic reservation system can be modified so that **stations can reserve more than one slot per frame transmission per minislot**. Suppose that a minislot can reserve up to k frames. The maximum  cycle size occurs when all stations are busy. Given by Mk + Mv. So the maximum achievable throughput is:
+$$ρ_{max} = Mk / (Mk + Mv) = 1/(1 + v/k)$$
+
+
+
+##### Question: The effect of the stations number
+
+If M becomes very large, this overhead can become significant. This situation becomes a serious problem when a very large number of stations transmit frames infrequently. **The reservation minislots are incurred every cycle, even though most stations donot transmit**.
+
+Solution: Not allocating  a minislots for each stations, and instead making stations contend for a reservation minislot by using **a random access technique such as Slotted ALOHA**.
+$$ρ_{max} = 1/ (1 + v/0.368) = 1/(1 + 2.71v)$$
+
+### 4.2 Polling
+
+Polling System:m stations make turns accessing the medium. **At any given time only one of the stations has the right to transmit into the medium**.
+
+#### 4.2.1 Centralized with a host computer
+
+The system consists of an **outbound line** in which information is transmitted from the host computer to the stations.
+
+The system consists of an **inbound line** in which must shared with M stations. **The inbound line that must be shared with the M stations**. The inbound line is a shared medium that **requires a medium access control to coordinate the transmission from stations to the host computer**.
+
+The host computer acting as a centrol controller that issues control messages to coordinate the transmission from the stations. 
+* The central controller sends a **polling message** to a particular station.
+* When polled, the stations sends **its inbound frames** and indicates the completion of its transmission through **a go-ahead message**.
+* The central controller polls stations in round-robin fashion, or some pre-detected order.
+
+#### 4.2.2 Central controller use radio transmission
+
+Frequency-division duplex(FDD): The central controller may use radio **transmissions in a certain frequency band to transmit out-bound frames**, and stations may **share a different frequency band to transmit inbound frames**.
+
+
+Time-division duplex(TDD): The variation of FDD, having inbound and outbound transmission share one frequency band. show as 6.21.B
+
+#### 4.2.3 Polling without central controller
+
+Stations have developed **a polling order list under some protocol**. All stations can receive the transmissions from all other stations. After a station is done transmitting, it is responsible for sending a polling message to the next station in the polling order list.
+
+* walk time: elapse while the polling message propagates and is received.
+* frame transmission time.
+
+In some system, the transmission time is allowed to transmit as long as it has information in its buffers. In other systems, the transmission time for each station is limited to some maximum duration.
+
+The total walk time τ' is the sum of the walk times in one cycle, represents the minimum time for one round of polling of all the stations. **The walk time between consecutive stations t' is determined by several factors**:
+* the propagation time required for a signal to propagate from one station to another.
+* the time required for a station to begin transmitting after it has been polled.
+* the time required to transmit the polling messages.
+
+The cycle time Tc: the total time that elapses **between the start of two consecutive polls of the same station**. **The cycle time is the sum of the M walk times and the M station transmission times**
+
+Suppose **λ/M frames/second is the average arrival rate of frames for transmission from a station**. E[Nc] is the average number of message arriavls to a station in one cycle time.
+
+$$E[N_c] = (λ/M)E(T_c) $$
+
+The time spent at each station is E[Nc]X + t', where t' is the walk time.
+
+The average cycle time is then M times the average time spent at each station:
+
+$$E[T_c] = M{E[N_c]X + t'} = M{(λ/M)E[T_c]X + t'}$$
+
+$$E[T_c] = Mt'/(1 -  λX) = τ'/(1-ρ)$$
+
+The behavior of the mean cycle time as a function of load:
+$$ρ = λX$$
+
+Under light load the cycle time is simply required to poll the full set of stations, and the mean cycle time is approximately τ'.
+
+The walk times required to pass control of the access right to the medium can be viewed as a form of overhead. The **normalized overhead per cycle** is then given by the ratio of **the total walk time to the cycle time**.
+
+
+
+### 4.3 Token-Passing Rings
+
+Polling can be implemented in a distributed fashion on networks with a ring topology. Such networks consist of station interfaces that are connected by point-to-point digital transmission lines. 
+
+**An interface in the listen mode** reproduces **each bit that is received from its input to its output after some constant delay**, ideally in the order of one bit time. This delay allow the interface to monitor the passing bit stream for certain patterns.
+* address
+* the pattern corresponding to a free token.
+
+Idle Token: 11111111
+
+Busy Token: 01111111
+
+When **a free token is received and the attached station has information to send**, the interface changes the passing token to **busy** by **changing a particular bit in the passing stream**.
+* In effect, receiving a free token corresponding to  receiving a polling message.
+* **The station interface then changes to the transmit mode** where it proceeds to transmit frames of information from the attached station. These frames circulate around the ring and are copied at the destination station interfaces.
+
+
+##### The relationship between ring circulation time and transmission time
+
+(1) ring circulation time < transmission time
+
+The arriving information corresponds to bits of **the same frame that the station is transmitting**.
+
+(2) ring circulation time > transmission time
+
+More than one frames may be present in the ring at any given time. 
+
+In such cases the arriving information could correspond to bits of a frame from a different station, **so, the station must buffer these bits for later transmission**.
+
+
+##### Token Ring Type
+
+A frame that is inserted into the ring must be removed.  The frame removal approach:
+
+(1) have the destination station remove the frame from the ring.
+
+(2) allow the frame to travel back to the transmitting station. 
+* This approach is preferred because the transmitting station interface can then forward the arriving frame to its attached station, thus providing a form of acknowledgment.
+
+The ring latency is defined as **the number of bits that can be simutaneously in transit around the ring**.
+
+(1) Multitoken approach. The free token is transmitted immediately **after the last bit of the data frame**. It allows several frames to be in transmit in different part of ring.
+
+(2) Single-token Operation. Involves inserting the free token after **the last bit of the busy token is recieved back** and **the last bit of the frame is transmitted**.
+
+* If the frame length greater than the ring latency, the operation is equivalent to multitoken.
+
+(3) Single-frame Operation. The free token is inserted after **the transmitting station has received the last bit of its frame**.
+
+* If the frame length greater than ring latency, this approach corresponds to multitoken operation.
+
+##### About the limitation
+
+The token-ring operation usually also specifies **a limit on the time that a station can transmit**. One approach is to allow a station to transmit  an unlimited number of frames each time a token is received.
+* This approach **minimizes the delay experienced by frames**.
+* But the time that can elapse between consecutive arrivals of a free token to a station to be unbounded.
+
+A limit is usually placed:
+* on the number of frames that can be transmitted each time a token is received.
+* on the total time that a station may transmit information into the ring.
+
+
+##### Token Ring Performance
+
+The introduction of limits on the number of frames that can be transmitted per token affects the maximum achievable throughput.
+
+Suppose that a maximum of one frame can be transmitted per token. 
+
+* Ring Latency: τ' seconds.
+* The Ring Latency normalized to the frame transmission time: a'.
+* The total propagation delay around the ring: τ
+* The number of bit delays in an interface: b.
+* The total delay introduced by the M station interfaces: Mb.
+* The speed of the transmission lines: R.
+
+$$τ' = τ + (Mb)/R$$
+$$a' = τ' / X$$
+
+**For system using multitoken operation**, the total time taken to transmit the frames from the M stations is MX + τ'. Because MX of this time is spent transmitting information, **the maximum normalized throughput** is then
+
+$$ρ_{max} = MX / (MX + τ') = 1/(1 + τ'/MX) = 1/(1 + a'/M)$$
+
+**For Single-token system**, we can see that the effective frame duration is the maximum of X and τ'. Therefore, the maximum normalized throughput is:
+
+$$ρ_{max} = MX/(Mmax(X,τ') + τ') = 1/(max{1, a'}+τ'/MX)$$
+$$ρ_{max} = 1/(max{1, a'}+a'/M)$$
+
+a' < 1: the single-token operation is the same maximum throughput as multitoken operation.
+
+a' > 1: the maximum throughput is less than that of multitoken operation.
+
+**For single-frame system**, the effective frame transmission time is always X+τ'. Therefore, the maximum throughput is:
+
+$$ρ_{max} = MX/(M(X+ τ') +τ') = 1/(1 + a'(1+1/M))$$
+
+The maximum throughput for single-frame operation is the lowest of the three approaches.
+
+### 4.4 Comparision of Scheduling and Random Access Systems
+
+(1) In scheduling reservation interval, polling and token transmission constitue overhead and in random access systems collisions are overhead.
+
+(2) In sheduling overhead is proportional to the number of stations, in random access systems overhead is proportional to the load.
+
+(3) Scheduling systems are more efficient under heavy load and random access system are more efficient under light load.
+
+(4) Scheduling systems provide orderly access to the medium, random access systems show great delay variability in access to the medium.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
