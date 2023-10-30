@@ -350,81 +350,111 @@ The client-side port number is an ephemeral number that is selected when the soc
 
 
 
-## 4. TCP/IP Architecture
-
-## 4.1 TCP/IP Conceptions
+## 3. TCP/IP Architecture
 
 **TCP/IP Network Architecture**: a set of protocols that allows communication across multiple diverse networks. 
 
-The TCP/IP model does not require strict layering, and it contains four layers:
-(1) Application Layer: provide services that can be used by other applications.
-* incorporate the function of the top three layer of OSI Layers.
-* application layer programs are intended to run directly over the transport layer.
+### 3.1 TCP/IP Conceptions
 
-EXAMPLE: protocols have been developed for remote login, for e-mail, for file transfer, and for network management.
-
-(2) Transport Layer:
-* have two types of services:
-	* Transmission Control Protocol(TCP): consists of reliable connection-oriented transfer of a byte stream.
-	* User Datagram Protocol(UDP): best-effort connectionless transfer of individual message.
-
-(3) Internet Layer: handles the transfer of information across multiple networks through the use of routers; **deal with the routing of packets**.
-
-* The connect provide single service: best-effort connectionless packet transfer.
-* IP packets are exchanged between routers without a connection setup.
-
-(4) the network interface layer: is connected with the network-specific aspects of the transfer of packets.
-* the network interface layer is particularly concerned with the protocols that access the intermediate networks.
+The TCP/IP model **does not require strict layering**, and the application layer has the option of bypassing intermediate layers.
 
 <figure>
     <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/TCPIP.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/TCPIP.png" align="center"></a>
     <figcaption>TCP/IP Model.</figcaption>
 </figure>
 
+
+It contains four layers:
+
+(1) Application Layer: provide services that can be used by other applications.
+* **incorporate the function of the top three layer of OSI Layers**.
+* application layer programs are **intended to run directly over the transport layer**.
+    * The first service consists of **reliable connection-oriented transfer of a byte stream**, which is provided by the **Transmission Control Protocol(TCP)**.
+    * The second service consists of **best-effort connectionless transfer of individual message**, which is provided by the **User Datagram Protocol(UDP)**. The second service provided no mechanisms for error recovery or flow control. UDP is used for applications that **require quick but not necessarily reliable delivery**.
+
+
+
+EXAMPLE: protocols have been developed for remote login, for e-mail, for file transfer, and for network management. HTTP protocol is actually a TCP/IP application layer protocol.
+
+(2) Transport Layer: 
+
+* have two types of services:
+	* Transmission Control Protocol(TCP): consists of reliable connection-oriented transfer of a byte stream.
+	* User Datagram Protocol(UDP): best-effort connectionless transfer of individual message.
+
+(3) Internet Layer: handles the transfer of information across multiple networks through the use of routers/gateways.
+
+The Internet Layer corresponds to **the part of the OSI network layer that is concerned with the transfer of packets between machines** that are connected to different networks. Therefore, it must deal with **the routing of packets from router to router across these networks**.
+
+The internet layer provides a single service: best-effort connectionless packet transfer.
+* IP packets are exchanged between routers without a connection setup.
+* Packets are **routed independently, and so they may traverse different paths**.
+* IP packet called **datagrams**.
+
+The **connectionless approach makes the system robust**; that is, if failures occur in the network, the packets are routed around the points of failure, and there is no need to set up the connections again.
+
+The gateways that interconnect the intermediate networks may discard packets when congestion occurs. The responsibility for recovery from these losses is passed on to the transport layer
+
+(4) the network interface layer: is concerned with the network-specific aspects of the transfer of packets.
+* It must deal with part of the OSI network layer and data link layer.
+* the network interface layer is particularly **concerned with the protocols that access the intermediate networks**.
+
+At each gateway **the network access protocol encapsulates the IP packet into a packet or frame of the underlying network or link**. The IP packet is recovered at the exit gateway of the given network. This gateway must then **encapsulate the IP packet into a packet or frame of the type of the next network or link**.
+* provides a clear separation of the internet layer from the technology-dependent
+network interface layer.
+* This approach also allows the internet layer to provide a data transfer service **that is transparent in the sense of not depending on the details of the underlying networks**.
+
+
 <figure>
     <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/TCPIP2.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/TCPIP2.png" align="center"></a>
-    <figcaption>TCP/IP Model.</figcaption>
+    <figcaption>TCP/IP protocol graph.</figcaption>
 </figure>
 
+The transport layer protocols TCP and UDP, on the other hand, operate over IP.
+
+The operation of the single IP protocol over various networks provides **independence from the underlying network technologies**. The **communication services of TCP and UDP** provide **a network-independent platform** on which applications can be developed.
 
 
+### 3.2 TCP/IP Protocol: The process of layers working together
 
-## 4.2 TCP/IP Protocol: The process of layers working together
+
+Each host in the Internet is identified by a **globally unique IP address**. Strictly speaking, **the IP address identifies the host’s network interface** rather than the host itself.
+
+A node that is **attached to two or more physical networks** is called a router
+
+ An IP address is divided into two parts: **a network id and a host id**.
+
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/2EthernetLAN.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/2EthernetLAN.png" align="center"></a>
+    <figcaption>A server, a workstation, and a router are connected to an Ethernet LAN, and a remote PC is connected to the router through a point-to-point link.</figcaption>
+</figure>
 
 On a LAN the attachment of a device to the network is often identified by a phisical address.
 
 Each **Ethernet network interface card(NIC)** is issued a **globally unique medium access control(MAC)** or physical address.
-* the machines connected to the NIC have unique address.
+* When a NIC is used to connect a machine to any Ethernet LAN. All machines in the LAN connected to the NIC have unique address.
 
+#### 3.2.1 Sending and Receiving IP Datagrams
 
-Sender information transfer between layers:
-(1) The TCP segment is passed to the IP Layer, which in turn encapsulates the segment into Internet Packet.
-* IP packet header:
-	* protocol field: designate the layer that is operating above IP.
-	* IP Address of sender.
-	* IP Address of destination.
-
-(2) The IP datagram is then encapsulated using PPP and then sent to the server.
-
-Receiver information transfer between layers:
-(1) The server NIC captures the Ethernet frame and extracts the IP datagram and passes it to IP entity. 
-
-(2) The protocal field in IP header indicates that a TCP segment is to be extracted and passed on to the TCP layer.
-
-(3) The TCP layer uses the port number to find out that the message is likely to be passed to the HTTP server process.
-
-End-to-end process-to-process connection: let the receiver know which connection the message correspond to.
-* socket address: the port number, the IP address, the protocol type.
-* the source socket address and the destination socket address together uniquely specify the connection between the server process and client process.
-
-<figure>
-    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/EthernetPDU.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/EthernetPDU.png" align="center"></a>
-    <figcaption>TCP/IP Model.</figcaption>
-</figure>
+In the case in which the work station wants to send an IP datagrams to the server. The IP datagram has the workstation’s IP address and the server’s IP address **in the IP packet header**.
 
 
 
-## 4.3 TCP/IP Protocol: Sending and Receiving IP Datagrams
+
+**Information transfer between work station and server**
+
+(1) The IP entity in the workstation looks at its routing table to see whether it has an entry for the complete IP address.
+
+(2) The IP datagram is passed to the Ethernet device driver, which prepares an Ethernet frame. 
+* The header in the frame contains **the source physical address, and the destination physical address**.
+* The **type field** is required because **the Ethernet may be carrying packets for other non-IP protocols**.
+
+(3) The Ethernet frame is then broadcast over the LAN. 
+
+(4) The server’s NIC recognizes that the frame is intended for its host, so the card captures the frame and examines it.
+
+The NIC finds that the protocol type field is set to IP and therefore passes the IP datagram up to the IP entity.
+ 
 
 **Statement1: the client know the server IP address**
 
@@ -457,6 +487,35 @@ End-to-end process-to-process connection: let the receiver know which connection
 (4) The router finds out the routing table, ecapsulates the examined IP datagram into Ethernet frame and sends it directly to the target.
 
 
+**Sending information transfer between layers:**
+
+(1)HTTP request message GET is passed to the TCP Layer, which encapsulates the message into a TCP segment.
+* The TCP segment contains **an ephemeral port number** for the client process c.
+*  and **a well-known port number** for the server process, 80 for HTTP.
+
+(2) The TCP segment is passed to the IP Layer, which in turn encapsulates the segment into Internet Packet.
+* IP packet header:
+	* protocol field: designate the layer that is operating above IP.
+	* source physical address.
+	* destination physical address.
+
+(3) The IP datagram is then encapsulated using PPP and then sent to the server.
+
+Receiver information transfer between layers:
+
+(1) The server NIC captures the Ethernet frame and extracts the IP datagram and passes it to IP entity. 
+
+(2) The **protocal field** in IP header indicates that **a TCP segment is to be extracted and passed on to the TCP layer**.
+
+(3) The TCP layer uses the port number to find out that the message is likely to be passed to the HTTP server process.
+
+End-to-end process-to-process connection: let the receiver know which connection the message correspond to.
+* socket address: the port number, the IP address, the protocol type.
+* the source socket address and the destination socket address together uniquely specify the connection between the server process and client process.
 
 
 
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/EthernetPDU.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/EthernetPDU.png" align="center"></a>
+    <figcaption>IP datagrams is encapsulated in an Ethernet frame.</figcaption>
+</figure>
