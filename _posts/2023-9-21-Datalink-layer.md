@@ -58,6 +58,72 @@ Features:
 * Multiplexing
 * Privacy, Integrity, Authentication.
 
+### 1.3 Eend to End versus Hop by Hop
+
+Peer-to-Peer protocols usually occur in two basic settings:
+* across a single hop in the network
+* end to end across an entire network
+
+The two settings can lead to different characteristics about **whether PDUs arrive in order**, about **how long it takes for the PDUs to arrive**.
+
+#### 1.3.1 Hop to Hop Network
+
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/5p2p.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/5p2p.png" align="center"></a>
+    <figcaption>Peer to Peer protocol across a single hop.</figcaption>
+</figure>
+
+Above figure (a) show **a peer-to-peer protocol that operates across a single hop in a network**. The data link layer takes packets from the network layer, encapsulates them in frames that it transfers across the link, and delivers them to the network layer at the other end. If the transmission medium is noisy or unreliable it is possible for transmitted frames to not arrive at the receiver. 
+
+In figure (b), we depict the data link that connects packet switch A and packet switch B in the broader context of a network.
+
+#### 1.3.2 End to End Network
+
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/5e2e.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/5e2e.png" align="center"></a>
+    <figcaption>Peer to Peer protocol operating end to end across a network - protocol stack view.</figcaption>
+</figure>
+
+The **transport layer peer processes at the end systems** accept messages from **their higher layer and transfer these messages by exchanging segments end to end across the network**. The exchange of segments is accomplished by using **network layer service**.
+
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/5e2enet.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/5e2enet.png" align="center"></a>
+    <figcaption>Peer-to-Peer protocols operating end to end across a network - spatial view.</figcaption>
+</figure>
+
+**The task of the peer-to-peer protocols** in this case can be quite complicated. The figure shows **the two end systems α and β operating across a three-node network**. 
+* The segments that are exchanged by the end systems are encapsulated in packets that **traverse the three-node network**.
+
+Suppose that the network operates in **datagram mode** where **packets from the same end system are routed independently**.
+
+It is then possible that packets will **follow different paths across the network**, and so their corresponding segments may **arrive out of order at their destination**. Some packets and their segments may also be **delayed for long periods or even lost if they are routed to a congested packet switch**. 
+
+The peer processes at the transport layer may need to take into account all the characteristics of the network transfer service to be able to provide **the desired service to its higher layer**. 
+
+**Note that end-to-end peer protocols can also be implemented at layers higher than the transport layer, for example, HTTP at the application layer.**
+
+#### 1.3.3 Comparision
+
+
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/5eh.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/5eh.png" align="center"></a>
+    <figcaption>End-to-End versus Hop-by-Hop approaches.</figcaption>
+</figure>
+
+**Hop-to-Hop**
+
+As for Hop-to-Hop, To provide reliable communication, **error-control procedures can be introduced at every hop**, that is, between every pair of adjacent nodes in a path across the network. Every node is then **required to implement a protocol that checks for errors and requests retransmission using ACK and NAK messages** until a block of information is received correctly.
+
+The hop-by-hop approach **initiates error recovery** more quickly and may give more reliable
+service. On the other hand, the processing in each node is more complex.
+
+
+**End-to-End**
+
+An end-to-end approach removes the error-recovery responsibility from the intermediate nodes.  
+* **blocks of information are forwarded across the path, and only the end systems are responsible for initiating error recovery**.
+
+In the case of **reliable transfer service**, both approaches have been implemented. In situations where errors are infrequent, end-to-end mechanisms are preferred. 
 
 
 
@@ -164,7 +230,7 @@ The receiver always in **ready-state** waiting for a notification of an arriving
     * error frame: the frame is discarded and no further action is taken.
 
 
-
+The timer's time is longer than the average round-trip time.
 
 
 #### 2.2.2 Performance Issues
@@ -583,31 +649,80 @@ In the frame-mapped mode, GFP can be used to carry variable length payloads, suc
 
 In the transparent-mapped mode, GFP carries synchronous information streams with low delay in fixed length frames.
 
+## 4. Point-To-Point Protocol
 
+The Point-to-Point Protocol provide a method for **encapsulating IP packets over point-to-point links**.
 
+* PPP can be used as **a data link control** to connect **two routers or can be used to connect a personal computer to an Internet service provider (ISP)** using **a telephone line and a modem**.
 
-## 4. HDLC Data Link Control
+The PPP protocol can operate over almost any type of full-duplex point-to-point tranmission link. It can also operate over
+* traditional asynchronous links
+* bit synchronous links
+* new transmission system: ADSL & SONET.
+
+### 4.1 Point-To-Point Framing
+
+PPP protocol uses an **HDLC like frame formate**. Unlike the HDLC, PPP frame consists of **an integer number of bytes**. So the byte stuffing technique is not used, **the byte insertion method is used**.
+
+the second field in the PPP frame normally contains the "all 1s" address field(0XFF).
+* indicates that **all stations are to accept the frame**.
+
+The control field is usually set to  00000011 (0x03).
+* PPP is normally run in  connectionless mode.
+* **indicates an unnumbered HDLC frame**, and sequence number is not used.
+
+### 4.1 Point-To-Point Process
+
+PPP was designed to **support multiple network protocols simutaneously**. PPP can **transfer packets that are produced by different network layer protocols**. 
+* This situation arises in **multiprotocol** routers that can simutaneously support several network layer protocols.
+* The protocol field is 1 or 2 bytes long and **is used to identify the network layer protocol** of the packet contained in the information field.
+
+The PPP protocol provides many useful capabilities through a link control protocol and a family of network control protocols.
+
+(1) The Link Control Protocol(LCP): is **used to set up, configure, test, maintain, and terminate a link connection**.
+* multilink PPP allows a high-speed data link to be built from multiple low-speed physical links.
+
+(2) The Network Control Protocol(NCP) is used **to configure each network layer protocol that is operate over the link**.
+* PPP can subsequently **transfer packets from these different network layer protocols over the same data link**(IP, IPX, Decnet, AppleTalk).
+* The destination peer can then direct the encapsulated packet to the appropriate network layer protocol by **reading the protocol field in the frame**.
+
+(3) The Password Authentication Protocol(PAP) requires the initiator to send **an ID and a Password**. 
+* The peer process the responds with a  message indicating that the authentication has been successful or has failed.
+* When the authentication is failed, the PAP instructs the LCP to terminate the link.
+* PAP is susceptible to eavesdropping.
+
+(4) The Challenge-Handshake Authentication Protocol(CHAP) **provides greater security by having the initiator and the responder go through a challenge-response sequence**.
+* CHAP assumes that the peer processes have somehow established a shared secret key.
+* The CHAP protocol allows an authenticator to reissue periodically the challenge to reauthenticate the process.
+
+## 5. HDLC Data Link Control
 
 High-Level Data Link Control(HDLC) provides a rich set of standards for operating a data link over bit synchronous physical layers.
 
+### 5.1 Data Link Services
 
-### 4.1 Data Link Services
-
-The **data link control** as a set of functions whose role is  to provide a communication service to the network layer.
+The **data link control** as a set of functions whose role is to provide a communication service to the network layer.
 
 The network layer entity is involved in an exchange of packets with a peer network layer entity located at a neighbor packet-switching node. **To exchange these packets the network layer must rely on the service that is provided by the data link layer**. The data link layer itself **transmit frames and make use of the bit transport service** that is provided by the physical layer, that is, the actual digital transmission system.
 
+
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/5DataLinkLayer.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/5DataLinkLayer.png" align="center"></a>
+    <figcaption>The data link layer.</figcaption>
+</figure>
+
+
 **Transmission**
 
-The network layer passes **its packets(network layer PDU / NLPDU)** to the data link layer in the form of **a data link SDU**. The data link layers adds **a header and CRC check bits** to the SDU to form **a data link PDU**. The frame is transmitted using the physical layer.
+The network layer passes **its packets(network layer PDU / NLPDU)** to the data link layer in the form of **a data link SDU**. The data link layers adds **a header and CRC check bits** to the SDU to form **a data link PDU frame**. The frame is transmitted using the physical layer.
 
 **Receiver**
 
 The data link layer at the other end recovers the frame from the physical layer, **performs the error checking, and when appropriate delivers the SDU(packet) to its network layer**.
 
-Data link layers can be configured to provide several types of services to the network layer.
+Data link layers can **be configured to provide several types of services to the network layer**.
 * connection-oriented service: provide error-free, ordered delivery of packets. involves three phase:
-    * setting up the connection: service access point(SAP).
+    * setting up the connection: Each network layer has a **service access point(SAP) (identified by addresses)** through which it accesses its data link  layer.
     * the actual transfer of packet encapsulated in data link frames.
     * release the connection and free up the variable and buffers. 
 
@@ -616,7 +731,7 @@ Data link layers can be configured to provide several types of services to the n
     * unacknowledged service.
 
 
-### 4.2 HDLC Configurations and Transfer Modes
+### 5.2 HDLC Configurations and Transfer Modes
 
 HDLC provides for a variety of data transfer modes that can be used in a number of different configurations. 
 
@@ -629,26 +744,57 @@ the balanced point-to-point link configuration: two stations implement the data 
 * information frames can be transmitted in full-duplex manner.
 
 
-### 4.3 HDLC Frame Format
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/5HDLCConfig.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/5HDLCConfig.png" align="center"></a>
+    <figcaption>HDLC Configurations.</figcaption>
+</figure>
+
+
+
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/5HDLCFrame.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/5HDLCFrame.png" align="center"></a>
+    <figcaption>HDLC frame format.</figcaption>
+</figure>
+
+
+
+### 5.3 HDLC Frame Format
+
+The functionality of a protocol depends on the control fields that defined in the header.
 
 The HDLC Frame Format:
-* HDLC frame is delineated by two 8-bit flags. 
-* The frame has a field for only one address. 
-* 8- or 16- bit control field.
+* Flags: HDLC frame is delineated by two 8-bit flags. 
+* Address: The frame has a field for only one address. (because one primary, multi secondary, the address field alywas contains the address of the secondary.)
+* Control: 8- or 16- bit control field.
+* Information: contains the user information.
+* FCS: **a 16- or 32- bit CRC calculated over the control, address, and information filed** is used to provide error-detection capability.
+
+
 
 The control fields type:
 * 0 in the first bit: an information frame.(I-frame)
 * 10 in the first two bits : supervisory frame.
 * 11 in the first twor bits: unnumbered frame.
 
+
 the information frame and supervisory frame **implement the main functions of data link control, which is to provide error and flow control**.
 
-Poll/Final bit(P/F): In unbalanced mode this bit indicates a poll when being sent from a primary to a secondary. The bit indicates a final frame when being sent from a secondary to a primary. 
-* To **poll a given secondary**, a host sends a frame to the secondary, indicated by the address field with the P/F bit set to 1. Only the last frame transmitted from **the secondary has the P/F bit set to 1 to indicate that it is the final frame**.
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/5controlfieldformate.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/5controlfieldformate.png" align="center"></a>
+    <figcaption>Control field format.</figcaption>
+</figure>
 
-N(S) field in I-frame provides **the send sequence number** of the I-frame. 
 
-N(R) field is used to **piggyback acknowledgements and to indicate the next frame that is expected at the given station**.
+
+(1) Poll/Final bit(P/F): 
+* In unbalanced mode **this bit indicates a poll when being sent from a primary to a secondary**.
+* **The bit indicates a final frame when being sent from a secondary to a primary**. 
+* To **poll a given secondary**, a host sends a frame to the secondary, indicated by the address field with the P/F bit set to 1. 
+* Only the last frame transmitted from **the secondary has the P/F bit set to 1 to indicate that it is the final frame**.
+
+(2) N(S) field in I-frame provides **the send sequence number** of the I-frame. 
+
+(3) N(R) field is used to **piggyback acknowledgements and to indicate the next frame that is expected at the given station**.
 
 Supervisory frames have 4 values if the S bits in the control field:
 * SS = 00: **receive ready frame(RR)**. RR frames are used to acknowledge frames when no I-frames are available to piggyback the acknowledgment
@@ -660,7 +806,7 @@ Supervisory frames have 4 values if the S bits in the control field:
 
 HDLC has two options for sequence numbering. In default HDLC uses a three-bit sequence numbering.
 * default 3 bits. window size is 7 for Stop-and-Wait and Go-Back-N ARQ.
-* In the extended sequence numbering option, the control field is increased to 16 bits. The sequence numbers are increased to 7 bits. The maximum send window size is 127 for Stop-and-Wait and Go-Back-N ARQ. For Selective Repeat ARQ, the maximum send and receive window sizes are 4 and 64 respectively.
+* In the extended sequence numbering option, the control field is increased to 16 bits. The sequence numbers are increased to 7 bits. **The maximum send window size is 127 for Stop-and-Wait and Go-Back-N ARQ**. For **Selective Repeat ARQ, the maximum send and receive window sizes are 4 and 64 respectively**.
 
 The unnumbered frames implement a number of control functions. Each type of unnumbered frame is identified by a specific set of M bits. During call setuop ir rekease
 
