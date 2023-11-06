@@ -15,13 +15,33 @@ feature: https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io
 
 **Switched networks**: provide interconnection between users by means of transmission lines, multiplexers and switchers. The transfer of information across such networks requires **routing tables** to direct the information from source to destination.
 
+* They use routing in transferring information from source to destination. 
+* They use **hierarchical addressing** to help routing.
+
 **Broadcast networks**: All information is received by all users, routing is not necessary. A **nonhieracrchical addressing scheme** is sufficient to indicate which user the information is destined to.
+
+* transmission medium is shared by a number of users. 
+* All users hear the transmitted information. There is no need for routing and simple flat addressing is sufficient. 
+* This type of networks is also known as multiple access networks.
+* This type of networks requires medium access control (MAC) protocol to coordinate access to the medium.
+
+
 
 **Local area networks(LANs)**: emphasis on low cost and simplicity, have been traditionally based on the broadcast approach.
 
 **Multiple Access Networks**: a single transmission medium is shared by a community of users.
 
 **Medium Access Control(MAC)**: to **coordinate the access to the channel(avoid colliding problem)** so that information gets through from a source to a destination in **the same broadcast network**.
+
+
+Medium Sharing Techniques:
+* Static Channelization
+* Dynamic Medium Access Control
+    * Scheduling
+    * Random Access
+
+
+
 
 <figure>
     <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/MultiMedia.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/MultiMedia.png" align="center"></a>
@@ -40,7 +60,7 @@ feature: https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io
 Two broad categories of schemes for sharing a transmission medium.:
 * Channelization Schemes: a static and collision-free sharing of the medium. They involve the partitioning of the medium into separate channels that are then decided to particular users.
     * steady stream of information
-* MAC schemes: a **dynamic sharing of the meduim on a per frame basis** that is better matched to situations in which **the user traffic is bursty**.
+* MAC schemes(Dynamic Medium Access Control): a **dynamic sharing of the meduim on a per frame basis** that is better matched to situations in which **the user traffic is bursty**.
     * random access
     * scheduling
 
@@ -101,13 +121,20 @@ A collision of frame transmissions take place. In the case station B must have b
 </figure>
 
 
-Assume L is **the frame length**, R is **the transmission bit rate**. The seconds required to transmit a frame:
+Throughput = Effective Transmission Rate.
+
+Noramlized Throughput = Transmission Efficiency.
+
+Assume L is **the frame length**, R is **the transmission bit rate**. The packet transmission time (seconds):
 
 $$X = L/R$$
 
 A frame transmission time requires:
 
-$$L/R + 2t_prop$$
+$$L/R + 2t_prop = X + 2t_prop$$
+
+G = **total(new+collided) frames arrival rate per X sec**:
+
 
 The throughput of a system is defined as the actual rate at which information is sent over the channel. The **maximum throughput**:
 
@@ -169,6 +196,10 @@ Difference between noraml transmission errors and frame collision:
 * Transmission Error: noise affect only a single station.
 * Frame Collision: more than one retransmission.
 
+* never monitor the channel
+* have no time slot
+* random retransmission
+
 
 <figure>
     <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/6aloharandom.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/6aloharandom.png" align="center"></a>
@@ -194,7 +225,7 @@ Vulnerable period: t0-X to t0+X. Any frames begin its transmission in the period
 
 **arrival rate of new frames(S)**: in units of frames/X seconds.
 
-**total arrival rate(G)**: in units of frames/X seconds. also called total laod.
+**total arrival rate(G)**: **total(new+collided) frames per X seconds** in units of frames/X seconds. also called **total load**.
 
 
 The key simplifying assumption: the backoff algorithm spreads the retransmissions so that frame transmissions, new and repeated, are **equally likely to occur at any instant in time**.
@@ -202,11 +233,14 @@ The key simplifying assumption: the backoff algorithm spreads the retransmission
 
 The number of frames transmitted in a time interval has a poisson distribution:
 
-$$P[k  transmissions in 2X seconds] = ((2G)^k/k!)e^{-2G}$$
+$$P[k  transmissions in 2X seconds] = ((2G)^k e^{-2G})/k!$$
 
-The theoughput S is equal to the total arrival rate G times the probability of a successful transmission.
+**The theoughput S is equal to the total arrival rate G times the probability of a successful transmission.**
+
+$$P[NoCollision]=P_0 =e^(-2G)$$
 
 $$S = GP[NoCollision] = GP[0transmissionin2Xseconds]$$
+
 $$S = Ge^{-2G}$$
 
 
@@ -230,11 +264,17 @@ Slotted ALOHA: reduces collisions by **constraining the stations to transmit in 
 
 Vulnerable period: from t0-X to t0.
 
+$$P_k = (G)^ke^{-G}/k!$$
+
 $$S = GP[no collision] = GP[0transmissionsinXseconds]$$
 
 $$S = Ge^{-G}$$
 
-Aloha and Slotted Aloha show how low-delay frame transmission is possible using essentially uncoordinated access to a media.
+Aloha and Slotted Aloha show how **low-delay frame transmission is possible using essentially uncoordinated access to a media**.
+
+S is the number of frames per X sec that can be successfully
+transmitted and it corresponds to normalized throughput.
+
 
 ### 3.3 Carrier Sense Multiple Access
 
@@ -346,7 +386,12 @@ The maximum throughput in the CSMA-CD system occurs when all of the channel time
 
 $$ρ_{max}=X/(X+t_{prop}+2et_{prop})=1/(1+(2e+1)a)=1/(1+(2e+1)Rd/vL)$$
 
-$$a = t_prop/X$$
+$$a = t_{prop}/X$$
+
+
+The average cycle duration:
+
+$$c = X + t_{prop} + 2et_{prop}$$
 
 * a is the propagation delay normalized to the frame transmission time.
 * R: bit rate of the medium.
@@ -386,6 +431,13 @@ The stations take turns transmitting a single frame at the full rate R bps, and 
 
 * Each cycle begins with **a reservation interval**.
 
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/6reserve.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/6reserve.png" align="center"></a>
+    <figcaption>Reservation systems.</figcaption>
+</figure>
+
+
+
 In the simplest case, the reservation interval **consists of M minislots, one minislot per station**. Stations use their corresponding minislot to indicate that **they have a frame to transmit in  a corresponding cycle**. The stations announce their intention to transmit a frame by broadcasting their reservation bit during the appropriate minislot.
 
 **By listening to the reservation interval, the stations can determine the order of frame transmissions in the corresponding cycle**. The length of the cycle will then correspond to **the number of stations that have a frame to transmit**.
@@ -398,6 +450,10 @@ About Efficiency:
 Suppose the propagation time is negligible, The maximum throughput occurs when all stations are busy, and hence the maximum thoughput is:
 $$ρ_{max} = 1/(1 + v)$$
 
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/6reserve2.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/6reserve2.png" align="center"></a>
+    <figcaption>Reservation systems.</figcaption>
+</figure>
 
 Suppose that the propagation delay is not negligible. If the stations transmit their reservations in the same way as before, but the reservations do not take effect until some fixed number of cycles later.
 
@@ -546,7 +602,9 @@ Suppose that a maximum of one frame can be transmitted per token.
 * The number of bit delays in an interface: b.
 * The total delay introduced by the M station interfaces: Mb.
 * The speed of the transmission lines: R.
+* The number bit  of a token: f
 
+$$τ = τ_1 + τ_2 + ...+ τ_M$$
 $$τ' = τ + (Mb)/R$$
 $$a' = τ' / X$$
 
@@ -569,65 +627,135 @@ $$ρ_{max} = MX/(M(X+ τ') +τ') = 1/(1 + a'(1+1/M))$$
 
 The maximum throughput for single-frame operation is the lowest of the three approaches.
 
+
+**The Calculation in PPT**
+
+Throughput = R_{eff} = effective transmission rate = average number of useful information bits in a cycle/ average duration of a cycle
+
+$$R_{eff} = ML / (M(X + τ') + τ' + Mf/R)$$
+
+The Max Normal Throughput ρ= effective transmission rate / transmission rate 
+
+$$ρ = R_{eff}/R = MX/(M(X+τ')+Mf/R + τ')$$
+
 ### 4.4 Comparision of Scheduling and Random Access Systems
 
-(1) In scheduling reservation interval, polling and token transmission constitue overhead and in random access systems collisions are overhead.
+(1) In scheduling reservation interval, **polling and token transmission constitue overhead** and in random access systems **collisions are overhead**.
 
-(2) In sheduling overhead is proportional to the number of stations, in random access systems overhead is proportional to the load.
+(2) In **sheduling overhead is proportional to the number of stations**, in **random access systems overhead is proportional to the load**.
 
-(3) Scheduling systems are more efficient under heavy load and random access system are more efficient under light load.
+(3) **Scheduling systems are more efficient under heavy load** and **random access system are more efficient under light load**.
 
-(4) Scheduling systems provide orderly access to the medium, random access systems show great delay variability in access to the medium.
+(4) **Scheduling systems provide orderly access to the medium**, **random access systems show great delay variability in access to the medium**.
 
+## 5 CSMA-CA
 
-
-
-
-
+### 5.1 Conception
 
 
+The distributed coordination function (DCF) provides support for asynchronous data transfer of MSDUs on a best-effort basis.
+
+The DCF is based on the carrier sensing multiple access with collision avoidance (CSMA-CA) protocol.
 
 
+Interframe Space(IFS): Allstations are obliged to remain quiet for a certain minimum period after a transmission has been completed.
+
+SIFS: High-priority frames must wait the short IFS before they contend for the channel.
+* ACK, CTS
+
+PCF Interframe Space(PIFS): is intermediate in duration and is used by the PCF to gain priority access to the medium at the start of a CFP.
+
+The DCF interframe space (DIFS) is used by the DCF to transmit data and management MDPUs
+
+network allocation vector (NAV), which indicates the amount of time that must elapse until the current transmission is complete and the channel can be sampled again for idle status.
+
+RTS: request-to-send
+
+CTS: clear-to-send
 
 
+When a station has a new packet to transmit, it senses the channel:
 
+1. If channel is idle source transmits an RTS packet to the destination. If it receives a CTS packet from the destination, source starts transmitting the data packet.
 
+2. If channel is busy or RTS collides, then source backoffs a random amount of time. Contention intervals are divided into minislots. During each minislot a station decrements its backoff counter by one. If during count down channel becomes busy, then it freezes the decrement of the counter. After channel becomes idle it resumes decrementing of the backoff counter from where it left. When backoff counter reaches to zero it transmits its RTS packet.
 
+3. The destination transmits an ACK after receiving a data packet.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+4. Following successful transmission of a packet, if a station has another packet to transmit, it has to back off random amount of time.
 
 
 
 
 
+For each retransmission attempt, the number of available backoff slots grows exponentially as 2^(2+i). The idle period after a DIFS period is referred to as the contention window (CW).
+
+
+
+
+## 6 Spanning Tree Algorithm
+
+When two or more networks are interconnected at the **physical layer**, **the type of device is called a repeater**.
+
+
+When two or more networks are interconnected **at the MAC or data link layer**, the type of device is called a **bridge**. 
+* Because bridges exchange frames at the data link layer, the frames can contain any type of network layer PDUs.
+
+When two or more networks are interconnected at the **network layer**, the type of device is called a **router**.
+
+The device that **interconnects networks at a higher level** is usually called a **gateway**.
+
+
+**Local area Networks (LANs)** that involve sharing of media, such as Ethernet and token ring, can only handle up to some maximum level of traffic. 
+
+To have a frame filtering capability, a bridge has to monitor the MAC address of each frame. For this reason, a bridge cannot work with physical layers. On the other hand, a bridge does not perform a routing function, which is why a bridge is a layer 2 relay.
+
+
+Two types of bridges are widely used: transparent bridges and source routing bridges. **Transparent bridges are typically used in Ethernet LANs**, whereas **source routing bridges are typically used in token-ring and FDDI networks**.
+
+### 6.1  Transparent Bridge 
+
+ A transparent bridge performs the following three basic functions:
+
+1. Forwards frames from one LAN to another.
+
+2. Learns where stations are attached to the LAN.
+
+3. Prevents loops in the topology.
+
+BRIDGE LEARNING
+
+The table is called a forwarding table, or forwarding database, and associates each station address with a port number.
+
+The learning process just described **works as long as the network does not contain any loops, meaning that there is only one path between any two LANs**.
+
+SPANNING TREE ALGORITHM
+
+**To remove loops in a network**, the IEEE 802.1 committee specified an algorithm called the **spanning tree algorithm**.
+
+
+The spanning tree algorithm requires that each bridge have a unique bridge ID, each port within a bridge have **a unique port ID**, and all bridges on a LAN recognize **a unique MAC group address**. Together, bridges participating in the spanning tree algorithm carry out the following procedure:
+
+1. Select a root bridge among all the bridges in the bridged LAN. **The root bridge is the bridge with the lowest bridge ID.**
+
+
+2. Determine the **root port** for each bridge except the root bridge in the bridged LAN. **The root port is the port with the least-cost path to the root bridge**. In case of ties the
+root port is the one with lowest port ID. Cost is assigned to each LAN according to some criteria. One criterion could be to assign higher costs to lower speed LANs. A path cost is the sum of the costs along the path from one bridge to another.
+
+
+3. Select a designated bridge for each LAN. **The designated bridge is the bridge that offers the least-cost path from the LAN to the root bridge.** In case of ties the designated bridge is the one with the lowest bridge ID. The port that connects the LAN and the designated bridge is called **a designated port**.
+
+Finally, all root ports and all designated ports are placed into a “forwarding” state. These are the only ports that are allowed to forward frames. The other ports are placed into a “blocking” state.
+
+ The procedure to discover a spanning tree can be implemented by using a distributed algorithm. Each bridge exchanges special messages called **configuration bridge protocol data units (configuration BPDUs).** A configuration BPDU
+contains the bridge ID of the transmitting bridge, the root bridge ID, and the cost of the
+least-cost path from the transmitting bridge to the root bridge. Each bridge records
+the best configuration BPDU it has so far.
+
+
+### 6.2 Source Routing Bridges
 
 
 
 
 
-
-
-
-
- 
