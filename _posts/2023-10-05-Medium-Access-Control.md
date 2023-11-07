@@ -420,10 +420,17 @@ reaction time.
 ## 4 Scheduling Approaches To Medium Access Control
 
 The random access approaches:
-* Advantages: The random access approaches provide **low-delay frame transfer** in broadcast networks.
+* Advantages: **Under Light Traffic** the random access approaches provide **low-delay frame transfer** in **broadcast networks**.
 * Disadvantages: The random access approaches **limit the maximum achievable throughput** and can **result in large variability in frame delays** under traffic loads.
 
 **The scheduling approaches to medium access control** attempt to produce **an orderly access** to the transmission medium.
+
+Scheduling Approaches:
+* Reservation Systems
+    * Polling System
+* Token Ring System
+
+
 
 ### 4.1 Reservation System
 
@@ -444,10 +451,11 @@ In the simplest case, the reservation interval **consists of M minislots, one mi
 * Variable-length frames can be handled if the reservation message includes frame-length information.
 
 About Efficiency:
-* The frame transmission time: X = 1.
-* Each frame transmission requires 1+v time units.
+* The **frame transmission time**: X = 1.
+* a **reservation minislot** requires v time unit(v<1)
+* Each **frame transmission requires 1+v time units**.
 
-Suppose the propagation time is negligible, The maximum throughput occurs when all stations are busy, and hence the maximum thoughput is:
+**Suppose the propagation time is negligible**, The maximum throughput occurs when all stations are busy, and hence the maximum thoughput is:
 $$ρ_{max} = 1/(1 + v)$$
 
 <figure>
@@ -471,13 +479,20 @@ $$ρ_{max} = 1/ (1 + v/0.368) = 1/(1 + 2.71v)$$
 
 ### 4.2 Polling
 
-Polling System:m stations make turns accessing the medium. **At any given time only one of the stations has the right to transmit into the medium**.
+Polling System:**m stations make turns accessing the medium**. **At any given time only one of the stations has the right to transmit into the medium**.
+
+
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/_type.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/_type.png" align="center"></a>
+    <figcaption>.</figcaption>
+</figure>
+
 
 #### 4.2.1 Centralized with a host computer
 
-The system consists of an **outbound line** in which information is transmitted from the host computer to the stations.
+The system consists of an **outbound line** in which information is transmitted **from the host computer to the stations**.
 
-The system consists of an **inbound line** in which must shared with M stations. **The inbound line that must be shared with the M stations**. The inbound line is a shared medium that **requires a medium access control to coordinate the transmission from stations to the host computer**.
+The system consists of an **inbound line** in which must shared with M stations. **The inbound line that must be shared with the M stations**. The inbound line is **a shared medium** that **requires a medium access control to coordinate the transmission from stations to the host computer**.
 
 The host computer acting as a centrol controller that issues control messages to coordinate the transmission from the stations. 
 * The central controller sends a **polling message** to a particular station.
@@ -495,12 +510,20 @@ Time-division duplex(TDD): The variation of FDD, having inbound and outbound tra
 
 Stations have developed **a polling order list under some protocol**. All stations can receive the transmissions from all other stations. After a station is done transmitting, it is responsible for sending a polling message to the next station in the polling order list.
 
-* walk time: elapse while the polling message propagates and is received.
+#### 4.2.4 Polling Mechanism
+
+
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/_p.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/_p.png" align="center"></a>
+    <figcaption>.</figcaption>
+</figure>
+
+* walk time: elapse while **the polling message propagates and is received**.
 * frame transmission time.
 
 In some system, the transmission time is allowed to transmit as long as it has information in its buffers. In other systems, the transmission time for each station is limited to some maximum duration.
 
-The total walk time τ' is the sum of the walk times in one cycle, represents the minimum time for one round of polling of all the stations. **The walk time between consecutive stations t' is determined by several factors**:
+The **total walk time τ' is the sum of the walk times in one cycle**, represents the minimum time for one round of polling of all the stations. **The walk time between consecutive stations t' is determined by several factors**:
 * the propagation time required for a signal to propagate from one station to another.
 * the time required for a station to begin transmitting after it has been polled.
 * the time required to transmit the polling messages.
@@ -530,7 +553,7 @@ The walk times required to pass control of the access right to the medium can be
 
 ### 4.3 Token-Passing Rings
 
-Polling can be implemented in a distributed fashion on networks with a ring topology. Such networks consist of station interfaces that are connected by point-to-point digital transmission lines. 
+Polling can be implemented in **a distributed fashion on networks with a ring topology**. Such networks consist of **station interfaces that are connected by point-to-point digital transmission lines**. 
 
 **An interface in the listen mode** reproduces **each bit that is received from its input to its output after some constant delay**, ideally in the order of one bit time. This delay allow the interface to monitor the passing bit stream for certain patterns.
 * address
@@ -570,14 +593,15 @@ A frame that is inserted into the ring must be removed.  The frame removal appro
 The ring latency is defined as **the number of bits that can be simutaneously in transit around the ring**.
 
 (1) Multitoken approach. The free token is transmitted immediately **after the last bit of the data frame**. It allows several frames to be in transmit in different part of ring.
+* This approach minimize the time required to pass a free token to the next station.
 
 (2) Single-token Operation. Involves inserting the free token after **the last bit of the busy token is recieved back** and **the last bit of the frame is transmitted**.
-
 * If the frame length greater than the ring latency, the operation is equivalent to multitoken.
 
 (3) Single-frame Operation. The free token is inserted after **the transmitting station has received the last bit of its frame**.
-
 * If the frame length greater than ring latency, this approach corresponds to multitoken operation.
+
+'
 
 ##### About the limitation
 
@@ -650,12 +674,20 @@ $$ρ = R_{eff}/R = MX/(M(X+τ')+Mf/R + τ')$$
 
 ## 5 CSMA-CA
 
-### 5.1 Conception
 
 
-The distributed coordination function (DCF) provides support for asynchronous data transfer of MSDUs on a best-effort basis.
+The distributed coordination function (DCF) **provides support for asynchronous data transfer of MSDUs on a best-effort basis**.
 
-The DCF is based on the carrier sensing multiple access with collision avoidance (CSMA-CA) protocol.
+
+The DCF is based on the **carrier sensing multiple access with collision avoidance** (CSMA-CA) protocol.
+
+Problem:
+
+1. Transmission errors in the channel is high
+
+2. Hidden terminal problem
+
+Solution: CSMA-CA
 
 
 Interframe Space(IFS): Allstations are obliged to remain quiet for a certain minimum period after a transmission has been completed.
@@ -674,6 +706,12 @@ RTS: request-to-send
 CTS: clear-to-send
 
 
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/_csmaca.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/_csmaca.png" align="center"></a>
+    <figcaption>.</figcaption>
+</figure>
+
+
 When a station has a new packet to transmit, it senses the channel:
 
 1. If channel is idle source transmits an RTS packet to the destination. If it receives a CTS packet from the destination, source starts transmitting the data packet.
@@ -686,6 +724,11 @@ When a station has a new packet to transmit, it senses the channel:
 
 
 
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/_csmaca2.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/_csmaca2.png" align="center"></a>
+    <figcaption>.</figcaption>
+</figure>
+
 
 
 For each retransmission attempt, the number of available backoff slots grows exponentially as 2^(2+i). The idle period after a DIFS period is referred to as the contention window (CW).
@@ -693,9 +736,9 @@ For each retransmission attempt, the number of available backoff slots grows exp
 
 
 
-## 6 Spanning Tree Algorithm
+## 6 LAN Bridges & Ethernet Switches
 
-When two or more networks are interconnected at the **physical layer**, **the type of device is called a repeater**.
+When two or more networks are interconnected at the **physical layer**, the type of device is called a **repeater**.
 
 
 When two or more networks are interconnected **at the MAC or data link layer**, the type of device is called a **bridge**. 
@@ -706,12 +749,14 @@ When two or more networks are interconnected at the **network layer**, the type 
 The device that **interconnects networks at a higher level** is usually called a **gateway**.
 
 
-**Local area Networks (LANs)** that involve sharing of media, such as Ethernet and token ring, can only handle up to some maximum level of traffic. 
+### 6.1 
+
+**Local area Networks (LANs)** that involve sharing of media, such as Ethernet and token ring, can only **handle up to some maximum level of traffic**. 
 
 To have a frame filtering capability, a bridge has to monitor the MAC address of each frame. For this reason, a bridge cannot work with physical layers. On the other hand, a bridge does not perform a routing function, which is why a bridge is a layer 2 relay.
 
 
-Two types of bridges are widely used: transparent bridges and source routing bridges. **Transparent bridges are typically used in Ethernet LANs**, whereas **source routing bridges are typically used in token-ring and FDDI networks**.
+Two types of bridges are widely used: transparent bridges and source routing bridges. **Transparent bridges are typically used in Ethernet LANs**, whereas **Source Routing Bridges are typically used in token-ring and FDDI networks**.
 
 ### 6.1  Transparent Bridge 
 
@@ -723,20 +768,43 @@ Two types of bridges are widely used: transparent bridges and source routing bri
 
 3. Prevents loops in the topology.
 
-BRIDGE LEARNING
+***(1) BRIDGE LEARNING**
 
-The table is called a forwarding table, or forwarding database, and associates each station address with a port number.
+The table is called a **forwarding table**, or forwarding database, and associates each station address with a port number.
 
 The learning process just described **works as long as the network does not contain any loops, meaning that there is only one path between any two LANs**.
 
-SPANNING TREE ALGORITHM
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/_learn.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/_learn.png" align="center"></a>
+    <figcaption>.</figcaption>
+</figure>
+
+To have a bridge that can adapt to the dynamics of the network, we need two additional minor changes:
+* First, **the bridge adds a timer associated with each entry**. When the bridge adds an address
+to its table, the timer is set to some value (typically on the order of a few minutes).
+The timer is decremented periodically. When the value reaches zero, the entry is erased
+so that a station that has been removed from the LAN will eventually have its address
+removed from the table as well. When the bridge receives a frame and finds that the
+source address of the frame matches with the one in the table, the corresponding entry is
+“refreshed” so that the address of an active station will be retained in the table. 
+* Second, **the bridge could update address changes quickly** by performing the following simple
+task.
+
+
+
+**(2) SPANNING TREE ALGORITHM**
 
 **To remove loops in a network**, the IEEE 802.1 committee specified an algorithm called the **spanning tree algorithm**.
 
 
-The spanning tree algorithm requires that each bridge have a unique bridge ID, each port within a bridge have **a unique port ID**, and all bridges on a LAN recognize **a unique MAC group address**. Together, bridges participating in the spanning tree algorithm carry out the following procedure:
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/_st.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/_st.png" align="center"></a>
+    <figcaption>.</figcaption>
+</figure>
 
-1. Select a root bridge among all the bridges in the bridged LAN. **The root bridge is the bridge with the lowest bridge ID.**
+The spanning tree algorithm requires that each bridge have **a unique bridge ID**, each port within a bridge have **a unique port ID**, and all bridges on a LAN recognize **a unique MAC group address**. Together, bridges participating in the spanning tree algorithm carry out the following procedure:
+
+1. Select a **root bridge** among all the bridges in the bridged LAN. **The root bridge is the bridge with the lowest bridge ID.**
 
 
 2. Determine the **root port** for each bridge except the root bridge in the bridged LAN. **The root port is the port with the least-cost path to the root bridge**. In case of ties the
@@ -745,17 +813,102 @@ root port is the one with lowest port ID. Cost is assigned to each LAN according
 
 3. Select a designated bridge for each LAN. **The designated bridge is the bridge that offers the least-cost path from the LAN to the root bridge.** In case of ties the designated bridge is the one with the lowest bridge ID. The port that connects the LAN and the designated bridge is called **a designated port**.
 
-Finally, all root ports and all designated ports are placed into a “forwarding” state. These are the only ports that are allowed to forward frames. The other ports are placed into a “blocking” state.
+Finally, all root ports and all designated ports are placed into **a “forwarding” state**. These are the only ports that are allowed to forward frames. The other ports are placed into a **“blocking” state**.
 
  The procedure to discover a spanning tree can be implemented by using a distributed algorithm. Each bridge exchanges special messages called **configuration bridge protocol data units (configuration BPDUs).** A configuration BPDU
 contains the bridge ID of the transmitting bridge, the root bridge ID, and the cost of the
 least-cost path from the transmitting bridge to the root bridge. Each bridge records
 the best configuration BPDU it has so far.
 
+Process:
+
+Initially, each bridge assumes that it is the root bridge and transmits configuration
+BPDUs periodically on each of its ports. When a bridge receives a configuration BPDU
+from a port, the bridge adds the path cost to the cost of the LAN that this BPDU
+was received from. The bridge then compares the configuration BPDU with the one
+recorded. If the bridge receives a better configuration BPDU, it stops transmitting on
+that port and saves the new configuration BPDU. Eventually, only one bridge on each
+LAN (the designated bridge) will be transmitting configuration BPDUs on that LAN,
+and the algorithm stabilizes.
+
 
 ### 6.2 Source Routing Bridges
 
 
+Source routing bridges were developed by the IEEE 802.5 committee and are primarily used to **interconnect token-ring networks**.
 
+**The main idea of source routing** is that each station should determine the route to the destination when it wants to send a frame and therefore **include the route information in the header of the frame**.
+
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/_sr.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/_sr.png" align="center"></a>
+    <figcaption>.</figcaption>
+</figure>
+
+
+The **routing information field** is inserted only if **the two communicating stations are on different LANs**. The presence of the routing information
+field is indicated by the **individual/group address (I/G)** bit in the **source address field**.
+
+* If the routing information field is present, the I/G bit is set to 1. If a frame is sent
+to a station on the same LAN, that bit is 0. 
+
+The routing control field defines **the type of frame**,*** the length of the routing information field***, **the direction of the route given by the route designator fields (from left to right or right to left)**, and **the largest frame supported over the path**. 
+
+The route designator field contains a **12-bit LAN number** and a **4-bit bridge number**.
+
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/_sre.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/_sre.png" align="center"></a>
+    <figcaption>.</figcaption>
+</figure>
+
+Process:
+
+The basic idea for a station to discover a route is as follows. 
+* First the station **broadcasts a special frame**, called the single-route broadcast frame. 
+* The frame visits **every LAN in the bridged LAN exactly once**, eventually reaching the destination station.
+* Upon receipt of this frame, the destination station responds with another special frame,
+called the **all-routes broadcast frame**, which **generates all possible routes back to the source station**. 
+
+After collecting all routes, the source station chooses the best route and saves it.
+
+### 6.3 Mixed-Media Bridges
+
+
+Bridges that **interconnect LANs of different type** are referred to as **mixed-media
+bridges**. 
+
+The different between Ethernet and Token-Ring LANs:
+
+(1) Both Ethernet and token-ring LANs use **six-byte MAC addresses** but they differ in
+**the hardware representation of these addresses**. Token rings consider the first bit in a
+stream to be **the high-order bit in a byte**. Ethernet considers such a bit to be the low-order
+bit. 
+
+(2) Ethernet and token-ring LANs differ in terms of the **maximum size frames that are
+allowed**. Ethernet has an upper limit of approximately 1500 bytes, whereas token ring
+has no explicit limit.
+
+(3) Token ring has the three status bits, A and C in the frame status field and E in the
+end delimiter field. Ethernet frames do not have corresponding fields to carry such bits.
+
+
+(4) Another problem in interconnecting LANs is that they use different transmission
+rates. 
+
+Two approaches to bridging between transparent(Ethenet) bridging  domains and source routing domains(token ring):
+* Translational Bridging 
+* Source-Route Transparent Bridging
+
+
+### 6.4 Virtual LAN
+
+
+The notion of a virtual LAN (VLAN) has been developed to address the preceding
+problem by allowing **logical partitioning of stations into communities of interest (called VLAN groups or simply VLANs)** that are not constrained by the **physical location or connectivity**.
+
+Solution: **VLAN-aware bridges**
+
+Implementation:
+* port-based VLANs
+* tagged VLANs
 
 

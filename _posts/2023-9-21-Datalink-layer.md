@@ -442,6 +442,13 @@ The Selective Rpeat ARQ:
  
  When an out-of-sequence frame is observed at the receiver, a NAK frame is sent with sequence number R_next. When the transmitter receive the NAK with sequence number R_next, the transmitter retransmits the R_next frame. **the piggybacked acknowledgement in the information frame continues to carry R_next**.
 
+
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/_srarq.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/_srarq.png" align="center"></a>
+    <figcaption></figcaption>
+</figure>
+
+
 **The Interaction Process**
 
 (1) Initialize
@@ -529,6 +536,10 @@ The L is the size of the pipe in multiples of frames, and we assume the window s
 
 Adaptivity and Robustness are equally important attributes of ARQ.
 
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/_comp.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/_comp.png" align="center"></a>
+    <figcaption></figcaption>
+</figure>
 
 
 
@@ -536,61 +547,91 @@ Adaptivity and Robustness are equally important attributes of ARQ.
 
 The main purpose of Data Link Controls is to enable the transfer of frames of information over the digital bits or octet stream provided by physical layer.
 
+Data Link Layer **Provides transfer of frames over physical layer**. It provides:
+
+(1) Inserting of framing information.
+
+(2) Error Conctrol for reliable information transfer.
+
+(3) Flow Control to prevent transmitter overflowing receiver buffers.
+
+(4) Addressing or protocol type information to **carry information from multiple users**.
+
+
 ### 3.1  Framing
+
 
 Framing: involves **identifying the begining and end of a block of information within digital stream**.
 * Presuppose: There is enough synchronization at the physical layer.
 
-Framing may involve **delineating the boundaries between frames that are of fixed length** or it may involve **delineating between frames that are of variable length**.
+Transmission may be classified into two,
+* Asynchronous transmission
+    * There is no transmission at regular intervals
+* Synchronous transmission
+    * There is transmission at regular intervals
+
 
 The information is contrained to be 
 * an integer number of characters of a certain length.
 * any number of bits.
 
 
-T-1 carrier system: a frame consists of a single framing bit followed by 24 octets. Thereafter, only bit errors, loss of bits, or loss of signal will cause a loss of frame synchronization.
+Framing may involve **delineating the boundaries between frames that are of fixed length** or it may involve **delineating between frames that are of variable length**.
 
-SNET frames: fixed length framing in the physical layer.
+As for frame with fixed length:
 
-ATM cell delineation: is a fixed length packet that consists of 53 bytes. ATM framing can be viewed as a data link layer function and is based on the use of CRC checking.
+(1) T-1 carrier system: a frame consists of a single framing bit followed by 24 octets(192bits). 
+The single framing bit follows the pattern 101010.... When the receiver needs to synchronize to
+a bit streams it is initially in a “hunt” state where it tests a given bit position to see
+if it corresponds to the framing bit. **It is statistically very improbable that an arbitrary position will carry the sequence 1010 . . . for a long time, so eventually the receiver will lock onto the correct framing bit position.**
 
-The essence of framing in these three examples is character counting.
+The T-1 carrier system uses **a framing bit to identify the beginning of each frame**. This is done by **alternating the value of the framing bit at each frame**, assuming that no other bits can sustain an alternating pattern indefinitely. Framing is done by examining each of 193 possible bit positions successively **until an alternating pattern of sufficient duration is detected**. Assume that each information bit takes a value of 0 or 1 independently and with equal probability.
+
+Thereafter, **only bit errors, loss of bits, or loss of signal will cause a loss of frame synchronization**.
+
+(2) SONET frames: fixed length framing in **the physical layer**, where the first two
+octets of each frame consist of the sequence 11110110 00101000.
+
+(3) ATM cell delineation: is a fixed length packet that consists of 53 bytes. ATM framing can be viewed as a data link layer function and is based on the use of CRC checking.
+
+The essence of framing in these three examples is **character counting**.
 
 The purpose of the framing bit or character is merely to **confirm that the frame position has not changed or been lost**.
 
+As for frame with Variable-length:
+
 Variable-length frames need more information to delineate.
-* special characters to identify begining and end of frame.
-* special bit patterns "flags" to identify the beginning and end of frames
-* character counts and CRC checking methods
+* **special characters** to identify begining and end of frame.
+* **special bit patterns** "flags" to identify the beginning and end of frames
+* **character counts** and **CRC checking methods**
 
 ### 3.1 Beginning and End of frame charcters and byte stuffing
 
 **Character-based frame synchronization methods** are used when the information in a frame consists of **an integer number of characters**.
 
+**Asynchronous transmission systems** are used extensively to **transmit sequences of printable characters using eight-bit ASCII code**.
+
 To delineate a frame of characters, special eight-bit codes that do not correspond to printable characters are used as **control characters**.
 * STX: start of text control character. 02
 * ETX: end of text character. 03
+
+**transparent: the frame can carry all possible bit sequences**.
 
 Byte Stuffing: to solve the transparent problem.
 * DLE: data link escape control with HEX value 10. 
 
 DLE STX indicate the beginning of the frame and DLE ETX denotes the end. Extra DLE is inserted or stuffed before **the occurence of a DLE inside the frame**.
 
-
-#### 3.1.1  About T-1 Carrier
-
-The T-1 carrier system uses **a framing bit to identify the beginning of each frame**. This is done by **alternating the value of the framing bit at each frame**, assuming that no other bits can sustain an alternating pattern indefinitely. Framing is done by examining each of 193 possible bit positions successively **until an alternating pattern of sufficient duration is detected**. Assume that each information bit takes a value of 0 or 1 independently and with equal probability.
-
-
-
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/_framing.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/_framing.png" align="center"></a>
+    <figcaption></figcaption>
+</figure>
 
 ### 3.2 Flags, Bit Stuffing and Byte Stuffing
 
 **Flag-based frame synchronization** was developed to transfer **an arbitrary number of bits** within a frame.
 
-The beginning and end of an HDLC frame is indicated by the presence of an eight-bit flag.
-
-The beginning and end of an HDLC frame is indicated by the presence of an eight-bit flag HEX 7E.
+The beginning and end of an HDLC frame is indicated by the presence of an eight-bit flag HEX 7E ( 01111110).
 
 **Bit stuffing** prevents the occurrence of the flag inside the frame. The transmitter examines the content of the frame and insert an extra 0 after each instance of 5 consecutive 1s. The transmitter then attaches the flag at the beginning and end of the resulting bit-stuffed frame.
 
@@ -598,6 +639,13 @@ The beginning and end of an HDLC frame is indicated by the presence of an eight-
 * 0 after 5 1s: stuffing bit.
 * 10 after 5 1s: a flag.
 * 11 after 5 1s: an error.
+
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/_HDLC.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/_HDLC.png" align="center"></a>
+    <figcaption></figcaption>
+</figure>
+
+
 
 **Application: PPP**
 
@@ -612,6 +660,13 @@ Byte stuffing is used to deal with the occurrence of the flag inside the frame.
     * 0x7E -> 0x7D 0x5E
     * 0x7D -> 0x7D 0x5D
 
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/_ppp.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/_ppp.png" align="center"></a>
+    <figcaption></figcaption>
+</figure>
+
+
+
 The receiver must **remove the inserted Control Escape characters** prior to computing the CRC checksum. Each Control Escape octet is removed and following octet is exclusive-ORed with 0x20, unless the Octet is the Flag.
 
 PPP framing can be used over **asynchronous**, **bit-synchronous**, or **octet-synchronous** transmission systems.
@@ -620,15 +675,21 @@ Also provide the framing in Packet-over-SONET.
 
 ### 3.3 CRC-BASED FRAMING
 
-Generic Framing Procedure(GFP): a new standard for framing that is intended to address some shortcomings of PPP framing.
+**Generic Framing Procedure(GFP)**: a new standard for framing that is intended to address some shortcomings of PPP framing.
 
 PPP shotcoming:
 * the size of transmitted frame that contains a given number of characters cannot be predicted ahead of time.
 * privide an opportunity for malicious users to inflate the bandwidth consumed by inserting flag pattern within a frame.
 
-GFP combines a frame length indication field with the Head Error Control(HEC) method used to delineate ATM cells.
+GFP combines a frame length indication field with the **Head Error Control(HEC) method** used to delineate ATM cells.
 * looking at the **length indication field** to find the length of the frame.
 * Attention: the occurrence of an error in the count field leads to a situation where the begining of the next frame cannot be found.
+
+
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/_gfp.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/_gfp.png" align="center"></a>
+    <figcaption></figcaption>
+</figure>
 
 The GFP Frame Structure:
 * Payload Length Indicator(PLI): gives the **size in bytes of the GFP payload area** and so indicate the begining of next GFP frame.
@@ -645,9 +706,9 @@ GFP is designed to operate over octet-synchronous physical layers. The frames in
 
 **Application**
 
-In the frame-mapped mode, GFP can be used to carry variable length payloads, such as Ethernet frames, PPP/IP packets, or any HDLC-framed PDU.
+In the **frame-mapped mode**, **GFP can be used to carry variable length payloads**, such as Ethernet frames, PPP/IP packets, or any HDLC-framed PDU.
 
-In the transparent-mapped mode, GFP carries synchronous information streams with low delay in fixed length frames.
+In the **transparent-mapped mode**, **GFP carries synchronous information streams with low delay in fixed length frames**.
 
 ## 4. Point-To-Point Protocol
 
