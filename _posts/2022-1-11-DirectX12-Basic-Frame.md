@@ -7,8 +7,7 @@ tag:
 - Render 
 - DirectX12
 - Graphics
-comments: true
-blog: true
+graphics: true
 feature: https://github.com/OneSilverBullet/SilverGamer.GitHub.io/blob/gh-pages/_img/blogHead/directX12partI.jpg
 ---
 
