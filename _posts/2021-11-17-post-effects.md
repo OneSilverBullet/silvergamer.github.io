@@ -3,12 +3,9 @@ layout: post
 title:  "Post Effects"
 date:   2021-11-17
 excerpt: "The post effects that you cant live without once you have used."
-tag:
-- Post-Processing 
-- Screen Space
-- Graphics
+tag: [Graphics Pipeline]
 comments: true
-blog: true
+project: true
 feature: https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/blogHead/DOF.jpg
 ---
 ## Overview
