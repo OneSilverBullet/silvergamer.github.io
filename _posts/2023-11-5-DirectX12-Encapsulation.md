@@ -48,3 +48,34 @@ For the GPU to access descriptor in the heap, the heap must be shader-visible.
     <figcaption>DirectX12 Basic Data Structure.</figcaption>
 </figure>
 
+## 1. Types
+
+### .1 Parameter Passing
+
+For efficiency purpose, XMVECTOR values can be passed as arguments to functions in **SSE/SSE2** registers instead of on the stack. We use following types to transfer XMVECTOR:
+* FXMVECTOR
+* GXMVECTOR
+* HXMVECTOR
+* CXMVECTOR
+
+(1) The first three XMVECTOR parameters should be of type FXMVECTOR;
+
+(2) The fourth XMVECTOR should be of type GXMVECTOR;
+
+(3) The fifth and sixth XMVECTOR parameter should be of type HXMVECTOR;
+
+(4) Any additional XMVECTOR parameters should be of type CXMVECTOR. 
+
+Furthermore, the calling convention annotation XM_CALLCONV must be specified before the function name so that the proper calling
+convention is used, which again depends on the compiler version.
+
+```
+inline XMMATRIX XM_CALLCONV XMMatrixTransformation(
+ FXMVECTOR ScalingOrigin,
+ FXMVECTOR ScalingOrientationQuaternion, .
+ FXMVECTOR Scaling,
+ GXMVECTOR RotationOrigin,
+ HXMVECTOR RotationQuaternion,
+ HXMVECTOR Translation);
+```
+

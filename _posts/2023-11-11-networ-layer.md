@@ -108,5 +108,105 @@ An implication of this powerful **aggregation** concept is that a router can **f
 * Class E addresses are reserved for experiments.
 
 
+### 2.3 Subnet Addressing
+
+Problem: With the original addressing scheme, it would be a gigantic task for the local network administrator to manage all 64,000 hosts.
+
+Solution: Subnetting. Add another hierarchical level called 'subnet'.
+
+* Subnet mask: the router needs to store an additional quantity to find the subnet number.
+
+Calculation Process:
+
+(1) The IP Address is:
+
+10010110 01100100 00001100 10110000
+
+(2) The Subnet mask is:
+
+11111111 11111111 11111111 10000000
+
+(3) The subnet number can be determined by performing a binary AND between the subnet mask and the IP address.
+
+10010110 01100100 00001100 10000000
+
+**The Router Process Example**
+
+(1) a Packet having a destination IP address of 150.100.15.11 arrives from the outside network R1 has to **know the next-hop router to send the packet to**. 
+
+(2) Change the IP address to binary string, and apply the subnet mask. Finally get the subnet binary string. 
+
+(3) Router R1 looks up this subnet number in its routing table, and findsthe corresponding entry to specify the next-hop router address for R2.
+
+(4) When R2 recieves the packet, R2 performs the same process and finds out that the **destination host is connected to one of its network interfaces**. 
+
+
+### 2.4 IP Routing
+
+**The IP layer in the end-system hosts and in the routers work together to route packets from IP network sources to destinations**. The IP layer in each host and router **maintains a routing table** that it uses to determine how to handle each IP packet. 
+
+* If its routing table indicates that the destination host is directly connected to the originating host by a link or by a LAN, then the IP packet is sent directly to the destination host using the appropriate network interface. 
+
+* Otherwise, the routing table typically specifies that the packet is to be sent to a default router that is directly connected to the originating host.
+
+Now consider the action of a router. When a router receives an IP packet from one of the network interfaces:
+* the router examines its routing table to see **whether the packet is destined to itself**, and if so, delivers the packet to the appropriate higher-layer protocol.
+* If the destination IP address is not the **router’s own address**, then the router determines the next-hop router and the associated network interface, and then forwards the packet.
+
+**Each row in the routing table** must provide the following information: 
+
+(1) destination IP address
+
+(2) IP address of next-hop router
+
+(3) several flag fields
+
+(4) outgoing network interface
+
+(5) other information such as subnet mask, physical address, and statistics information.
+* the H flag indicates **whether the route in the given row is to a host (H = 1)** or to a network (H = 0).
+* The G flag indicates **whether the route in the given row is to a router (gateway; G = 1)** or to a directly connected destination (G = 0).
+
+
+The routing table is searched in the following order:
+
+(1) The destination column is searched to see **whether the table contains an entry for the complete destination IP address**. If so, then the IP packet is forwarded
+according to the next-hop entry and the G flag.
+
+(2) If the table does not contain the complete destination IP address, then the routing table is searched for the destination network ID. If an entry is found, the IP packet is forwarded according to the next-hop entry and the G flag. 
+
+(3) If the table does not contain the destination network ID, the table is searched for a default router entry, and if one is available, the packet is forwarded there. 
+
+(4) If none of the above searches are successful, then the packet is declared **undeliverable and an ICMP “host unreachable error” packet** is sent back to the originating host. 
+
+
+### 2.5 Classless Interdomain Routing(CIDR)
+
+CIDRE: An arbitrary prefix length to indicate the network number. Using a CIDR notation, a prefix 205.100.0.0 of length 22 is written as 205.100.0.0/22.
+
+With CIDR, packets are routed **according to the prefix of the IP address** without distinguishing different address classes. 
+
+The entries in a CIDR routing table contain **a 32-bit IP address and a 32-bit mask**. 
+
+CIDR enables a technique called **supernetting** to allow a **single routing entry** to cover a block of classful addresses.
+
+
+Example: 
+
+(1) the original contiguous four class c entries:
+
+Class C address 205.100.0.0 = 11001101 01100100 00000000 00000000
+
+Class C address 205.100.1.0 = 11001101 01100100 00000001 00000000
+
+Class C address 205.100.2.0 = 11001101 01100100 00000010 00000000
+
+Class C address 205.100.3.0 = 11001101 01100100 00000011 00000000
+
+(2) the **route aggregation**:
+
+Mask 255.255.252.0 = 11111111 11111111 11111100 00000000
+
+Supernet address 205.100.0.0 = 11001101 01100100 00000000 00000000
 
 
