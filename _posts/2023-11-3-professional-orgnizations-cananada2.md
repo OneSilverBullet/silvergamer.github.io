@@ -111,3 +111,146 @@ Bear in mind these components as you go through the two scenarios and answer the
 
 
 
+
+
+## Lesson 8
+
+### 8.1 Duty towards the Public
+
+This is a key duty for engineers who wish to practice the profession in Québec. Here the term public is understood very broadly. When we use the term public, we usually mean citizens. The meaning of public refers to **the duty of engineers to the citizens** of Québec/Canada. But it also uses public in another sense to mean the opposite of private. In that sense, public means the common good of people in Québec. **Engineers have a duty to safeguard the common public good in Québec**. This duty to safeguard the common public good is enforced through two duties – the first to humanity and the second to protect life and environment.
+
+ 
+
+#### 8.1.1 Duty to Humanity
+
+**The Code of Ethics** for engineers specifies that fundamentally “**In all aspects of their work an engineer must respect their obligations towards humanity.**” This duty specifies that, first and foremost, engineers exist to protect and respect humans. While this obligation towards humans arises from many civil and criminal laws, fundamentally it is governed by key legal frameworks in Canadian and Québec law – the Canadian Charter of Rights and Freedoms and the Québec Charter of Human Rights and Freedoms. The Canadian charter guarantees certain fundamental freedoms to humans living in the country. These freedoms include fundamental freedoms, such as freedom of conscience, religion, belief, expression, and association. In addition, the charter gives rights, such as democratic rights, mobility right, legal rights, equality rights, and language rights. In other words, in their work, professionals have a duty to not violate the provisions of the Canadian charter and the Québec charter. **One major implication of this duty** is to ensure that engineers do not engage in discrimination of any form. **Discrimination** is a violation of the Canadian charter, especially the equality rights specified in it. In turn, this means that no professional may refuse to provide services to a person because of their race, colour, age, sex, religion, national origin or ethnicity of such person.
+
+ 
+
+#### 8.1.2 Duties towards Life and Environment         
+
+**The Code of Ethics** also specifies that “In all aspects of their work, the engineer must take into account the consequences of the performance of his work on the environment and on the life, health and property of every person.” There are two aspects to this duty. The first is to **act in a manner to safeguard the environment**, and the second is to **be mindful of the life, health, and property of every human**. Safeguarding the environment requires the engineer to be mindful of technological choices that do not promote the pollution and eventual destruction of the environment and will further sustainable development. The respect for life, health and property relates closely to the rights mentioned in the Canadian charter.
+
+### 8.2 Ethics Construcst
+
+#### 8.2.1 Prejudice
+
+An opinion formed without taking time and care to judge fairly, often based on **incomplete and stereotyped information**.
+
+#### 8.2.2 Discrimination
+
+Treating people differently because of **some particular social attribute** such as race, gender, or religion.
+
+Adverse Effect Discrimination: Discrimination that happens as a result of **applying a rule or policy uniformly**.
+
+
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/infor.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/infor.png" align="center"></a>
+    <figcaption> . </figcaption>
+</figure>
+
+**Systemactic Discrimination**: A discrimination that is rooted in accepted ways of doing this in a business profession or occupation. This tends to prevent categories of people from achieving their goals.
+* Glass Ceiling: A form of systemic discrimination that prevents women from achieving their full potential by **blocking advances in their careers beyond a point**.
+* Cultural Imperialism: A form of systemic discrimination that reduces some cultures as **secondary to other more successful or widespread cultures**.
+* Physical/Attritudinal Barriers: prevent differently abled from achieving their full potential not because of targeted discrimination but because fullyt abled cannot perceive the barriers that the differently abled face.
+
+**Direct Discrimination**: Discrimination that is directed against person on the basis of prejudice.
+
+
+#### 8.2.2 Harassment
+
+This is a particular type of discrimination. It occurs when a person is subjected to unwanted behaviour that offends, demeans or humilitates. Form:
+* Sexual
+* Racial
+* Ridicule
+
+### 8.3 Thinking About Inclusivity and Diversity
+
+#### 8.3.1 Prejudice, Discrimination, and Harassment
+
+In thinking about discrimination, it is useful to understand the concept in the context of two related concepts of **prejudice and harassment**. 
+* The Association of Professional Engineers, Geophysicists, and Geologists of Alberta (APEGGA) defines **prejudice** as **an opinion formed without taking time and care to judge fairly, often based on incomplete and stereotyped information**. The key point is that prejudice is a biased **opinion that is often based on incomplete information**. 
+* Discrimination is usually built on prejudiced opinions, but **it takes prejudice a step further because it influences behaviours**. Discrimination implies treating people differently because of **some particular social attribute, such as race, gender or religion. Discrimination**, when it results in an extreme form of behavior, results in harassment. It occurs when an individual is subjected to **unwanted behaviour that offends, demeans, or humiliates**.
+
+Discrimination comes in several forms, some of them are directed while others are less easy to identify. 
+* **Direct discrimination** is discrimination that is directed against person(s) on the basis of prejudice. This is the most clearly identifiable form of discrimination, primarily because it happens in the open so that people become aware of it. 
+* Another form of discrimination is **adverse effect discrimination**. It is a discrimination that happens as a result of applying a rule or policy uniformly. When governments or companies apply a policy in society, it often discriminates against groups in society as a result. 
+
+A good example is positive discrimination in **hiring that favours visible minorities or women**. There is an adverse effect discrimination that is created against those who do not fall within these groups. Their chances at getting the same jobs have been reduced because of the preference that underrepresented groups have. 
+
+* A final form of discrimination is **systemic discrimination**. This discrimination is widespread but not very easy to identify. It is a discrimination that is rooted in accepted ways of doing things in a business, profession, or occupation. This tends to prevent categories of people from achieving their goals. 
+
+A good example of this is the glass ceiling. The glass ceiling is the existence of a barrier that prevent women from advancing in their careers in that organization beyond a particular level.
+
+#### 8.3.2 Multiculturalism and Diversity
+
+**Multiculturalism and diversity** are the **opposite of discrimination**. 
+* Diversity is **the variety in different social categories**, such as gender, race, ethnicity, age, religion, national origin or sexual orientation. 
+* Multiculturalism is **an equal acceptance for social differences in terms of gender, age, sexual orientation, ethnicity, race or national origin**. 
+
+While diversity is **the presence of cultural differences in society**, multiculturalism is a **positive accepting attitude towards these differences**. Such a multicultural orientation that fosters diversity has several advantages. It fosters a spirit of **mutual understanding in the workplace**, and more importantly, it allows everyone to develop their abilities to its full potential. 
+
+In Canada, **multiculturalism** is **an official policy** that reflects **an equal acceptance of races, religions, languages and cultures**. This policy is furthered through Canadian **legislation**. The **preservation and enhancement of multicultural heritage in Canada** is the **aim of the Canadian Charter of Rights and Freedoms**. In addition, Canada’s Multiculturalism Act of 1988 protects aboriginal rights, and the rights of people to enjoy their cultures and use of languages other than English and French. This legal background has allowed a mix of ethnic groups, languages, and cultures to co-exist in Canada. It is for these reasons that Canada is considered **a cultural mosaic** unlike U.S., which has adopted **a melting pot approach**. Canada, unlike U.S., seeks to foster diversity without **assimilating different cultural groups**.   
+
+
+### 8.4 Honesty
+
+Honesty is a **moral virtue** that is widely accepted but not very well understood, primarily because it is **a practice relevant to many different facets of our existence in society**. 
+In such a situation, since we could encounter honesty in so many spheres of our life, we do not often realize that we have been **honest or dishonest in a particular aspect**. In the personal sphere, honesty can be interpreted as **truth-telling**. 
+
+So **an honest person is one who can be relied on to tell the truth irrespective of circumstances**. 
+
+But in the professional context, **honesty is not limited to just speaking the truth**. 
+
+It also implies **representing oneself, our actions, and our views openly and truthfully**. So in addition to honesty **being the act of truth telling**, it also means that to be honest in the workplace implies:
+* the act of following scientific facts, 
+* the act of avoiding inappropriate means, 
+* the act of showing respect to colleagues in a professional relationship. 
+
+The difference between **honesty** as **truth-telling** and **honesty** as **correct representation of actions** can be distinguished by the difference between **an act of commission** and **an act of omission**. While telling a deliberate lie would be an act of commission on the part of the person speaking a lie; on the other hand, we lie by omission when we neglect to mention a relevant event, information, or circumstance to a person. Thus, **honest representation requires us to avoid both acts of commission and omission**.      
+
+
+#### 8.4.1 Duty to be Honest
+
+Although not mentioned separately as a mandatory duty for engineers, the duty to **be honest has considerable overlap with the trust-building obligations of engineers** towards clients or employers and with **their duty towards humanity**. But a few obligations indicate the duty to be honest. These are:
+
+* The engineer shall express their opinion on matters dealing with engineering, only if such opinion is based on sufficient knowledge and honest convictions.
+* An engineer must be impartial in their relations between the client and the contractors, suppliers, etc.
+* An engineer must safeguard their independence at all times to avoid situations of conflict of interest. 
+
+
+#### 8.4.2 Whistleblowing     
+
+ Whistleblowing is an act that **follows directly from the requirement of engineers to be honest and transparent in their actions and views**. It has been defined as **an act by an employee of informing the public or higher management of unethical or illegal behavior by an employer or supervisor**. As an engineer, if you come to know of **the commission of unethical or illegal actions in the workplace**, your duty to be honest as an engineer demands that you approach either the supervisor or the public to **reveal the existence of such actions**. Not doing so would mean you have **engaged in an act of omission**. 
+ 
+ Whistleblowing can be categorized into two types – internal or external, depending upon whether the **whistle is blown inside or outside** the organization. 
+ * Internal whistleblowing would mean going over the head of an immediate supervisor (who maybe engaged in unethical action) to a higher level of management. 
+ * External whistleblowing would mean going outside the company and report unethical or illegal actions to the media or to law-enforcement agencies directly.
+
+In the context of professional engineering in Québec, there are well instituted procedures for whistleblowing. At a first level, when you encounter an illegal or unethical action in your workplace, **your action should be to bring it to the attention of the company**, first verbally, and then failing which clearly indicate in writing to the company, the consequences that may result from ignoring your advice. If after this, there is no satisfactory resolution, as an engineer, your option, especially when certain works are a danger to public safety, must be to notify the Order. For an engineer in Québec, going public would imply approaching the OIQ rather than going to the media.
+
+
+## 9. Law and Legal Systems
+
+### 9.1 Law and Legal Systems
+
+#### 9.1.1 Law
+
+Law, as we have described earlier, is **a rule that regulates what is accepted or forbidden in a society**. Laws are created by a **competent authority**, such as a **parliament** or a **legislative assembly**. 
+
+Laws are enforced through a system composed of **enforcement agencies** (example: the police) and the **judiciary**. The body of law that governs a society can be subdivided, according to its focus, into two broad domains – **public law and private law**. 
+* Public laws are those laws that govern the actions of the state (or government) or the relations of the state and individuals. Examples of public law are international law, constitutional law, administrative law, or criminal law. 
+* Private law, on the other hand, is solely concerned with regulating the relations and disputes between private individuals. Examples of private law include commercial law, family law, property law, etc.       
+
+#### 9.1.2 Legal Systems
+
+Legal systems are related to laws, but as the name implies, it is the system that has built up around the process of **implementing laws in a society**. Legal systems could be defined as existing system for interpreting and enforcing laws. A legal system becomes the basis for:
+
+* The sources of laws and regulations that govern a society
+* The practices and customs followed by courts in interpreting laws to make decisions regarding legal disputes
+* And as frameworks that govern interpretation of statutes, legislation and bylaws
+
+Different countries around the world have different legal systems. In this module, you will find a map of the world indicating the major legal systems and their combinations, which are prevalent in different countries. Click on the major legal systems to understand their key features. In this class, we are concerned with two major legal systems – civil law and English common law systems. There are some key features that distinguish these two major legal systems. First, in a civil law system, laws are written into systematic collections referred to as codes. Second, Laws are created by legislatures alone. Third, legal decisions made by judges are based solely on applying the laws to the case. Finally, justice is produced through an inquisitorial process led by the judge. English common law, on the other hand, is based on laws and earlier cases that are similar. Second, laws are created both by legislatures and judges on the basis of the precedence value of earlier cases and judgments. Third, legal decisions are based not only on laws but also on precedence value of previous judgments. Finally, justice is produced through an adversarial process between two opposing sets of advocates with the judge acting as a neutral umpire.
+
+
+
