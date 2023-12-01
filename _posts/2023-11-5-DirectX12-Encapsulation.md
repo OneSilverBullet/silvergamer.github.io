@@ -79,3 +79,80 @@ inline XMMATRIX XM_CALLCONV XMMatrixTransformation(
  HXMVECTOR Translation);
 ```
 
+
+
+
+## 2. Types
+
+### The Map() function implementation 
+
+ID3D12Resource::Map
+
+Gets a **CPU pointer** to the specified subresource in the resource, but may not disclose the pointer value to applications. **Map also invalidates the CPU cache**, when necessary, so that CPU reads to this address reflect any modifications made by the GPU.
+
+
+One way is to set up a virtual memory mapping that makes the resource's actual memory (could be system memory or GPU memory) visible as part of the application's address space. If it does happen to be GPU memory, any writes you do would typically be buffered up and sent across the PCIe bus to the GPU, using write combining. (Even on a unified-memory system, mapped resource memory probably has some different caching behavior from "regular" memory, since CPU and GPU caches aren't coherent with each other.)
+
+The other way the driver can implement Map() is to allocate memory and create a local copy of the resource, let your app edit it, then copy the modified memory back to the resource when Unmap() is called. This might need to be done if the actual memory layout of the resource on the GPU is "weird" somehow, like having a nonstandard tiling scheme or some such.
+
+The copying approach is clearly more expensive due to the extra copies required, so I'd expect the driver to use the memory mapping approach whenever possible.
+
+
+
+## 3. Dynamic Descriptor Heap
+
+### 3.1 
+
+The static members for all classes
+* num descriptors per heap: 1024
+* mutex 
+* descriptor heap pool[vector][2]: all of the descriptor heaps
+* retired descriptor heap[queue][2]: the descriptor heap which retired.
+* available descriptor heap[queue][2]: the descriptor heap available for allocating descriptor.
+
+The Static Methods
+
+(1) Request Descriptor Heap
+
+There is two dynamic descriptor heap type: D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER and D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV. According to the dynamic descriptor heap type to choose which heap pool to use.
+
+Steps:
+
+a. Check the retired descriptor heaps to find whether there is descriptor heap with fence completed. If there are free descriptor heaps, put these descriptor heaps to  the avaliable descriptor heaps queue.
+
+b. If there is no descriptor heap with completed fence, then create a descriptor heap with flag D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE and push the heap to the available descriptor heaps queue. 
+
+c. If there is descriptor heap in available heaps, return the front item in available descriptor heap.
+
+(2) Discard Descriptor Heaps
+
+This function has two input:
+* fence value: After completing the fence, the used descriptor heaps is useless.
+* descriptor heaps vector: the used descriptor heaps vector.
+
+Steps:
+
+a. Push all the used descriptor heaps into the retired descriptor heaps. These descriptor heaps are full of descriptors.
+
+
+The essential logic of dynamic descriptor heap:
+
+DynamicDescriptorHeap::DescriptorHandleCache::CopyAndBindStaleTables
+
+
+
+
+
+Descriptor Table Cache: Describes a descriptor table entry, a region of the handle cache and which handles have been set.
+* assigned handles bit map: uint32_t
+* table start: D3D12_CPU_DESCRIPTOR_HANDLE*
+* table size: uint32_t
+
+Descriptor Handle Cache
+
+
+
+
+
+
+
