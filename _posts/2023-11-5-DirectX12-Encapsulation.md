@@ -151,6 +151,21 @@ Descriptor Table Cache: Describes a descriptor table entry, a region of the hand
 Descriptor Handle Cache
 
 
+The root signature is the **empty slots** to interpret the shader parameters. 
+
+The descriptor heap is responsible for **the assignment of shader parameters** corresponding to **the root signature**.
+
+The mechanism of dynamic descriptor heap:
+
+(1) Parse Root Signature
+
+parse the root signature and create related descriptor table structure.
+
+
+
+
+
+
 
 
 
