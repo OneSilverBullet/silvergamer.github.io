@@ -143,7 +143,7 @@ DynamicDescriptorHeap::DescriptorHandleCache::CopyAndBindStaleTables
 
 
 
-Descriptor Table Cache: Describes a descriptor table entry, a region of the handle cache and which handles have been set.
+**Descriptor Table Cache**: Describes a descriptor table entry, a region of the handle cache and which handles have been set.
 * assigned handles bit map: uint32_t
 * table start: D3D12_CPU_DESCRIPTOR_HANDLE*
 * table size: uint32_t
@@ -159,9 +159,111 @@ The mechanism of dynamic descriptor heap:
 
 (1) Parse Root Signature
 
-parse the root signature and create related descriptor table structure.
+parse the root signature and create related descriptor table structure. Deduce cache layout needed to **support the descriptor tables needed by the root signature**.
+
+When the graphics context set the Root Signature, the layout of the root signature will be deduced in this function.
 
 
+It is should be mentioned that the Root Signature Encapsulation has a bit map called **m_DescriptorTableBitMap**, which means the bit map of root parameter type with D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE.
+
+For the simplify, the root signature only support the constant and descriptor tables slots.
+
+Futhermore, there are two bit operation function:
+* _BitScanForward: find the index of the first 1 
+* _BitScanReverse: find the index of the last 1
+
+
+```
+    //get the descriptor table bit map from Root Signature
+    m_StaleRootParamsBitMap = 0;
+    m_RootDescriptorTablesBitMap = (Type == D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER ?
+        RootSig.m_SamplerTableBitMap : RootSig.m_DescriptorTableBitMap);
+
+    unsigned long TableParams = m_RootDescriptorTablesBitMap;
+
+    //Get the minimum 1 bit index in the root signature descriptor table bit map
+    unsigned long RootIndex;
+    while (_BitScanForward(&RootIndex, TableParams))
+    {
+        TableParams ^= (1 << RootIndex); //eliminate the influence of redundant 1 bit
+
+        //get the number of descriptors in current descriptor table 
+        UINT TableSize = RootSig.m_DescriptorTableSize[RootIndex];
+        ASSERT(TableSize > 0);
+
+        //allocate the descriptor table cache within root descriptor table 
+        DescriptorTableCache& RootDescriptorTable = m_RootDescriptorTable[RootIndex];
+        RootDescriptorTable.AssignedHandlesBitMap = 0;
+        //allocate the current empty pointer
+        RootDescriptorTable.TableStart = m_HandleCache + CurrentOffset;
+        RootDescriptorTable.TableSize = TableSize;
+
+        //
+        CurrentOffset += TableSize; 
+    }
+
+    m_MaxCachedDescriptors = CurrentOffset;
+```
+
+In the dynamic descriptor table cache, the main data is stored in two array:
+* m_RootDescriptorTable: It is a DescriptorTableCache[16] array. It is used to store the root descriptor tables. The descriptor Table Cache contains a pointer to m_HandleCache.
+* m_HandleCache: It is a D3D12_CPU_DESCRIPTOR_HANDLE[256] array. It is used to store the real descriptors.
+
+It is a simple linear memory system.
+
+(2) Set the dynamic descriptor tables
+
+In directX12, the root signature declare the data sent to the commandlist, and we should set the data by following api:
+* **SetComputeRoot32BitConstant**: Upload constant value to command list based on the root index and offset.
+* **SetGraphicsRootDescriptorTable**: It is used to bind a descriptor table to a particular graphics root signature parameter slot. On the other hand, this api associates a descriptor table with a specific root parameter in the graphics root signature.
+* **SetComputeRootDescriptorTable**: It is used to associate a descriptor table with a specific root parameter in the compute root signature when recording a compute command list.
+
+To be brief, the last two api needs to upload the descriptor table. A descriptor table is a data structure that contains an array of descriptors, representing resources such as **textures, buffers, or constant buffers**.
+
+In the mini-engine, the last two api are encapsulated into StageDescriptorHandles function. I will talk discuss the version of graphics(the version of compute is the same).
+
+**StageDescriptorHandles**: this function implement in the **descriptor table cache**.
+
+Input:
+* RootIndex: the index in root signature
+* Offset: the input cpu handle's offset
+* numHandles: input handles number.
+* Handles: the array of D3D12_CPU_DESCRIPTOR_HANDLE. The descriptor array.
+
+Steps:
+
+```
+//get the descriptor table cache
+DescriptorTableCache& TableCache = m_RootDescriptorTable[RootIndex];
+
+//get the destination pointer based on table start and offset
+D3D12_CPU_DESCRIPTOR_HANDLE* CopyDest = TableCache.TableStart + Offset;
+
+//copy the pointer into destination
+for (UINT i = 0; i < NumHandles; ++i)
+    CopyDest[i] = Handles[i];
+
+//use the bit operation to indicate the filling descriptor position.
+TableCache.AssignedHandlesBitMap |= ((1 << NumHandles) - 1) << Offset;
+
+//use the bit operation to indicate the filling descriptor table position
+m_StaleRootParamsBitMap |= (1 << RootIndex);
+```
+
+The use case of the api is as follows:
+
+```
+//g_DepthDownsize2 is color buffer
+Context.SetDynamicDescriptors(3, 0, 1, &g_DepthDownsize2.GetSRV());
+```
+
+
+
+(3) Set the descriptor heap to command list
+
+The basic dx12 api to set the descriptor table to command list is as follows:
+* SetGraphicsRootDescriptorTable: set the graphics root descriptor table to command list.
+* SetComputeRootDescriptorTable: set the compute root descriptor table to command list.
 
 
 
