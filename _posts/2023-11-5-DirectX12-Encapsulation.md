@@ -99,9 +99,8 @@ The copying approach is clearly more expensive due to the extra copies required,
 
 
 
-## 3. Dynamic Descriptor Heap
 
-### 3.1 
+### 2.1
 
 The static members for all classes
 * num descriptors per heap: 1024
@@ -135,27 +134,52 @@ Steps:
 a. Push all the used descriptor heaps into the retired descriptor heaps. These descriptor heaps are full of descriptors.
 
 
-The essential logic of dynamic descriptor heap:
+## 3. Dynamic Descriptor Heap
 
-DynamicDescriptorHeap::DescriptorHandleCache::CopyAndBindStaleTables
+### 3.1 Descriptor Heap Pool
+
+A mechanism to reuse the previous retired descriptor heaps.
+
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/DirectXP1Fig/dynamic.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/DirectXP1Fig/dynamic.png" align="center"></a>
+    <figcaption>The mechanism of dynamic descriptor heap.</figcaption>
+</figure>
 
 
+### 3.2 Dynamic Descriptor Heap Implementation
+
+#### 3.2.1 The Technology Basis
+
+The D3D12DynamicIndexing sample demonstrates some of the new HLSL features available in Shader Model 5.1 - particularly dynamic indexing and unbounded arrays - to render the same mesh multiple times, each time rendering it with a dynamically selected material. With dynamic indexing, shaders can now index into an array without knowing the value of the index at compile time. When combined with unbounded arrays, this adds another level of indirection and flexibility for shader authors and art pipelines.
+
+Link: https://learn.microsoft.com/en-us/windows/win32/direct3d12/dynamic-indexing-using-hlsl-5-1#dynamically-change-the-root-parameter-index
+
+#### 3.2.2 Conceptions
 
 
+Dynamic descriptor heaps, as the name implies, allow dynamic resizing during runtime. This is particularly useful when the number of descriptors needed for rendering varies from frame to frame.
 
-**Descriptor Table Cache**: Describes a descriptor table entry, a region of the handle cache and which handles have been set.
+Since only a single CBV_SRV_UAV descriptor heap and a single SAMPLER descriptor heap can be bound to the command list at the same time, the DynamicDescriptorHeap class also ensures that the currently bound descriptor heap has a sufficient number of descriptors to commit all of the staged descriptors before a Draw or Dispatch command is executed. If the currently bound descriptor heap runs out of descriptors, then a new descriptor heap is bound to the command list.
+
+There are two essential structure as the basis of dynamic descriptor heap.
+
+(1) **Descriptor Table Cache**: Describes a descriptor table entry, a region of the handle cache and which handles have been set.
 * assigned handles bit map: uint32_t
 * table start: D3D12_CPU_DESCRIPTOR_HANDLE*
 * table size: uint32_t
 
-Descriptor Handle Cache
+(2) **Descriptor Handle Cache**: Store the descriptors.
+* m_RootDescriptorTablesBitMap: store the root sigtnture descriptor table bit map
+* m_StaleRootParamsBitMap: store the valid descriptor table bit map 
+* m_RootDescriptorTable: DescriptorTableCache[16] store the descriptor table in linear array.
+* m_HandleCache: D3D12_CPU_DESCRIPTOR_HANDLE[256] store the descriptors in descriptor table in a linear way.
+
+The root signature is the **empty slots** to interpret the shader parameters. The descriptor heap is responsible for **the assignment of shader parameters** corresponding to **the root signature**.
 
 
-The root signature is the **empty slots** to interpret the shader parameters. 
+#### 3.2.3 Implementation
 
-The descriptor heap is responsible for **the assignment of shader parameters** corresponding to **the root signature**.
-
-The mechanism of dynamic descriptor heap:
+The main mechanism of dynamic descriptor heap:
 
 (1) Parse Root Signature
 
@@ -258,13 +282,150 @@ Context.SetDynamicDescriptors(3, 0, 1, &g_DepthDownsize2.GetSRV());
 ```
 
 
-
 (3) Set the descriptor heap to command list
 
 The basic dx12 api to set the descriptor table to command list is as follows:
 * SetGraphicsRootDescriptorTable: set the graphics root descriptor table to command list.
 * SetComputeRootDescriptorTable: set the compute root descriptor table to command list.
 
+In the process of setting descriptor tables into command list, firstly we should parse the root indices indicate descriptor tables in descriptor heap cache.
+
+```
+    //find the first bit of the stored root param bit map, which means the root index
+    uint32_t StaleParams = m_StaleRootParamsBitMap;
+    while (_BitScanForward((unsigned long*)&RootIndex, StaleParams))
+    {
+        //store the root index in a sequence type
+        RootIndices[StaleParamCount] = RootIndex;
+        //explicit the influence of used bit
+        StaleParams ^= (1 << RootIndex);
+
+        //find the last bit which means the descriptor size in current descriptor table
+        uint32_t MaxSetHandle;
+        ASSERT(TRUE == _BitScanReverse((unsigned long*)&MaxSetHandle, m_RootDescriptorTable[RootIndex].AssignedHandlesBitMap),
+            "Root entry marked as stale but has no stale descriptors");
+
+        //store current descriptor table item size
+        NeededSpace += MaxSetHandle + 1;
+        TableSize[StaleParamCount] = MaxSetHandle + 1;
+
+        //count the valid descriptor table number
+        ++StaleParamCount;
+    }
+
+    //reset the root param bit map
+    m_StaleRootParamsBitMap = 0;
+```
+
+Then **we copy the descriptors from the descriptors cache to descriptorHeap**. 
+
+Be attention, in the descriptors copy process, the **DestHandleStart** parameter is DescriptorHandle type, which indicate the pointer in current descriptor heap.
+
+In the following codes, the process flow works as follow:
+* Set the new descriptor heap destination pointer dh_p to the command list. 
+    * the dh_p is also the current descriptor table memory pointer
+* Setup the destination descriptor pointer array by the dh_p. Setup the source descriptor pointer array by the DescriptorHandleCache.
+* Use device->CopyDescriptor to copy the src descriptors to dst descriptors.
+
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/DirectXP1Fig/descriptorTable.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/DirectXP1Fig/descriptorTable.png" align="center"></a>
+    <figcaption>The relationship between the two bit map.</figcaption>
+</figure>
+
+
+```
+    //copy items size per time
+    static const uint32_t kMaxDescriptorsPerCopy = 16;
+
+    //the destination descriptors array
+    UINT NumDestDescriptorRanges = 0;
+    D3D12_CPU_DESCRIPTOR_HANDLE pDestDescriptorRangeStarts[kMaxDescriptorsPerCopy];
+    UINT pDestDescriptorRangeSizes[kMaxDescriptorsPerCopy];
+
+    //the source descriptors array
+    UINT NumSrcDescriptorRanges = 0;
+    D3D12_CPU_DESCRIPTOR_HANDLE pSrcDescriptorRangeStarts[kMaxDescriptorsPerCopy];
+    UINT pSrcDescriptorRangeSizes[kMaxDescriptorsPerCopy];
+
+    //for each descriptor table coped from resources
+    for (uint32_t i = 0; i < StaleParamCount; ++i)
+    {
+        //get the root index, the descriptor table may be not continuous
+        RootIndex = RootIndices[i];
+        
+        //set the root item into command list
+        (CmdList->*SetFunc)(RootIndex, DestHandleStart);
+        
+        //access the root descriptor table cache
+        DescriptorTableCache& RootDescTable = m_RootDescriptorTable[RootIndex];
+    
+        //access the source descriptor handle pointer
+        D3D12_CPU_DESCRIPTOR_HANDLE* SrcHandles = RootDescTable.TableStart;
+        
+        //the bit map of the descriptors in current descriptor map, the descriptors in the descriptor table may be not continuous 
+        uint64_t SetHandles = (uint64_t)RootDescTable.AssignedHandlesBitMap;
+
+        //store the descriptor start point and copy the descriptor instances to current descriptor heap
+        D3D12_CPU_DESCRIPTOR_HANDLE CurDest = DestHandleStart;
+
+        //jump to the next descriptor table
+        DestHandleStart += TableSize[i] * DescriptorSize;
+
+        //the descriptors in descriptor table always are continuous, but there may be some empty slots
+        unsigned long SkipCount;
+        while (_BitScanForward64(&SkipCount, SetHandles))
+        {
+            // skip over unset descriptor handles
+            SetHandles >>= SkipCount;
+
+            // get to the filled descriptor pointer
+            SrcHandles += SkipCount;
+
+            // jump to the filled destination descriptor pointer
+            CurDest.ptr += SkipCount * DescriptorSize;
+
+            // get the filled descriptor block number and jump over the filled descriptor blocks
+            unsigned long DescriptorCount;
+            _BitScanForward64(&DescriptorCount, ~SetHandles);
+            SetHandles >>= DescriptorCount;
+
+            // If we run out of temp room, copy what we've got so far
+            if (NumSrcDescriptorRanges + DescriptorCount > kMaxDescriptorsPerCopy)
+            {
+                g_Device->CopyDescriptors(
+                    NumDestDescriptorRanges, pDestDescriptorRangeStarts, pDestDescriptorRangeSizes,
+                    NumSrcDescriptorRanges, pSrcDescriptorRangeStarts, pSrcDescriptorRangeSizes,
+                    Type);
+
+                NumSrcDescriptorRanges = 0;
+                NumDestDescriptorRanges = 0;
+            }
+
+            // Setup destination range
+            pDestDescriptorRangeStarts[NumDestDescriptorRanges] = CurDest;
+            pDestDescriptorRangeSizes[NumDestDescriptorRanges] = DescriptorCount;
+            ++NumDestDescriptorRanges;
+
+            // Setup source ranges (one descriptor each because we don't assume they are contiguous)
+            for (uint32_t j = 0; j < DescriptorCount; ++j)
+            {
+                pSrcDescriptorRangeStarts[NumSrcDescriptorRanges] = SrcHandles[j];
+                pSrcDescriptorRangeSizes[NumSrcDescriptorRanges] = 1;
+                ++NumSrcDescriptorRanges;
+            }
+
+            // Move the destination pointer forward by the number of descriptors we will copy
+            SrcHandles += DescriptorCount;
+            CurDest.ptr += DescriptorCount * DescriptorSize;
+        }
+    }
+
+    //
+    g_Device->CopyDescriptors(
+        NumDestDescriptorRanges, pDestDescriptorRangeStarts, pDestDescriptorRangeSizes,
+        NumSrcDescriptorRanges, pSrcDescriptorRangeStarts, pSrcDescriptorRangeSizes,
+        Type);
+```
 
 
 
