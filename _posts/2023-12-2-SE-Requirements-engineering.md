@@ -18,7 +18,7 @@ The system requirements are **the descriptions of the system services and constr
 
 
 <figure>
-    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/DirectXP1Fig/4_requirements.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/DirectXP1Fig/4_requirements.png" align="center"></a>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/software/4_requirements.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/software/4_requirements.png" align="center"></a>
     <figcaption>The requirements engineering process.</figcaption>
 </figure>
 
@@ -37,7 +37,7 @@ This is inevitable **as requirements may serve a dual function**:
 (2) System Requirements: **A structured document setting out detailed descriptions of the system’s functions**, **services** and **operational constraints**. Defines what should be implemented so may be part of a contract between client and contractor.
 
 <figure>
-    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/DirectXP1Fig/4_user_and_system_requirements.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/DirectXP1Fig/4_user_and_system_requirements.png" align="center"></a>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/software/4_user_and_system_requirements.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/software/4_user_and_system_requirements.png" align="center"></a>
     <figcaption>The user and system process.</figcaption>
 </figure>
 
@@ -104,7 +104,7 @@ These define **system properties and constraints** e.g. reliability, response ti
 **Non-functional requirements** may be **more critical** than functional requirements. If these are not met, the system may be **useless**.
 
 <figure>
-    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/DirectXP1Fig/4_non_func_reqs.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/DirectXP1Fig/4_non_func_reqs.png" align="center"></a>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/software/4_non_func_reqs.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/software/4_non_func_reqs.png" align="center"></a>
     <figcaption>The Non-functional Requirements.</figcaption>
 </figure>
 
@@ -180,7 +180,7 @@ Generic Activities:
 In practice, RE is **an iterative activity** in which these processes are **interleaved**.
 
 <figure>
-    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/DirectXP1Fig/4_spiral_view.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/DirectXP1Fig/4_spiral_view.png" align="center"></a>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/software/4_spiral_view.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/software/4_spiral_view.png" align="center"></a>
     <figcaption>The spiral view of the requrements engineering process.</figcaption>
 </figure>
 
@@ -208,7 +208,7 @@ Processing Stages:
 * Requirements specification: Requirements are **documented** and **input into the next round of the spiral**.
 
 <figure>
-    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/DirectXP1Fig/4_req_elicitation.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/DirectXP1Fig/4_req_elicitation.png" align="center"></a>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/software/4_req_elicitation.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/software/4_req_elicitation.png" align="center"></a>
     <figcaption>The requirements elicitation and analysis process.</figcaption>
 </figure>
 
@@ -381,7 +381,7 @@ Reasons:
 * Large systems usually have **a diverse user community, with many users having different requirements and priorities** that may be conflicting or contradictory. 
 
 <figure>
-    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/DirectXP1Fig/4_req_evo.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/DirectXP1Fig/4_req_evo.png" align="center"></a>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/software/4_req_evo.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/software/4_req_evo.png" align="center"></a>
     <figcaption>The requirements evolution.</figcaption>
 </figure>
 
@@ -393,7 +393,7 @@ Reason:
 New requirements emerge as a system is being developed and after it has gone into use.
 
 <figure>
-    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/DirectXP1Fig/4_change_managementy.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/DirectXP1Fig/4_change_managementy.png" align="center"></a>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/software/4_change_managementy.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/software/4_change_managementy.png" align="center"></a>
     <figcaption>The requirements change management.</figcaption>
 </figure>
 

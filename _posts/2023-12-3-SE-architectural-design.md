@@ -120,6 +120,11 @@ Advantages:
 Disadvantages:
 * Can involve additional code and code complexity when the data model and interactions are simple.
 
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/software/a_mvc.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/software/a_mvc.png" align="center"></a>
+    <figcaption>The architecture of MVC.</figcaption>
+</figure>
+
 ### 3.3 The Layered Architecture
 
 * Used to model the interfacing of sub-systems.
@@ -168,6 +173,11 @@ Cons:
 * May be **inefficiencies** in organizing all communication through the repository. 
 * Distributing the repository across several computers may be difficult.
 
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/software/a_raide.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/software/a_raide.png" align="center"></a>
+    <figcaption>The architecture of repository.</figcaption>
+</figure>
+
 
 
 ### 3.5 The Client-server Architecture
@@ -191,16 +201,20 @@ Cons:
 * May be management problems if servers are owned by different organizations.
 
 
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/software/a_cs.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/software/a_cs.png" align="center"></a>
+    <figcaption>The architecture of client and server.</figcaption>
+</figure>
+
 ### 3.6 The Pipe and filter architecture
 
 Functional transformations process their inputs to produce outputs.
 * Not really suitable for interactive systems.
 
-**The processing of the data in a system** is organized so that **each processing component (filter)** is discrete and **carries out one type of data transformation**. The data flows (as in a pipe) from one component to another for processing. 
+Description: **The processing of the data in a system** is organized so that **each processing component (filter)** is discrete and **carries out one type of data transformation**. The data flows (as in a pipe) from one component to another for processing. 
 
 
 Usage: Commonly used in data processing applications (both batch- and transaction-based) where inputs are processed in separate stages to generate related outputs.
-
 
 Prons:
 * Easy to understand and supports transformation reuse. 
@@ -211,4 +225,108 @@ Prons:
 Cons:
 * The format for data transfer has to be agreed upon between communicating transformations.
 * Each transformation must parse its input and unparsed its output to the agreed form. This increases system overhead and may mean that it is impossible to reuse functional transformations that use incompatible data structures.
+
+
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/software/a_pf.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/software/a_pf.png" align="center"></a>
+    <figcaption>The architecture of pipeline filter.</figcaption>
+</figure>
+
+
+## 4. Application Architectures
+
+### 4.1 Application Architectures
+
+**Application systems** are designed to **meet an organizational need**.
+
+As businesses have much in common, their application systems also tend to have **a common architecture** that **reflects the application requirements**.
+
+A **generic application architecture** is an architecture for a type of software system that may be configured and adapted to **create a system that meets specific requirements**.
+
+Use of application architecture:
+* as a **starting point** for architectural design
+* as a **design checklist**
+* as a **way of organising the work** of the development team
+* as a **means of assessing** components for reuse
+* as a **vocabulary** for talking about application types
+
+Example:
+* data processing application
+* transaction processing applications(widely used)
+    * e-commerce systems
+    * reservation systems
+* event processing systems
+* language processing systems(widely used)
+    * compilers
+    * command interpreters
+
+
+### 4.2 Transaction Processing Systems
+
+**Process user requests for information from a database or requests** to **update the database**.
+* Users make asynchronous requests for service which are then processed by a transaction manager.
+
+From a user perspective, a **transaction**:
+* any **coherent sequence of operations that satisfies a goal**.
+
+
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/software/a_tpa.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/software/a_tpa.png" align="center"></a>
+    <figcaption>The application architecture of transaction process application.</figcaption>
+</figure>
+
+### 4.3 Information Systems Architecture
+
+Information systems have **a generic architecture** that can be **organized as a layered architecture**.
+
+These are transaction-based systems as interaction with these systems generally involves database transactions.
+
+Layers include:
+* user interface
+* user communications
+* information retrieval
+* system database
+
+These systems are often implemented as **multi-tier client server architectures**.
+
+
+
+### 4.3 Language Processing Systems
+
+(1) Accept **a natural or artificial language as input** and generate some other representation of that language. 
+
+(2) May include an interpreter to **act on the instructions in the language that is being processed**.
+
+(3) Used in situations where the easiest way to solve a problem is to **describe an algorithm or describe the system data**.
+* Meta-case tools process tool descriptions, method rules, etc and generate tools.
+
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/software/a_lps.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/software/a_lps.png" align="center"></a>
+    <figcaption>The application architecture of language processing system.</figcaption>
+</figure>
+
+#### 4.3.1 Compiler Component
+
+**A lexical analyzer**: takes input languages tokens and **converts them to an internal form**.
+* **A symbol table**, which holds information about the names of entities (variables, class names, object names, etc.) used in the text that is being translated.
+* A syntax analyzer, which checks the syntax of the language being translated. 
+* A syntax tree, which is an internal structure representing the program being compiled.
+
+
+A semantic analyzer that uses information from the syntax tree and the symbol table to check the semantic correctness of the input language text. 
+A code generator that ‘walks’ the syntax tree and generates abstract machine code.
+
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/software/a_ra.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/software/a_ra.png" align="center"></a>
+    <figcaption>The repository compiler architecture of language processing system.</figcaption>
+</figure>
+
+
+
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/software/a_ca.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/software/a_ca.png" align="center"></a>
+    <figcaption>The pipe and filter compiler architecture of language processing system.</figcaption>
+</figure>
+
+
 
