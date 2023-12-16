@@ -348,7 +348,428 @@ The **pointer structure** consisting of **the H1, H2, and H3 bytes**,
 
 
 
+## 4.4  CIRCUIT SWITCHES
+
+A network is frequently represented as a cloud that connects multiple users as shown in
+Figure 4.33a. 
+
+A **circuit-switched network** is **a generalization of a physical cable** in the sense that it provides **connectivity** that **allows information to flow between inputs and outputs** to the network. 
+
+Unlike a cable, however, a network is geographically distributed and consists of **a graph of transmission lines (that is, links) interconnected by switches(nodes)**. 
+
+As shown in Figure 4.33b, the function of a circuit switch is to transfer the signal that arrives **at a given input to an appropriate output**. 
+* The **interconnection of a sequence of transmission links and circuit switches** enables **the flow of information between inputs and outputs in the network**.
+
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/_433.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/_433.png" align="center"></a>
+    <figcaption> A network consists of links and switches. </figcaption>
+</figure>
+
+### 4.4.1 Space-Division Switches
 
 
+
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/_434.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/_434.png" align="center"></a>
+    <figcaption> Crossbar switch. </figcaption>
+</figure>
+
+
+
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/_435.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/_435.png" align="center"></a>
+    <figcaption> Multistage switch (with three smaller space-division switches). </figcaption>
+</figure>
+
+
+
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/_436.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/_436.png" align="center"></a>
+    <figcaption> A multistage switch is nonblocking if k = 2n − 1 </figcaption>
+</figure>
+
+
+
+## 4.7 Traffic and Overload control in Telephone Networks
+
+The **dynamic aspects of multiplexing** the information flows **from various users into shared high-speed digital transmission lines**.
+
+### 4.7.1 Concentration
+
+**Concentration** addresses the situation where **a large number of users** alternate
+between periods when they need connections and periods when they are idle.
+* Concentration involves **the dynamic sharing of a number of communication channels** among a larger community of users.
+
+
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/_455.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/_455.png" align="center"></a>
+    <figcaption> Concentration. </figcaption>
+</figure>
+
+numerous users at a given site, **each connected to a local concentrator**,
+**share expensive trunks provided by a high-speed digital transmission line** to connect to
+another location.
+
+* When a user on one end wishes to communicate with a user at the other end, the concentrator
+assigns **a communication line or trunk** for **the duration of the call**. 
+* When the call is completed, **the transmission line is returned to the pool** that is available to meet new connection requests.
+* Note that **signaling between concentrators** is required to set up and terminate each call.
+
+ We say that a connection request is **blocked** when **no trunks are available**. 
+ * The objective here is to minimize the number of trunks, while **keeping the probability of blocking to some specified level**.
+
+
+
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/_456.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/_456.png" align="center"></a>
+    <figcaption> Number of trunks in use as a function of time. </figcaption>
+</figure>
+
+
+the statistical behavior of the users can be characterized. In particular it has been
+found that the **users as a group** make requests for connections according to **a Poisson process with connection request or arrival rate λ calls/second**. A Poisson process is
+characterized by the following two properties:
+* In a very small time interval of duration △ seconds, only two things can happen:
+    * There is a request for one call, with probability λ△
+    * there are no requests for calls, with probability 1 − λ△.
+* The arrivals of connection requests **in different intervals** are **statistically independent**.
+
+**The holding time**： The time that a user maintains a connection.
+* the holding time X is a random variable.
+*  The average holding time E[X] can be viewed as **the amount of “work” that the transmission system has to do for a typical user**.
+
+The **offered load a** is defined as **the total rate at which work is offered by the community of users to the multiplexing system**, as measured in Erlangs
+
+$$a = λ × E[X](Erlangs)$$
+
+One Erlang corresponds to **an offered load that would occupy a single trunk 100 percent of the time**.
+
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/_457.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/_457.png" align="center"></a>
+    <figcaption> Blocking probability for offered load versus number of trunks: blocking probability descreases with the number of trunks. </figcaption>
+</figure>
+
+The **blocking probability $P_b$** for a system with **c trunks** and **offered load a** is given by the Erlang B formula:
+
+$$P_b = B(c, a) = (a^c/c!) /  (\sum_{k=0}^{c} a^k / k!)$$
+
+where $k!=1*2*3*...*k$. The figure shows the blocking probability for various offered loads as **the number of trunks c is increased**.
+* As expected, the blocking probability decreases with the number of trunks.
+
+ **A 1% blocking probability is typical in the design of trunk systems**.
+
+ This result shows that the system becomes **more efficient as the size of the system increases, in terms of offered load**. The efficiency can be measured by **trunk utilization** that is defined as the average number of trunks in use divided by the total number of trunks.
+
+$$Utilization=λ(1 − P_b)E[X]/c = (1 − P_b)a/c$$
+
+
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/_4t2.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/_4t2.png" align="center"></a>
+    <figcaption> The trunk utilization. </figcaption>
+</figure>
+
+ The **improvement in system performance** that results from **aggregating traffic flow** is called **multiplexing gain**.
+
+
+### 4.7.2 Routing Control
+
+**Routing control** refers to **the procedures for assigning paths in a network to connections**.  Clearly, connections should follow **the most direct route**, since this approach uses **the fewest network resources**.
+
+
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/_458.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/_458.png" align="center"></a>
+    <figcaption> Hierarchical Routing Control. </figcaption>
+</figure>
+
+Economic considerations lead to an approach that **provides direct trunks** between **switches** that have **large traffic flows** between them and that **provide indirect paths through tandem switches for smaller flows**.
+* Cost: Each pair of switches requires 18 long distance trunks to handle the 10 Erlangs of traffic at 1% blocking probability. Thus the approach in Figure 4.58a requires 9 × 18 = 162 trunks.
+
+**A hierarchical approach** to routing is desirable when the volume of traffic between
+switches is **small**. This approach **entails aggregating traffic flows onto paths that are shared by multiple switches**.
+* Cost: **Concentrating the traffic flows through the tandems** reduces to 106 the number of trunks required to handle the combined 90 Erlangs of traffic. 
+
+
+The second approach does require the use of **local trunks to the tandem switch**, and so the choice depends on **the relative costs of local and long-distance trunks**.
+
+
+Question: The higher efficiency implies that a smaller
+number of spare circuits is required to meet the 1% blocking probability. However, **the smaller number of spare circuits** makes the system **more sensitive** to **traffic overload conditions**. the blocking probability for large systems is **quite sensitive to traffic overloads**, and therefore the selection of the trunk groups must **provide a margin for some percentage of overload**.
+
+Solution: 
+* A request for a connection between the two switches first attempts to engage a trunk in the direct path. 
+* If **no trunk is available in the direct path**, then an attempt is made to **secure an alternative path** through **the tandem switch**.
+
+Note that because **only 10% of the traffic between the switches attempts the alternative route**, a **10% blocking probability on the alternative path** is sufficient to
+bring the overall blocking probability to 1%.
+
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/_459.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/_459.png" align="center"></a>
+    <figcaption> Alternative Routing. </figcaption>
+</figure>
+
+It should be noted also that the Erlang formula cannot be applied directly in the calculation of blocking probability on the alternative route. The reason is that the requests for routes to the tandem switch arrive **only during periods when the high-usage route is unavailable**.
+
+
+
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/460.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/460.png" align="center"></a>
+    <figcaption> Typical routing scenario. </figcaption>
+</figure>
+
+a more realistic scenario where **the tandem switch handles overflow traffic from some high-usage trunk groups and direct traffic between switches** that have small volumes of traffic between them.
+
+The traffic between switches A and D must be provided with a 1% blocking probability, while a
+10% blocking probability is sufficient for the other pairs of switches. To achieve this
+blocking probability **the traffic from A to D must receive a certain degree of preferential access to the trunks between the tandem switches**.  
+
+
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/_461.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/_461.png" align="center"></a>
+    <figcaption> Dynamic nonhierarchical routing. </figcaption>
+</figure>
+
+
+Traffic flows vary according to the time of day, the day of the week, and even the
+time of year. The ability to **determine the state of network links and switches provides an opportunity to assign routes in more dynamic fashion**.
+
+time/day differences between the East Coast and the West Coast in North America allow the network
+resources at one coast to **provide alternative routes for traffic** on the other coast during
+certain times of the day. **Dynamic nonhierarchical routing (DNHR)** is an example of
+this type of dynamic approach to routing calls.
+
+A certain number of tandem switches is capable of **providing a two-hop alternative route**. The order in which tandem switches are attempted as alternative routes is determined dynamically according to the state of the network.
+
+
+### 4.7.3 Overload Controls
+
+Traffic and routing control are concerned with the handling of traffic flows during
+normal predictable network conditions. **Overload Control** addresses **the handling of traffic flows** during unexpected or unusual conditions, such as occur **during holidays**.
+
+
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/_462.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/_462.png" align="center"></a>
+    <figcaption> Traffic overload. </figcaption>
+</figure>
+
+As shown in figure, Overload conditions result in traffic levels that the network equipment has not been provisioned for and if not handled properly can result in **a degradation in the level of service offered to all network customers**.
+
+As the **offered traffic** approaches **network capacity**, the **carried traffic** may begin to fall. **network resources become scarce**, many call attempts manage to seize only some of
+the resources they need and **ultimately end up uncompleted**.
+
+
+One purpose of overload control is to ensure that **a maximum number of calls** are completed so that **the carried load can approach the network capacity under overload conditions**.
+
+
+To identify overload conditions:
+*  the **traffic loads** at various links and switches need to be measured and tracked
+    * The increased traffic load indicates a problem condition but is not sufficient to identify the problem.
+* the **success ratio of call attempts to a given destination** also needs to be monitored.
+    *  The answer/bid ratio provides the information that identifies switch A as the location of the problem.
+
+The **traffic load measurement** in combination with the **answer/bid ratio** is useful in diagnosing fault conditions.
+
+
+Once an overload condition has been identified, several types of actions can be taken：
+* One type of overload control addresses problems by **allocating additional resources**
+    *  Many transmission systems include **backup redundant capacity** that can be activated in response to failures
+* Dynamic alternative routing provides another approach for allocating resources between areas experiencing high levels of traffic.
+
+Question: Certain overload conditions cannot be addressed by **allocation of additional resources**. 
+
+Solution: The overload controls in this case act to **maximize the efficiency with which the available resources are utilized**.
+
+Procedure: 
+* In the case of networkwide congestion the routing procedures could be modified so that all call attempts, if accepted, are met using direct routes. 
+* Alternative routes are disallowed because they require **more resources to complete calls**.
+
+As a result, the **traffic carried by the network is maximized**.
+
+
+Question:  a certain area experiences extreme levels of inbound and outbound traffic as may result from the occurrence of a natural disaster
+
+Solution:
+* One approach involves **allowing only outbound traffic to seize the available trunks**. This
+approach relieves the switches in the affected area from having to process incoming requests for calls while allowing a maximum of outbound calls to be completed.
+*  A complementary control involves **code blocking**, where distant switches are instructed to **block calls destined for the affected area**.
+* A less extreme measure is to **pace the rate at which call requests from distant switches to the affected area** are allowed to proceed.
+
+## 4.8 Cellular Tellephone Network
+
+In cellular telephony the telephone number **specifies a specific subscriber’s mobile station** (telephone). Much of the complexity in cellular telephony results from
+the **need to track the location of the mobile station**.
+
+
+Radio telephony: an analog voice signal was modulated onto a radio wave.
+* **Radio transmission** makes communications possible to mobile users
+
+Because electromagnetic waves propagate over a wide geographical area, they are ideally suited for a **radio broadcasting service** where **information from a source or station** is **transmitted to a community of receivers that is within range of the signal**.
+
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/_463.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/_463.png" align="center"></a>
+    <figcaption> Celullar Network. </figcaption>
+</figure>
+
+Early mobile radio telephone systems used a **radio antenna** installed on a hill and equipped with a high-power multichannel transmitter. 
+* Transmission from the mobile users to the antenna made use of the power supplied by the car battery.
+
+
+**frequency-reuse principle**: By reducing the power level, the **coverage area can be reduced** and **the frequency band can then be reused in nearby adjacent areas**. This frequency-reuse principle forms the basis for cellular radio communications.
+
+In **cellular radio communications**, a region, for example, a city, is divided into a
+number of geographical areas called **cells** and **users within a cell communicate using a band of frequencies**.
+*  Cell areas are established based on the density of subscribers. Large cells are used in rural areas, and small cells are used in urban areas
+
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/_464.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/_464.png" align="center"></a>
+    <figcaption> Components of a cellular Network. </figcaption>
+</figure>
+
+**A base station** is placed near **the center of each cell**. 
+* The base station has an **antenna** that is used to **communicate with mobile users in its vicinity**.
+* Each base station has **a number of forward channels** available to transmit to its mobile
+users and **an equal number of reverse channels** to receive from its mobile users.
+
+The mobile switching center (MSC)(mobile telephone switching office (MTSO)): **Base stations are connected by a wireline transmission link** or by **point-to-point microwave radio** to **a telephone switch**.
+**The MSC handles connections between cells** as well as to **the public switched telephone network**. 
+* As **a mobile user** moves from one cell to another, a handoff procedure is carried out that **transfers the connection from one base station to the other**, allowing the
+call to continue **without interruption**.
+
+**Immediately adjacent cells cannot use the same set of frequency channels** because doing so may result in interference in transmissions to users near their
+boundary.
+* The **set of available radio channels** are **reused** following the frequency reuse pattern.
+
+a seven-cell reuse pattern: 4 or 12 are also ok.
+* seven disjoint sets of frequency channels are reused.
+*  introduces a minimum distance of one cell between cells using the same frequency channels.
+* As traffic demand grows, additional capacity can be provided by splitting a cell into several smaller cells
+
+
+Advanced Mobile Phone Service (AMPS): an analog cellular system still in use in North America.
+* **the frequency band 824 to 849 MHz** is allocated to transmissions **from the mobile station to the base station**.
+* **the band 869 to 894 MHz** is allocated to transmissions from **the base station to the mobile station**.
+* uses a 30 kHz channel to carry one voice signal, so the total number of channels available in each direction is 25 MHz/30 kHz = 832 channels.
+* The bands are divided equally between **two independent service providers**, so
+each cellular network has 416 bidirectional channels.
+* Each forward and reverse channel pair has frequency assignments that are separated by 45 MHz.
+* This separation between transmit and receive channels reduces the interference between the transmitted signal and the received signal.
+
+A small number of channels within each cell have been designated to function as
+**setup channels**.
+*  the AMPS system allocates 21 channels for this purpose.
+
+When a mobile user turns on his or her unit, the unit scans the setup channels and **selects the one with the strongest signal**. 
+* Henceforth it **monitors this setup channel** as long as the **signal remains above a certain threshold**.
+
+
+### 4.8.1 Establish a call
+
+(1)  To establish a call from the public telephone network or from another mobile user to a mobile user, **the MSC sends the call request to all of its base stations**, which in turn **broadcast the request in all the forward setup channels**, specifying the mobile user’s telephone number. 
+
+(2) When the **desired mobile station** receives the request message, it replies by **identifying itself on a reverse setup channel**. 
+
+(3) The corresponding base station forwards the reply to the MSC and **assigns a forward and reverse voice channel**. 
+
+(4) The base station instructs the mobile station to **begin using these channels**, and the mobile telephone is rung.
+    
+
+### 4.8.2 Init a call
+
+(1) the mobile station sends a request in **the reverse setup channel**.
+
+In addition to its **phone number** and **the destination phone number**, the mobile station
+also transmits **a serial number** and possible **password** information that is used by the
+MSC to validate the request
+
+This call setup involves **consulting the home location register**, which is a database that contains information about subscribers for which this is the home area.
+
+The validation involves **the authentication center**, which contains authentication information about subscribers.
+
+
+(2)  The MSC then **establishes the call** to the **public telephone network** by using **conventional telephone signaling**, and **the base station** and **mobile station** are moved to the **assigned forward and reverse voice channels**.
+
+
+### 4.8.3 the Call proceeds
+
+(1) The signal level is **monitored** by the base station. If **the signal level** falls **below a specified threshold**, the MSC is notified and the mobile station is instructed to transmit on the **setup channel**.
+
+(2) All base stations in the vicinity are instructed to **monitor the strength of the signal level** in the **prescribed setup channel**. The MSC uses this information to **determine the best cell** to which the call should be handed off. The
+current base station and the mobile station are instructed to prepare for a handoff.
+
+(3) The MSC then **releases its connection to the first base station** and **establishes a connection to the new base station**. The mobile station changes its channels to those selected in the new cell. The connection is interrupted for the brief period that is required to execute the handoff.
+
+
+### 4.8.4 Roaming
+
+Roaming users enter an area **outside their home region**.
+
+
+First, **business arrangements must be in place between the home and visited cellular service providers**. 
+
+(1) When the roamer enters a new area, the **roamer registers in the area** by using **the setup channels**. 
+
+(2) The MSC in the new area uses the information provided by the roamer to **request authorization from the roamer’s home location register**. 
+
+(3) The visitor location register contains information about visiting subscribers. After registering, the roamer can **receive and place calls inside the new area**.
+
+
+### 4.8.5 Standards
+
+The **Global System for Mobile Communications (GSM)** signaling was developed as part of a standard for **pan-European public land mobile system**.
+
+The **Interim Standard 41 (IS-41)** was developed later in North America, using much of the GSM framework.
+
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/_465.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/_465.png" align="center"></a>
+    <figcaption> Protocol stacks in the cellular network. </figcaption>
+</figure>
+
+**In the GSM system the base station subsystem (BSS)** consists of **the base transceiver station (BTS)** and **the base station controller (BSC)**. 
+* The BTS consists of the antenna and transceiver to communicate with the mobile telephone.
+* The BTS is also concerned with the measurement of signal strength.
+* The BSC manages **the radio resources of one or more BTSs**.
+* The BSC is concerned with **the setup of frequency channels** as well as with **the handling of handoffs**.
+
+Each BTS communicates with **the mobile switching center** through the **BSC**, which provides an interface between **the radio segment and the switching segment**.
+
+
+The GSM signaling protocol stack has three layers:
+* Layer 1 corresponds to **the physical layer**
+* layer 2 to the **data link layer**. 
+* layer 3 corresponds to **the application layer** 
+    * radio resources management (RRM)
+    * mobility management (MM)
+    * call management (CM)
+
+
+The **radio air interface** between the mobile station and the BTS is denoted as
+Um.
+* The **physical layer** across the **Um interface** is provided by the **radio transmission system**.
+* The LAPD protocol is **a data link protocol** that is part of **the ISDN protocol stack**.
+* LAPDm denotes **a “mobile” version of LAPD**. 
+* The **radio resources management sublayer between the mobile station and the BTS** deals with **setting up the radio channels** and with handover (the GSM term for handoff).
+
+
+The interface between the BTS and its BSC is denoted as the Abis interface.
+* The physical layer consists of **a 64 kbps link with LAPD providing the data link layer**.
+* A BSC can handle a handover if the handover involves two cells under its control.
+This approach relieves the MSC of some processing load. 
+
+The interface between the BSC and the MSC is denoted as the A interface that uses the protocol stack of SS7.
+
+The RRM sublayer in the MSC is involved in handovers between cells that belong to
+different BSCs but that are under the control of the MSC.
+
+Only the **mobile station** and the **MSC** are involved in the **mobility management**
+and **call management sublayers**. 
+* Mobility management deals with the procedures to **locate mobile stations** so that calls can be completed. 
+
+In GSM, cells are grouped into location areas. A mobile station **is required to send update messages** to notify the system when it is moving between location areas.
+
+
+In GSM, unlike other standards, the mobile station includes a smart card, called the **Subscriber Identity Module (SIM)**, which **identifies the subscriber**, independently of the specific terminal device, and provides a secret authorization key. 
+
+The **mobility sublayer** also deals with the authentication of users.
+
+The **call management sublayer** deals with the establishment and release of calls.
 
 
