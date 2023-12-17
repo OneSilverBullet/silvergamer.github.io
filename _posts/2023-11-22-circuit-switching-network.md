@@ -350,15 +350,12 @@ The **pointer structure** consisting of **the H1, H2, and H3 bytes**,
 
 ## 4.4  CIRCUIT SWITCHES
 
-A network is frequently represented as a cloud that connects multiple users as shown in
-Figure 4.33a. 
+A network is frequently represented as a cloud that connects multiple users(as 4.33a). 
 
-A **circuit-switched network** is **a generalization of a physical cable** in the sense that it provides **connectivity** that **allows information to flow between inputs and outputs** to the network. 
+A **circuit-switched network** is **a generalization of a physical cable** in the sense that it provides **connectivity that allows information to flow between inputs and outputs** to the network.
 
-Unlike a cable, however, a network is geographically distributed and consists of **a graph of transmission lines (that is, links) interconnected by switches(nodes)**. 
 
-As shown in Figure 4.33b, the function of a circuit switch is to transfer the signal that arrives **at a given input to an appropriate output**. 
-* The **interconnection of a sequence of transmission links and circuit switches** enables **the flow of information between inputs and outputs in the network**.
+The function of a circuit switch is to **transfer the signal that arrives at a given input to an appropriate output**. The interconnection of a sequence of **transmission links** and **circuit switches** enables the flow of information between inputs and outputs in the network.
 
 <figure>
     <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/_433.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/_433.png" align="center"></a>
@@ -367,13 +364,45 @@ As shown in Figure 4.33b, the function of a circuit switch is to transfer the si
 
 ### 4.4.1 Space-Division Switches
 
+Space-division switches: they provide a **separate physical connection** between inputs and outputs so **the different signals are separated in space**.
 
+#### (1) Crossbar Switch
+
+The crossbar switch consists of an N × N array of **crosspoints** that can connect any input to any available output.
+* When a request comes in from an
+incoming line for an outgoing line, **the corresponding crosspoint is closed to enable information to flow from the input to the output**.
 
 <figure>
     <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/_434.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/_434.png" align="center"></a>
     <figcaption> Crossbar switch. </figcaption>
 </figure>
 
+The **crossbar switch** is said to be a
+**nonblocking switch**; in other words, connection requests are never denied because of **lack of connectivity resources**, that is, **crosspoints**. Connection requests are denied only
+when the requested outgoing line is **already engaged in another connection**.
+
+
+The complexity of the crossbar switch as measured by the number of crosspoints
+is $N^2$.
+
+
+#### (2) Mulistage Switches
+
+a multistage switch that consists of **three stages** of smaller space division switches.
+* The **N inputs** are grouped into **N/n groups of n input lines.**
+* Each group of **n input lines** enters a small switch in the first stage that consists of an n×k array
+of crosspoints.
+* Each **input switch** has one line connecting it to each of **k intermediate stage N/n × N/n switches**.
+* Each intermediate switch in turn has one line connecting it to each of **the N/n switches in the third stage**.
+* The latter switches are k × n.
+
+**In effect each set of n input lines shares k possible paths to any one of the switches at the last stage**.
+* the first path goes through the first intermediate switch
+* the second path goes through the second intermediate switch
+
+The resulting multistage
+switch is **not necessarily nonblocking**. For example, if k < n, then as soon as a switch
+in the first stage has k connections, all other connections will be blocked.
 
 
 <figure>
@@ -381,12 +410,149 @@ As shown in Figure 4.33b, the function of a circuit switch is to transfer the si
     <figcaption> Multistage switch (with three smaller space-division switches). </figcaption>
 </figure>
 
+#### (3) CLOS NONBLOCKING SWITCHING FABRIC
+
+The set of routes that **maximize the number of intermediate switches** already in use by the given input and output groups is shown in the figure. That is, **each existing connection uses a different intermediate switch**. Therefore, the maximum number of intermediate switches not available to **connect the desired input to the desired output is 2(n − 1)**. 
+* Now suppose that k = 2n − 1; then k paths are available from any input group to any output group.
+
+
+Thus **the multistage switch with k = 2n − 1** is **nonblocking**.
 
 
 <figure>
     <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/_436.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/_436.png" align="center"></a>
     <figcaption> A multistage switch is nonblocking if k = 2n − 1 </figcaption>
 </figure>
+
+The number of crosspoints required in a three-stage switch is the sum of the
+following components:
+
+* N/n input switches × nk crosspoints/input switch.
+* k intermediate switches × (N/n)2 crosspoints/intermediate switch.
+* N/n output switches × nk crosspoints/output switch.
+
+The total number of crosspoints is $2Nk + k(N/n)^2$.
+
+The number of
+crosspoints required to make the switch nonblocking is $2N(2n −1)+(2n −1)(N/n)^2$.
+
+**The number of crosspoints can be minimized through the choice of group size n**. 
+* By differentiating the above expression with respect to n, we find that the number of crosspoints is minimized if $n ≈ (N/2)^{1/2}$. The minimum number of crosspoints is then
+$4N((2N)^{1/2} − 1)$.
+
+We then see that the minimum number of crosspoints using a Clos nonblocking three-stage switch grows at a rate proportional to $N^{1.5}$.
+
+
+*When k < 2n − 1, there is a nonzero probability that a connection request will be blocked*.
+
+
+### 4.4.2 Time Division Switches
+
+The **time-slot interchange (TSI)** technique replaces the crosspoints in a **space switch with the reading and writing of a slot into a memory**. 
+
+
+The interchange technique: 
+* The **octets in each incoming frame** are written into a **register**. 
+* The call setup procedure has **set a permutation table that controls the order in which the contents of the register are read out**. 
+* Thus the outgoing frame begins by reading the contents of slot 23, followed by slot 24, and so on until
+slots 1 and 2 are read, as shown in the figure. This procedure can connect any input to any available output.
+
+Frames come in at a **rate of 8000 times** a second and **the time-slot interchange** requires **one memory write and one memory read** operation per
+slot, the maximum number of slots per frame that can be handled is
+
+$$MaximumNumOfSlots=125μsec/(2*MemoryCycleTime)$$
+
+
+The development of the TSI technique was **crucial in completing the digitization of the telephone network**.
+
+The introduction of TSI in digital time-division switches led to significant reductions in cost and to improvements in performance by **obviating the need to convert back to analog form**.
+
+
+
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/_437.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/_437.png" align="center"></a>
+    <figcaption> Time-slot interchange technique </figcaption>
+</figure>
+
+#### (1) Time-Space-Time Switches
+
+a **hybrid switch design** in which **TSI switches are used at the input and output stages** and **a crossbar space switch is used at the intermediate stage**. These switches are called **time-space-time switches**.
+ 
+The design approach is to establish an **exact correspondence** between the input lines in a space-division switch in the first stage and time slots in a TSI switch.
+
+Each input line to the switch corresponds to a slot, so the **TSI switch has input frames of size n slots**.
+
+Similarly, the **output frame from the TSI switch** has **k slots**. Thus the operation of the TSI switch involves taking the n slots from the incoming frame and reading them out in a frame of size k, according to some preset permutation table.
+
+Note that for the system to operate in synchronous fashion, the **transmission time of an input frame** must be equal to the **transmission time of an output frame**.
+
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/_438.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/_438.png" align="center"></a>
+    <figcaption> Hybrid switches </figcaption>
+</figure>
+
+The **flow of slots** between **the switches in the first stage** and **the switches in the intermediate stage**.
+
+
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/_439.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/_439.png" align="center"></a>
+    <figcaption> Flow of slots between switches in a hybrid switch. </figcaption>
+</figure>
+
+(1) what happens as **the first slot in a frame** comes out of **the first stage**
+
+This first slot corresponds to the first output line
+out of each of the first stage switches.
+
+The first line out of each first stage switch is connected to the first intermediate switch.
+
+The first slot in each intermediate frame will be directed to intermediate switch 1.
+
+this switch is a crossbar switch, and so it will transfer the N/n input slots into N/n output slots according to the crosspoint settings. 
+
+Note that all the other intermediate switches are idle during the first time slot.
+
+(2) what happens with the second slot in a frame
+
+These slots are now directed to crossbar switch 2, and all other intermediate switches are idle.
+
+It thus becomes apparent that **only one of the crossbar switches is active** during any given time slot. 
+
+This situation makes it possible to replace the k intermediate crossbar switches with a single crossbar switch that is time-shared among the k slots in a frame.
+
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/_440.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/_440.png" align="center"></a>
+    <figcaption> Time-space-time switches </figcaption>
+</figure>
+
+To **replace the k intermediate original crossbar switches**, the **time-shared crossbar switch** must be reconfigured to the **interconnection pattern of the corresponding original switch** at every time slot. This approach to sharing a space switch is called **time-division switching**.
+
+#### (2) Example: 4X4 Time-Space-Time Switch
+
+A simple 4 × 4 switch example that is configured for the connection pattern that takes inputs (A, B, C, D) and outputs (C, A, D, B). 
+
+Part (a) of the figure shows **a configuration of a three-stage space switch** that implements this **permutation**.
+
+Part (b) shows the **TST implementation** where **the inputs arrive in frames of size 2** that are mapped into **frames of size 3** by **the first-stage TSI switches**.
+
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/_441.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/_441.png" align="center"></a>
+    <figcaption> Example of a time-space-time switch </figcaption>
+</figure>
+
+Note that parts (a) and (b) have the same configurations.
+
+#### (3) Example: Time-Space-Time switch design
+
+Question: consider the design of a nonblocking 4096 × 4096 time-space-time switch that has input frames with 128 slots. 
+
+Solution:
+* Because N = 4096 and n = 128, we see that N/n = 32 input TSI switches are required in the first stage. 
+* The nonblocking requirement implies that the frames between the input stage and the intermediate stage must be of size k = 2n − 1 = 255 slots. 
+* The internal speed of the system is then approximately double that of the input lines. 
+* The time-shared crossbar switch is of size 32 × 32.
+
+ The resulting switch can be seen to be quite compact.
 
 
 
@@ -399,6 +565,8 @@ The **dynamic aspects of multiplexing** the information flows **from various use
 **Concentration** addresses the situation where **a large number of users** alternate
 between periods when they need connections and periods when they are idle.
 * Concentration involves **the dynamic sharing of a number of communication channels** among a larger community of users.
+
+
 
 
 <figure>
