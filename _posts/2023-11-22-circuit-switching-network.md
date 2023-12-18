@@ -1013,3 +1013,96 @@ The **mobility sublayer** also deals with the authentication of users.
 The **call management sublayer** deals with the establishment and release of calls.
 
 
+## 4.9 Channelization in Telephone Cellular Networks
+
+### ADVANCED MOBILE PHONE SYSTEM 
+
+The Advanced Mobile Phone System (AMPS)  had an initial allocation of 40 MHz that was divided between two service providers (A and B).
+
+AMPS uses **FDMA operation** for transmission between a base station and mobile stations.
+* One band is used for **forward channels from the base station to the mobile stations**
+* The other band is used for **reverse channels from the mobile stations to the base station**.
+
+Each channel pair is separated by 45 MHz.
+
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/_635.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/_635.png" align="center"></a>
+    <figcaption> AMPS frequency allocation and channel structure. </figcaption>
+</figure>
+
+ AMPS uses analog frequency modulation to **send a single voice signal** over a **30 kHz** transmission channel.
+
+Thus the 50 MHz allocation provides two-way channels number:
+
+$$(50 × 10^6)/(2 × 30 × 10^3) = 832$$
+
+Of these channels 42 are set aside for control purposes
+
+
+AMPS uses **a seven-cell frequency reuse pattern** so only **one-seventh of the channels** is available **in a given cell**. 
+
+A **measure of the spectrum efficiency** in a cellular system is the number of calls/MHz/cell that can be supported. For AMPS **each service provider** has 416 − 21 traffic channels
+that are divided over **seven cells** and 25 MHz:
+
+$$Spectrum Efficiency For AMPS = 395/(7 × 25) = 2.26 calls/cell/MHz$$
+
+
+### IS-54/IS-136
+
+IS-54 uses a hybrid channelization technique that **retains the 30 kHz** structure of AMPS but **divides each 30 kHz channel into several digital TDMA channels**.
+
+This approach allows **cellular systems to be operated in dual mode**, **AMPS and TDMA**. Each 30 kHz channel carries a 48.6 kbps digital signal organized into six-slot cycles as shown.
+* Each cycle has a duration of 40 ms
+* Each slot contains 324 bits
+* Each slot corresponds to a bit rate of 324 bits/40 ms = 8.1 kbps
+* A full-rate channel consisting of **two slots** per cycle, and hence **16.2 kbps**, is used to **carry a voice call**.
+
+Thus IS-54 supports three digtal voice channels in one analog AMPS channel. 
+* Half-rate channels (8.1 kbps) 
+* Double full-rate channels (32.4 kbps)
+* Triple full-rate channels (48.6 kbps)
+
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/_636.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/_636.png" align="center"></a>
+    <figcaption> IS-54 TDMA structure. </figcaption>
+</figure>
+
+We note that the 416 analog channels available provide 3 × 416 = 1248 digital channels
+* 21 of these channels are used for control purposes
+*  the frequency reuse factor is 7
+
+$$SpectrumEfficiencyOfIS-54 = 1227/(7 × 25) = 7 calls/cell/MHz$$
+
+
+
+### GSM
+
+The **Global System for Mobile Communications (GSM)** is a European standard for cellular telephony that has gained wide acceptance.
+
+GSM was designed to operate in
+* the band 890 to 915 MHz for the **reverse channels**
+* the band 935 to 960 MHz for the **forward channel**
+
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/_637.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/_637.png" align="center"></a>
+    <figcaption> (a) GSM channel structure; (b) GSM TDMA structure. </figcaption>
+</figure>
+
+The available frequency band is divided into carrier signals that are spaced 200 kHz apart. 
+
+Thus the 25 MHz bandwidth can support 124 one-way carriers
+
+The carrier signal is divided into **120 ms multiframes**, where each multiframe consists of **26 frames**, and each frame has **eight slots**.
+
+Two frames in a multiframe are used for **control purposes**, and the remaining 24 frames carry traffic.
+
+
+A **full-rate traffic channel** uses one slot in every traffic frame in a multiframe.
+Therefore, the bit rate of a full-rate channel is
+
+$$Traffic channel bit rate = 24 slots/multiframe × 114 bits/slot× (1 multiframe/120 ms) = 22,800 bps$$
+
+
+If we assume 124 carriers in the 50 MHz band, then we obtain a total of 124 × 8 = 992 traffic channels. Assuming a frequency reuse factor of 3:
+
+$$Spectrum efficiency of GSM = 992/(3 × 50) = 6.61 calls/cell/MHz$$
