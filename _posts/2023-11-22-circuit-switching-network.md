@@ -343,9 +343,81 @@ The **path overhead** uses **the first column of this array**. This SPE is then 
 
 The use of the pointer makes it possible to **extract a tributary signal** from the **multiplexed signal**. This feature gives **SONET multiplexers** an **add-drop capability**, which means that **individual tributaries can be dropped** and **individual tributaries can be added without having to demultiplex the entire signal**.
 
-The **pointer structure** consisting of **the H1, H2, and H3 bytes**, 
+The **pointer structure** consisting of **the H1, H2, and H3 bytes**, maintains **synchronization of frames and SPEs** in situations where their clock frequencies differ slightly.
+
+(1) Questions: If **the payload stream is faster** than the frame rate, then a buffer is required to hold payload bits as the frame stream falls behind the payload stream. To allow the frame to catch up, an extra SPE byte is transmitted in a frame from time to time.
+
+Solution: Negative Byte Stuffing
+* This extra byte, which is carried by H3 within the line overhead, clears the backlog that has built up. 
+* Whenever this byte is inserted, the pointer is moved forward by one byte to indicate that the **SPE starting point has been moved one byte forward**. 
+
+(2) Question: When the payload stream is slower than the frame stream
+
+Solution: Positive Byte Stuffing
+* **The number of SPE bytes transmitted in a frame** needs to be reduced by one byte from time to time. 
+* This correction is done by **stuffing an SPE byte with dummy information** and then **adjusting the pointer to indicate that the SPE now starts one byte later**.
+
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/_41.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/_41.png" align="center"></a>
+    <figcaption> Positive byte stuffing and negative byte stuffing. </figcaption>
+</figure>
+
+SPE rate >  STS-1 rate, negative byte stuffing. H3 carries a byte of information, decrement the pointer by one.
+
+SPE rate < STS-1 rate, positive byte stuffing. byte next to H3 carries dummy information, increment the pointer by one.
+
+(3) Question: how n STS-1 signals are multiplexed into an STS-n signal?
+
+Solution: **Each incoming STS-1 signal** is first synchronized to the local STS-1 clock of the multiplexer as follows.
+
+* The **section and line overhead** of the incoming STS-1 signal are terminated,
+and its payload (SPE) is mapped into a new STS-1 frame that is **synchronized to the local clock**.
+* The pointer in the new STS-1 frame is adjusted as necessary, and the mapping is done **on the fly**.
+* This procedure ensures that **all the incoming STS-1 frames** are mapped into STS-1 frames that are **synchronized with respect to each other**. 
+* The STS-n frame is produced by interleaving the bytes of the n synchronized STS-1 frames, in effect **producing a frame that has nine rows, 3n section and line overhead columns, and 87n payload columns**. 
+* To multiplex k STS-n signals into an STS-kn signal, the incoming signals are first de-interleaved into STS-1 signals and then the above procedure is applied to all kn STS-1 signals.
 
 
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/_42.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/_42.png" align="center"></a>
+    <figcaption> Synchronous multiplexing in SONET. </figcaption>
+</figure>
+
+
+A SONET STS-1 signal can be divided into **virtual tributary signals** that accommodate lower-bit-rate streams. 
+
+In each SPE, 84 columns are set aside and divided into **seven groups of 12 columns**. Each group constitutes a virtual tributary and has a bit rate of
+12 × 9 × 8 × 8000 = 6.912 Mbps. 
+
+Alternatively, each virtual tributary can be viewed as 12 × 9 = 108 voice channels. T
+
+hus mappings have been developed so that **a virtual tributary can accommodate four T-1 carrier signals** (4 × 24 = 96 < 108), or three CEPT-1 signals (3 × 32 = 96 < 108). 
+
+The SPE can then handle **any mix of T-1 and CEPT-1 signals that can be accommodated in its virtual tributaries**. 
+
+In particular **the SPE can handle a maximum of 7 × 4 = 28 T-1 carrier signals or 3 × 7 = 21 CEPT-1 signals**. A mapping has also been developed so that a single SPE signal can handle one DS3 signal.
+
+
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/_43.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/_43.png" align="center"></a>
+    <figcaption> The virtual group. </figcaption>
+</figure>
+
+### 2.3 Transport Networks
+
+A **transport network** provides **high bit rate connections** to clients at different locations much like a telephone network provides voice circuits to users.
+
+The connections provided by a transport network can form the **backbone of multiple**, **independent networks**.
+
+SONET produced significant reduction in cost by enabling **add-drop multiplexers**
+(ADM) that can insert and extract tributary streams without disturbing tributary streams
+that are in transit as shown in Figure 4.17b. The overall cost of the network can then be
+reduced by replacing back-to-back multiplexers with SONET ADMs.
+
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/_44.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/Telecommunication/_44.png" align="center"></a>
+    <figcaption> The SONET add-drop multiplexing. </figcaption>
+</figure>
 
 
 ## 4.4  CIRCUIT SWITCHES
