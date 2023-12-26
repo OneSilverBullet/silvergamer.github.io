@@ -6,7 +6,10 @@ excerpt: "The basic conception of real-time global illumination."
 tag:
 - Computer Graphics 
 graphics: true
-feature: https://github.com/OneSilverBullet/SilverGamer.GitHub.io/blob/gh-pages/_img/blogHead/directX12partI.jpg
+feature: https://github.com/OneSilverBullet/SilverGamer.GitHub.io/blob/gh-pages/_img/graph/head.png
+
+
+
 ---
 
 ## 1. Image based Lighting Overview
