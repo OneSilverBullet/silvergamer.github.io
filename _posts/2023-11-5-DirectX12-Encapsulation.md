@@ -161,6 +161,8 @@ Dynamic descriptor heaps, as the name implies, allow dynamic resizing during run
 
 Since only a single CBV_SRV_UAV descriptor heap and a single SAMPLER descriptor heap can be bound to the command list at the same time, the DynamicDescriptorHeap class also ensures that the currently bound descriptor heap has a sufficient number of descriptors to commit all of the staged descriptors before a Draw or Dispatch command is executed. If the currently bound descriptor heap runs out of descriptors, then a new descriptor heap is bound to the command list.
 
+**The dyanmic descriptor heap only consider about the descriptors table.** As for SRV, CRV, UAV, we can bind the gpu resource directly to the command list. In dynamic descriptor heap, we can change the related slot gpu resource, and we can changed the rendering effect directly, which is a nice way to promote efficiency.
+
 There are two essential structure as the basis of dynamic descriptor heap.
 
 (1) **Descriptor Table Cache**: Describes a descriptor table entry, a region of the handle cache and which handles have been set.
