@@ -28,7 +28,9 @@ Irradiance map is an essential part in Image based Rendering. To reduce the stor
 
 
 
-## 2. The Global Illumination in Modern Shading Pipeline 
+## 2. The Global Illumination in Modern Game Engine
+
+### 2.1 The Modern Shading Pipeline 
 
 In this chapter, we will discuss about how the global illumination can be used in shading pipeline. As we all know, different shading models have different BRDF functions, which means these shaders' calculation are different with each other. To embed the global illumination in the shading pipeline, we separate the shading process into two parts in architecture view: direct lighting and environment lighting.
 
@@ -44,15 +46,19 @@ In the custom game engine, we can design the shader architecture as follows. We 
     <figcaption>the shading pipeline.</figcaption>
 </figure>
 
-### 2.1 The Light Probes
+### 2.2 The Light Probes Conceptions
 
 The spherical harmonics are suitable for storing the low-frequency information. Hence, the diffuse lighting information with low-frequency can be projectted into the spherical harmonics. 
 
-In modern game engine, we place multiple probes around the scene. Each light probe stores the spherical harmonics parameters, which are the projection of the surrounding diffuse lighting information(cubemaps/samples). The diffuse lighting information can be gained through two ways:
-* Cubemaps: Take pictures in six directions of cubemaps from the probe view.
-* Samples: Each texel in cubemap can be recognized as a sample result in target direction. We can send the direction to a off-line ray tracer to get the rendering result.
 
-The process of calculating spherical harmonics for each light probes is called baking. 
+
+
+
+## 3. Light Probe Baking
+
+### 3.1 Conception
+
+The process of calculating spherical harmonics for each light probes is called **baking**. 
 
 After baking, to shading a fragment, we interpolate the spherical harmonics value based on the position of current fragment. The process:
 
@@ -64,15 +70,67 @@ After baking, to shading a fragment, we interpolate the spherical harmonics valu
 
 Albedo refers to the diffuse color of a material or surface, which is **the color that is scattered equally in all directions when light hits it**.
 
+### 3.2 Cubemap Generation
 
+As we all know, the irradiance map indicate the environment diffuse lighting around the current position. So, we need to record the environment diffuse light state to get accuracy environmental diffuse lighting.
 
+In modern game engine, we place multiple probes around the scene. Each light probe stores the spherical harmonics parameters, which are the projection of the surrounding diffuse lighting information(cubemaps/samples). The diffuse lighting information can be gained through two ways:
+* Cubemaps: Take pictures in six directions of cubemaps from the probe view.
+    * we need to real-time capture multi-times to gain a cubemap with multi-bounce lighting effect.
+* Samples: Each texel in cubemap can be recognized as a sample result in target direction. 
+    * We can send the direction to a off-line ray tracer to get the rendering result.
 
+Above all, we have got the cubemap/samples of current position right now.
 
+### 3.3 Probe Baking Theory
 
-
-
+In the baking process, we should projected the cubemap to a series of spherical harmonic parameters.
 
 <figure>
-    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/graph/fd.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/graph/fd.png" align="center"></a>
-    <figcaption>the function diagram.</figcaption>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/graph/pp.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/graph/pp.png" align="center"></a>
+    <figcaption>the probe projection results.</figcaption>
 </figure>
+
+The above figure shows the rebuild results for different orders spherical hamonics parameters. If we use the higher orders spherical harmonics parameters, we can get the accurate rebuild results. However, we need more space to store the parameters. **It's a trade-off between performance and effectiveness**. Always, we choose 3 orders spherical harmonics parameters to store the diffuse environment lighting.
+
+We can use the following process to project the cube map to a 3 order spherical harmonics parameters, which come from the paper *Stupid Spherical Harmonics*.
+
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/graph/pb.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/graph/pb.png" align="center"></a>
+    <figcaption>the probe baking pesi codes.</figcaption>
+</figure>
+
+There are some key points that we need to be clear.
+* The t(texel) is the color of current texel; 
+* EvalSHBasis is the function to get the SH Basis Function based on current texel's information.
+* The calculation of fTmp and fWt is to calculate the *differential solid angle*.
+* The final result divided by fWtSum/4π, which means **the spherical integral**.
+
+The EvalSHBasis is the essential part to baking the environment diffuse lighting. The EvalSHBasis function **solve current SH Basis** based on **the direction vector of related texel**. As the following figure, each texel has their own SH basis values.
+
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/graph/tx.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/graph/tx.png" align="center"></a>
+    <figcaption>the baking process.</figcaption>
+</figure>
+
+There is one implementation of EvalSHBasis function, which comes from paper *Efficient Spherical Harmonic Evaluation*(https://jcgt.org/published/0002/02/06/paper.pdf). By the following implementation, we can evaluate the 3 order spherical harmonics parameters rapidly. To be honest, I dont know the theory about the implementation, but it works really well.
+
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/graph/EvalSHBasis.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/graph/EvalSHBasis.png" align="center"></a>
+    <figcaption>the EvalSHBasis function.</figcaption>
+</figure>
+
+
+### 3.4 The Baking Architecture Implementation
+
+In this section, we discuss about the implementation of the section 3.3. In mordern game engine, there always have the conception of **Render Pass**. The most important thing is that we should decrease the number of render passes. The interaction between the CPU and GPU is really high, the decreasing of the render passes can significantly increase the efficiency.
+
+So we **use the Mipmap generation process to boost the evaluation process of SH parameters**. We can implement this process in the Computer Shader of DirectX12. For brevity, we just talk about the algorithm steps but no implementation. You can implement the sh probes baking by any graphics api.
+
+
+
+
+
+
+
+
