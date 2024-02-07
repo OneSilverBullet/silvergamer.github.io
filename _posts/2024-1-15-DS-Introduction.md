@@ -15,7 +15,7 @@ feature: https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io
 
 ### 1.1 Conception
 
-A distributed system is **a collection of autonomous hosts** that are connected through a computer **network**. Each host executes **components** and operates a distribution **middleware**, which enables the components to coordinate their activities in such a way that users perceive the system as a single, integrated computing  facility.
+A  distributed system is **a collection of autonomous hosts** that are connected through a computer **network**. Each host executes **components** and operates a distribution **middleware**, which enables the components to coordinate their activities in such a way that users perceive the system as a single, integrated computing  facility.
 
 
 Transparency: Distributed systems should be perceived by users and application programmers
