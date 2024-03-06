@@ -10,6 +10,437 @@ blog: true
 feature: https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/blogHead/directX12partI.jpg
 ---
 
+## 1. Algorithm Basis Conception
+
+### 1.1 Asymptotic Notation
+
+Scalability: Asymptotics.
+
+The counting of time is not exact, we express the run-time using the asymptotic notation.
+* O: f(n)=O(g(n)) if there exists postive constants c, n0 such that f(n)<=cg(n) for n >= n0.
+    * g(n) is an upper bound.
+* Ω: f(n)=Ω(g(n)) if there exists postive constants c, n0 such that f(n)>=cg(n) for n >= n0.
+    * g(n) is a lower bound.
+* θ: f(n)=θ(g(n)) if there exists postive constants c1, c2, n0 such that c2g(n)>=f(n)>=c1g(n) for n >= n0.
+    * f(n) grows as fast as g(n).
+* o: f(n)=o(g(n)) if there exists postive constants c, n0 such that f(n)< cg(n) for n >= n0.
+    * f(n) grows slower than g(n)
+* w: f(n)=w(g(n)) if there exists postive constants c, n0 such that f(n)> cg(n) for n >= n0.
+    * f(n) grows faster than g(n)
+
+Simplification of expressions in asymptotic analysis.
+
+(1) If c is a constant:
+
+$$O(f(n) + c) = O(f(n))$$
+
+$$O(cf(n)) = O(f(n))$$
+
+(2) If f1=O(f2):
+
+$$O(f1(n) + f2(n)) = O(f2(n))$$
+
+(3) If f1=O(g1(n)) and f2=O(g2(n)) then
+
+$$O(f_1(n)f_2(n))= O(g_1(n)g_2(n))$$
+
+(4) If 
+
+$$\lim_{n \to \inf}\frac{g(n)}{f(n)} = 0$$
+
+Then:
+
+$$g(n)=O(f(n))$$
+
+$$f(n) = Ω(g(n)) $$
+
+
+(5) If 
+
+$$\lim_{n \to \inf}\frac{g(n)}{f(n)} = c$$
+
+Then:
+
+$$g(n)=θ(f(n))$$
+
+$$f(n) = θ(g(n)) $$
+
+
+
+### 1.2 Recurrence
+
+An algorithm that breaks a problem of size n into one subproblem of size n/3 and another of size 2n/3, taking θ(n) time to divide and combine:
+
+$$T(n) = T(n/3) + T(2n/3) + θ(n)$$
+
+Solution:
+
+$$T(n) = θ(nlgn)$$
+
+### 1.3 Substitution Method
+
+Steps:
+
+(1) Guess the Solution.
+
+(2) Use induction to find the constants and show that the solution works.
+
+Example:
+
+Determine an asymptotic upper bound on T(n) = 2T(n/2) + θ(n). Floor function ensures that T(n) is defined over integers.
+
+Solution:
+
+Guess: T(n) = O(nlgn)
+
+Inductive Step:
+
+We assume that T(n) <= cnlgn for all numbers >= n0 and < n. 
+
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/al/ss1.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/al/ss1.png" align="center"></a>
+    <figcaption>Substitue into the recurrence.</figcaption>
+</figure>
+
+
+
+### 1.4 Recursion Trees Method
+
+#### Regular Example
+
+Used to generate a guess, then verify by substitution method.
+
+Example: T(n) = 3T(n/4) + θ(n^2). Draw out a recursion tree.
+
+
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/al/rt.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/al/rt.png" align="center"></a>
+    <figcaption>Recursion Tree.</figcaption>
+</figure>
+
+Subproblem size for nodes at depth i is n/4^i. So the base case
+
+$$n/4^i=1$$
+
+$$n=4^i$$
+
+$$i=log_4n$$
+
+Each level has 3 times as many nodes as the level above. Each internal node at depth i has cost c(n/4^i)^2.
+
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/al/rt2.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/al/rt2.png" align="center"></a>
+    <figcaption>Recursion Tree further proof.</figcaption>
+</figure>
+
+
+Then, we use substitution method to verify O(n^2) upper bound. We assume T(n) <= dn^2.
+
+$$T(n) <= 3T(n/4) + cn^2$$
+
+$$T(n) <= 3d(n/4)^2 + cn^2 = 3/16*dn^2 + cn^2 <= dn^2$$
+
+And the d exist for the correctness of above equation.
+
+#### Irregular Example
+
+T(n) = T(n/3) + T(2n/3) + θ(n).
+
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/al/rt3.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/al/rt3.png" align="center"></a>
+    <figcaption>Irregular Recursion Tree.</figcaption>
+</figure>
+
+
+The leftmost branch reaches n=1 after log_3 n levels. The rightmost branch reaches n=1 after log_{3/2}n levels.
+
+So, we assume that 
+* In lower bound guess: 
+$$T(n) >= dnlog_3n=Ω(nlgn)$$
+
+* In the upper bound guess:
+
+$$T(n) <= dnlog_{3/2}n=O(nlgn)$$
+
+Then prove in substitution method.
+
+
+### 1.5 Master Theorem
+
+Let a>=1 and b>1 be constants, let f(n) be a function, and let T(n) be defined on the nonnegative integers by the recurrence.
+
+$$T(n) = aT(n/b) + f(n)$$
+
+(1) If
+
+$$f(n) = O(n^{log_b^{a-β}})$$
+
+for some β>0, then:
+
+$$T(n)= θ(n^{log_b^a})$$
+
+(2) If
+
+$$f(n) = O(n^{log_b^{a}}lg^kn)$$
+
+for some k>0, then:
+
+$$T(n)= θ(n^{log_b^a}lg^{k+1}n)$$
+
+(3) If
+
+$$f(n) = O(n^{log_b^{a+β}})$$
+
+for some β>0, and if
+
+$$af(n/b)<=cf(n)$$
+
+for some constant c < 1 and all sufficiently large n, then T(n) = θ(f(n)).
+
+Examples:
+
+$$T(n) = 7T(n/3) + n^2$$
+
+$$n^{log_3^7}=n^{1.8}$$
+
+$$7(n/3)^2<=cn^2$$
+
+if c>=7/9, the equation is correct, so the run-time is θ(n^2).
+
+
+
+
+## 2. Divide and Conquer
+
+### 2.1 Divide and Conquer
+
+(1) Divide the problem into subproblems.
+
+(2) Conquer each subproblem by solving them recursively.
+
+(3) Combine the solutions to the subproblems into a solution of the original problem.
+
+The run-time of divide and conquer algorithm:
+
+$$T(n) = aT(n/b) + D(n) + C(n)$$
+
+* D(n): the time breaking a problem into subproblems.
+* C(n): the time combining subproblems into a solution
+
+#### BinSearch
+
+```
+int binSearch(x, A, i, j)
+{
+    if(i>j) return -1;
+    mid = (i+j)/2;
+    if(x < A[mid])
+        return binSearch(x, A, i, mid-1);
+    else if(x > A[mid])
+        return binSearch(x, A, mid+1, j);
+    return mid;
+}
+```
+
+So use the master Theorem state 3, the run time of binSearch is θ(lgn).
+
+
+#### Merge Sort
+
+```
+MergeSort(A, p, r):
+    //sort A[p] to A[r];
+    if(p < r){
+        mid = (p + r)/ 2;
+        MergeSort(A, p, mid);
+        MergeSort(A, mid, r);
+        Merge(A, p, mid, r);
+    }
+```
+
+For merge sort function, the run time:
+
+$$T(n) = 2T(n/2) + θ(n)$$
+
+So the run time is θ(nlgn). Master Theorem state 2.
+
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/al/merge.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/al/merge.png" align="center"></a>
+    <figcaption>Merge Sort.</figcaption>
+</figure>
+
+Disadvantages:
+* additional space
+* not in-place sorting
+
+Advantage:
+* worst case is same as the best
+* θ(nlgn) is guaranteed
+
+
+#### Integer Multiplication
+
+Input: X, Y - two n-digit integers
+
+Output: X * Y
+
+Origin Solution:
+
+```
+Multiply(X[1..n], Y[1..n]):
+    Z[1..2n] = 0
+    for i=1 to n:
+        carry = 0;
+        for j = n to 1:
+            m = Z[i+j] + carry + X[j] * Y[i];
+            Z[i+j] = m mod 10;
+            carry = m/10;
+        Z[i] = carry;
+    return Z;
+```
+
+As the codes show, the run time is θ(n2). We should use the divide and conquer method on the question:
+
+$$X = 10^{n/2}X_1 + X_2$$
+
+$$Y = 10^{n/2}Y_1 + Y_2$$
+
+So
+
+$$X*Y = (10^{n/2}X_1 + X_2)*(10^{n/2}Y_1 + Y_2)$$
+
+$$=10^nX_1Y_1 + 10^{n/2}(X_1Y_2+X_2Y_1) + X_2Y_2$$
+
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/al/nmb.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/al/nmb.png" align="center"></a>
+    <figcaption>Number Multiplication Solution.</figcaption>
+</figure>
+
+
+
+
+### 2.2 Multiplying Square Matrices
+
+Input: Three nxn matrices, A=aij, B=bij, C=cij.
+
+Result: The matrix product A B is added into C.
+
+Solution: Strassen's Algorithm
+
+Perform only 7 recursive multiplications of n/2 x n/2 matrices， rather than 8.
+
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/al/ss2.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/al/ss2.png" align="center"></a>
+    <figcaption>Strassen's Algorithm.</figcaption>
+</figure>
+
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/al/ss3.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/al/ss3.png" align="center"></a>
+    <figcaption>Strassen's Algorithm.</figcaption>
+</figure>
+
+
+The recurrence will be:
+
+$$T(n)=7T(n/2) +θ(n^2)$$
+
+By the master theorem, solution is
+
+$$T(n)=θ(n^{lg7})$$
+
+
+### 2.3 Maximum Subarray Problem
+
+
+Input: A[1 .. n] array of n integers.
+
+Output: Maximum sum of a contigous subarray, there exists 1 <= i < j <= n 
+
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/al/msubarray.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/al/msubarray.png" align="center"></a>
+    <figcaption>Maximum subarray problem.</figcaption>
+</figure>
+
+Solution: We apply the divide and conquer thinking to the question. 
+Consider:
+* the lefe side
+* the right side
+* the cross part
+
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/al/mp.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/al/mp.png" align="center"></a>
+    <figcaption>Maximum subarray problem.</figcaption>
+</figure>
+
+```
+MaxCrossingSubarray(A, low, mid, high):
+    L = -∞; R = -∞;
+    S = 0;
+    for i = mid to low:
+        S = S + A[i];
+        L = max(L, S);
+    S = 0;
+    for i= mid+1 to high:
+        S = S + A[i];
+        L = max(R, S);
+    return L+ R;
+
+
+MaxSubarray(A, low, high):
+    if high = low + 1:
+        return A[low] + A[high];
+    if high <= low:
+        return -∞;
+    mid = (low + high)/2;
+    left = MaxSubarray(A, low, mid);
+    right = MaxSubarray(A, mid + 1,high);
+    cross = MaxCrossingSubarray(A, low, mid, high);
+    return max(left, right, cross);
+```
+
+So the running time is:
+
+$$T(n) = 2T(n/2) + O(n) = O(nlgn)$$
+
+
+### 2.4 Quick Sort
+
+Quicksort is based on the three-step process of divide and conquer.
+
+(1) Divide: Partition A[p .. r] in two subarray A[p .. q-1] and A[q+1 .. r].Such that each element in the first subarray A[p .. q-1] is <= A[q ] and A[q] is < each element in the second subarray A[q+1 .. r].
+
+
+(2) Conquer: Sort the two subarray by recursive call Quick Sort.
+
+(3) Combine: No work to do. Sort in place.
+
+
+
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/al/quick.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/al/quick.png" align="center"></a>
+    <figcaption>Quick Sort.</figcaption>
+</figure>
+
+Worst Case: one of two subproblems is empty and the other is of size n-1. O(n2)
+
+Average Case: O(nlgn)
+
+
+#### Improvement: Randomized Quicksort
+
+a) Select the pivot randomly.
+
+b) Permutate the elements in random manner.
+
+(1) The expected running time of randomized quicksort on a sequence of size n is O(nlgn)
+
+(2) Any comparison-based sorting algorithm requires Ω(nlgn) comparisons to sort n elements in worst case.
+
+
+
+
+
+
 
 ## 1. Dynamic Programming
 
