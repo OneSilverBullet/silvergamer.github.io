@@ -351,7 +351,6 @@ $$T(n)=θ(n^{lg7})$$
 
 ### 2.3 Maximum Subarray Problem
 
-
 Input: A[1 .. n] array of n integers.
 
 Output: Maximum sum of a contigous subarray, there exists 1 <= i < j <= n 
@@ -437,14 +436,143 @@ b) Permutate the elements in random manner.
 (2) Any comparison-based sorting algorithm requires Ω(nlgn) comparisons to sort n elements in worst case.
 
 
+## 3. Order Statistics
+
+### 3.1 Conception
+
+The i th order statistic of a set of n elements is the i th smallest element.
+* the minimum is the first order statistic. i=1.
+* the maximum is the n th order statistic. i=n.
+* a median is the halfway point of a set.
+    * lower median is n/2 th element.
+    * upper median is n/2 + 1 th element.
+
+Question: Give an array A of n elements, find i th smallest element in it.
+
+Input: A[1 .. n] array of n integers.
+
+Output: x ∈ A larger than exactly i-1 elements in it: **Find i th order statistics of A**.
+
+Origin solution: sort and find ith order statistics. O(nlgn).
+
+### 3.2 Simutaneous Minimum and Maximum
+
+Some applications need both the minimum and maximum of a set of elements. 
+
+Origin Solution: A simple algorithm to find the minimum and maximum is to find each on independently. There will be n-1 comparisons for the minimum and n-1 comaprisons for the maximum. θ(n).
+
+In fact, at most 3[n / 2] comparisons suffice to find both the minimum and maximum.
+* Maintain the minimum and maximum
+* Dont compare each elements to the minimum and maximum separately.
+* Process elements in pairs.
+* Comapre the elements of a paire to each other, and then compare to the maximum and minimum.
+
+```
+if(A[i] > A[i+1])
+    if(max < A[i])
+        max = A[i];
+    if(min > A[i])
+        min = A[i];
+else
+    if(max < A[i+1])
+        max = A[i+1];
+    if(min > A[i])
+        min = A[i];
+```
+
+### 3.3 Selection in Expected Linear Time
+
+Randomized-Select differs from Qucksort in that it recurses on only one side of the partition.
+
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/al/rs.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/al/rs.png" align="center"></a>
+    <figcaption>The selection algorithm.</figcaption>
+</figure>
+
+After the call to Randomized-Partition, the array is partitioned into two subarrays.
+A[p .. q-1] and A[q+1 .. r] along with the pivot element at A[q ].
+
+* The elements of the subarray A[p .. q-1] are all <= A[q ].
+* The elements of the subarray A[q+1 .. r] are all > A[q ].
+* The pivot element is the k th element of the array A[p .. r], where k = q - p + 1.
+* If the pivot element is the i th smallest element. return A[q ].
+* Recursively select the appropriate element in one of the two partitions.
+
+The action of Randomize-Select as successive partitioning narrow A[p .. r].
+
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/al/rsp.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/al/rsp.png" align="center"></a>
+    <figcaption>The randomize select.</figcaption>
+</figure>
+
+Runtime: 
+
+* The worst-case of Randomize-Select is θ(n^2).
+
+* The expected run-time T(n) of Randomize-Select is linear. T(n)=θ(n).
+
+
+### 3.4 Optimize Selection in Worst-case Linear Time
+
+Can we make a Select algorithm to be linear in the worst case?
+
+Select Function:
+* Divide n elements into n/5 groups of 5 elements, and one group that can have less than 5 elements.
+* Find the median of each group.
+* Use **Select** recursively on the medians to find the median x of the n/5 median values.
+* Partition the entire input A[p .. r] around x, with the index for x being q, as before.
+* Continue as in the **Select** algorithm recursively.
+
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/al/median.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/al/median.png" align="center"></a>
+    <figcaption>The median algorithm.</figcaption>
+</figure>
+
+* There are at least 3(g/2) >= 3n/10 elements greater than x.
+* There are at least 3n/10 elements less than x.
+
+
+### 3.5 Finding a closest pair of points
+
+Given a set of n points Q in the plane, find a pair of points that is closest. n points form n(n-1)/2 different pairs of points.
+
+An algorithm calculating distances between all pairs needs time O(n^2). 
+
+**Base Idea**: If there are at most 3 points, solve the problem by **calculating all pairs distances**.
+
+
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/al/dvd.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/al/dvd.png" align="center"></a>
+    <figcaption>The divide.</figcaption>
+</figure>
+
+
+
+**Divide**: Given Q, find **a vertical line l** that bisects Q into 2 subsets Q1, Q2 of the same size.
+* Select median in O(n) time of the x-value.
+
+
+**Conquer**: 
+* Find the closest pair in Q1.
+* Find the closest pair in Q2
+
+**Combine**:
+
+Let θ be the closest distance in Q1 and Q2. Insepect the band around l of size 2θ and see 
+if any pair there is at distance < θ. If yes, tha pair is the solution.
+
+So, the recurrence is
+
+$$T(n)=2T(n/2)+O(n)$$
+
+So, the run-time is T(n)=O(nlgn).
 
 
 
 
+## 3. Dynamic Programming
 
-## 1. Dynamic Programming
-
-### 1.1 Conception
+### 3.1 Conception
 
 Dynamic Programming: making plans of events. Current method is used in finding the optimal value of a solution where several solutions exists.
 
@@ -465,11 +593,9 @@ Four steps of Dynamic Programming:
 * Construct an optimal solution from computed information.
 
 
+### 3.2 Questions
 
-
-### 1.2 Questions
-
-#### 1.2.1 Assembly-line Scheduling
+#### 3.2.1 Assembly-line Scheduling
 
 A product can be made on line 1 or line 2, each line consisting of several stations.
 
@@ -495,7 +621,7 @@ $$f_2[j]= min\{f_2[j-1] + a_{2,j}, f_1[j-1] + t_{1,j-1} + a_{2,j}\}$$
 
 $$solution = min\{f_1[n] + x_1, f_2[n]+x_2\}$$
 
-#### 1.2.2 Rod Cutting
+#### 3.2.2 Rod Cutting
 
 Question: Rods are cut and sold. Rods of length are available. A cut is done at no cost. For each length i <= N of rod has a given price. Cut the rod and maximum the prirce.
 
@@ -521,7 +647,7 @@ $$r_0=0$$
 Store the length of the first rod in a seperate table s[1..n]. We modify MEMOIZED-CUT-ROD-AUX(p,n,r) to compute s of optimal first-piece sizes. 
 
 
-#### 1.2.3 Matrix Multiplication
+#### 3.2.3 Matrix Multiplication
 
 
 Question: Consider 4 matrices multiplying:
@@ -560,7 +686,7 @@ Hence, the solution of the whole problem is OPT[1, n].
 It is worth to mention that OPT[i, i] = 1. We can start with the Matrices Chain with 1 length. Using an iterative dynamic programming approach, we solve increasing larger subproblemns m[i, i + l - 1].
 
 
-#### 1.2.4 Longest Common Subsequence
+#### 3.2.4 Longest Common Subsequence
 
 Question: Given two strings of characters:
 
@@ -608,7 +734,7 @@ int longestCommonSubsequence(string text1, string text2) {
 Obviously, the time complicate rate is θ(mn).
 
 
-#### 1.2.5 Longest Increasing Subsequence
+#### 3.2.5 Longest Increasing Subsequence
 
 Question: 
 
@@ -644,7 +770,7 @@ $$l_i = 1 + max\{l_j, 1 \leq j < i \}$$
 
 Obviously, the time complicate rate is θ(n^2).
 
-#### 1.2.6 Optimal Binary Search Trees
+#### 3.2.6 Optimal Binary Search Trees
 
 We have nodes and the probabilities with which the nodes are searched. 
 
@@ -654,11 +780,47 @@ Probabilities p1, p2, ..., pn of searching for these nodes.
 
 probabilities q0, q1, ..., qn of searching for elements between nodes.
 
+We will place these probabilities at dummy nodes d0, d1, d2, ..., dn.
+
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/al/opt.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/al/opt.png" align="center"></a>
+    <figcaption>The optimal binary tree.</figcaption>
+</figure>
+
+E[T ]: the cost of a tree T expresses **the expected number of comparisons corresponding to the given probabilities of searches**.
+
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/al/opte.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/al/opte.png" align="center"></a>
+    <figcaption>The cost of the optimal binary tree.</figcaption>
+</figure>
+
+Question: Find a binary search tree T gives the lowest expected cost.
+
+Theorem: If an optimal tree T has **a subtree T'** with keys ki, ki+1, .., kj and dummy keys di-1, di, .., dj. Then **T' must be also optimal for those keys**.
+
+Let e[1 ... n+1, 0 ... n] with e[i, j], for j>=i-1, be **the expected cost** of an optimal search tree for keys ki, ki+1, ..., kj. We wish to compute e[1, n].
+
+If kr is the root of the subtree with ki, ki+1, ..., kj, so:
+
+$$e[i, j]=e[i,r-1]+e[r+1, j] + w(i, j)$$
+
+$$w(i,j)=\sum_{k=1}^jp_k + \sum_{k=i-1}^jq_k$$
+
+Let w[1 .. n+1, 0 .. n] with
+
+$$w[i,j]=w[i,j-1]+p_j+q_j$$
+
+The lowest cost tree is obtained by minizing over all possible choices of r. r[i, j] for roots of optimal tree with ki, ki+1, ..., kj.
+
+So the solution is:
+
+$$e[i,j]=min_{i<=r<=j}(e[i,r-1]+e[r+1,j])+w[i, j]$$
+
+It gives O(n3) algorithm.
 
 
 
-
-#### 1.2.7  Knapasack Problems
+#### 3.2.7  Knapasack Problems
 
 Questions:
 
@@ -711,9 +873,9 @@ So obviously, the running time is O(nW).
 
 
 
-## 2. Greedy Algorithm
+## 4. Greedy Algorithm
 
-### 2.1 Conceptions
+### 4.1 Conceptions
 
 It is called **greedy** because when a choice is to be made, it chooses what **looks best at that moment**.
 
@@ -725,7 +887,7 @@ The greedy approach always will get three types results:
 * good approximation
 * is not suitable
 
-#### 2.1.1 Natural Greedy Algorithm
+#### 4.1.1 Natural Greedy Algorithm
 
 Indeed, since items are divisible it makes sense to start taking as much of an item
 that gives the biggest bang for the buck as possible
@@ -734,7 +896,7 @@ that gives the biggest bang for the buck as possible
     * If the remaining capacity of the knapsack can accommodate the **entire item**, take the entire item
     * otherwise take **the largest portion** of the item you can filling the knapsack to capacity
 
-#### 2.1.2 Huffman Codes
+#### 4.1.2 Huffman Codes
 
 Instead of representing each character by a fixed-length code (7 or 8 bits typically),
 most frequently used characters are given very short (binary character) code while
@@ -785,7 +947,7 @@ return Extract=Min(Q)
 ```
 
 
-#### 2.1.3 Proof of Huffman Codes
+#### 4.1.3 Proof of Huffman Codes
 
 **Leema**: Greedy Choice Property of Optimal Prefix-free code trees.
 
@@ -865,9 +1027,9 @@ B(H) = B(H′) + x.freq + y.freq
 Since T is optimal tree for the whole input C and B(H) ≤ B(T) the tree output by Huffman’s algorithm, H is optimal too.
 
 
-### 2.2 Questions
+### 4.2 Questions
 
-#### 2.2.1 Activity Selection Problem
+#### 4.2.1 Activity Selection Problem
 
 Question:
 
@@ -889,7 +1051,7 @@ pre-sort all activities by termination time in monotonically increasing order su
 fi ≤ fi+1. O(nlogn)
 
 
-#### 2.2.2 Scheduling Problems
+#### 4.2.2 Scheduling Problems
 
 Question: 
 
@@ -942,9 +1104,9 @@ We just use the greedy method to fill the highest unit price pack.
 
 
 
-## 3. Amortized Analysis
+## 5. Amortized Analysis
 
-### 3.1 Conception
+### 5.1 Conception
 
 
 Amortized analysis can be used to show that the average cost of an operation is small even though a single operation within the sequence might be expensive. Cost of the “expensive” operation is 
@@ -954,7 +1116,7 @@ Amortized analysis can be used to show that the average cost of an operation is 
 
 
 
-### 3.2 Aggregate Analysis
+### 5.2 Aggregate Analysis
 
 
 We show that for all n, a sequence of n operations takes worst case time T(n) in total. Thus, **cost per operation is T(n)/n.**
@@ -997,7 +1159,7 @@ Not every bit flips each time.
 
 So on average the cost is 2 per operation, i.e. O(1).
 
-### 3.3 Accounting Method 
+### 5.3 Accounting Method 
 
 We assign to operations cost that differ from the actual cost.
 * Some are charged more than the actual cost,
@@ -1009,7 +1171,7 @@ The amount charged is called **amortized cost**.
 What we need is that everything balances out at the end, i.e. **the total of amortized charges must be at least as high as the actual cost**. The extra is called credit.
 * by over-charging for some operations that are easy to count we don’t need to charge anything to operations that are less easy to count.
 
-#### 3.3.1 Stack Operations with Multipop
+#### 5.3.1 Stack Operations with Multipop
 
 Now consider **any sequence of n PUSH, POP and MULTIPOPs** on initially **empty stack**.
 
@@ -1022,7 +1184,7 @@ Each PUSH is over-charging the cost by 1. Thus, we “pre-pay” for the eventua
 
 If at most n PUSH operations are done, the total amortized cost is ≤ 2n and the total actual cost is O(n).
 
-#### 3.3.2 Binary Counter
+#### 5.3.2 Binary Counter
 
 Let the **amortized cost of setting a bit from 0 to 1 be 2**.
 
@@ -1034,7 +1196,7 @@ one 0 bit is flipped to a 1 bit.
 
 A sequence of n INCREMENTs is O(n)
 
-### 3.4 Potential Method 
+### 5.4 Potential Method 
 
 We represent the prepaid work as “potential energy” that can be released later for **the cost of future operations**.
 
@@ -1054,8 +1216,91 @@ If Φ(Dn) ≥ Φ(D0) then the total amortized cost is at least as great as the t
 
 $$\sum_{i=1}^n c_i$$
 
-### 3.4.1 Multipop
+### 5.5 dynamic tables
 
+Table expansion: insert an item x:
+* allocate a double size table
+* copy data to the new table
+* release original table
+* insert x into new table.
+
+
+Table Contraction: delete an item x:
+* delete an item x.
+* allocate a smaller table
+* release original table
+* copy data to the new table
+
+Load Factor: 
+
+$$α(T)=num[T]/size[T] ，0≤α≤1$$
+
+#### 5.5.1 Table Expansion
+
+(1) Aggregate Analysis
+
+Cost c_i of i'th insertion is:
+* i if i is a power of 2.
+* 1 otherwise
+
+$$\sum_{i=1}nc_i \leq n + \sum_{j=0}^{logn}2^j=n+\frac{2^{logn+1}-1}{2-1} \leq n+2n = 3n$$
+
+
+(2) Accounting Method
+
+Charge amortized cost of $3 per insertion of x.
+• $1 pays for x’s insertion.
+• $1 pays for x to be moved in the future.
+• $1 pays for some other item to be moved.
+
+(3) Potential Method
+
+Over size/2 insertions, potential needs to go from 0 to size.
+
+So, the potential function:
+
+$$Φ(T) = 2(T.num − T.size/2)$$
+
+
+* The potential equals 0 just after expansion, when T.num = T.size/2.
+* The potential equals T.size when the table fills, when T.num = T.size.
+
+
+Φi = potential after the ith operation,
+
+Φi − Φi−1 = change in potential due the ith operation,
+
+cˆi = ci + (Φi − Φi−1) 
+
+
+When the i th insertion does not trigger expansion:
+
+$$\hat c_i = c_i + (Φ_i − Φ_{i−1})=1+2=3$$
+
+When the i th insertion does trigger expansion.
+
+* numi = number of items in the table after the ith operation 
+* sizei = size of the table after the ith operation
+
+before insertion:
+
+$$Φ_{i-1}=2(num_{i-1}-size_{i-1}/2)=size_{i-1}= i-1$$
+
+After expansion:
+$$Φ_i=2(num_i-size_{i}/2) = 2 * 1 = 2$$
+
+$$(Φ_i − Φ_{i−1}) = 2 − (i − 1) = 3 − i$$
+
+$$\hat c_i = c_i + (Φ_i − Φ_{i−1}) = i+ 3-i=3$$
+
+#### 5.5.2 Table Contraction
+
+Shrink the table size to half size when α is 1/4.
+
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/al/pm.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/al/pm.png" align="center"></a>
+    <figcaption>The potential function.</figcaption>
+</figure>
 
 
 
