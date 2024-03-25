@@ -118,8 +118,72 @@ A **replicated object service** is **linearizable** if for any execution there i
 * The interleaved sequence of operations meets the specification of a (single) correct copy of the objects.
 * The order of operations in the interleaving is consistent with the real time at which they occurred.
 
+**Sequential Consistency**
 
+A replicated shared object service is sequentially consistent if for any execution there is some interleaving of clients’ operations such that:
+* The **interleaved sequence of operations** meets the specification of a (single) correct copy of the objects.
+* The **order of operations in the interleaving** is consistent with the program order in which each client executed them.
 
+### 1.7 Passive Replication(Primary-Backup)
+
+This system implements **linearizability**, since **the primary sequences all the operations** on the shared objects.
+
+If the primary fails, the system is linearizable, if a single backup takes over exactly where the primary left off
+* The primary is replaced by a unique backup
+* Surviving RMs agree which operations had been performed at take over
+
+To survive f process crashes, f+1 RMs are required.
+* Cannot deal with Byzantine failures because the client cannot get replies from the backup RMs
+
+To design **passive replication** that is **linearizable**. Challenges:
+* **View synchronous communication** has relatively **large overheads**
+* Several rounds of messages per multicast
+* After failure of primary, there is **latency** due to **delivery of group view**
+
+Variant in which **clients can read from backups**
+* reduces the work fro the primary
+* get sequential consistency but not linearizability
+
+### 1.8 Active Replication
+
+(1) The RMs are **state machines** all playing the **same role** and **organised as a group**.
+* All start in the **same state** and perform the **same operations in the same order** so that their state remains **identical**.
+
+(2) If an RM crashes it has **no effect on performance of the service** because the others continue as normal.
+
+(3) It can **tolerate Byzantine failures** because the FE can collect and compare the replies it receives.
+
+Five Phases:
+* **Request**: FE attaches **a unique id** and uses **totally ordered reliable multicast** to send request to RMs. FE can at worst, crash. It does not issue requests in parallel
+
+* **Coordination**: The multicast delivers requests to all the RMs in
+the same (total) order.
+
+* **Execution**: Every RM executes the request. They are state machines and **receive requests in the same order**, so the effects are identical. The id is put in the response
+
+* **Agreement**: No agreement is required because **all RMs execute the same operations in the same order**, due to **the properties of the totally ordered multicast**.
+
+* **Response**: FEs collect responses from RMs. FE may just use one or more responses. If it is only trying to **tolerate crash failures**, it gives the client the first response.
+
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/ds/ar.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/ds/ar.png" align="center"></a>
+    <figcaption>The active replication for fault tolerance.</figcaption>
+</figure>
+
+As RMs are **state machines** we have **sequential consistency**
+* Due to reliable totally ordered multicast, the RMs collectively do the same as a single copy would do
+* It works in a synchronous system
+* In an asynchronous system reliable totally ordered multicast is impossible – but failure detectors can be used to work around this problem. 
+
+This **replication scheme** is **not linearizable**
+* Because total order is not necessarily the same as real-time order
+
+To deal with Byzantine failures
+* For up to **f Byzantine failures**, use **2f +1 RMs**
+* FE collects **f +1 identical responses**
+
+To improve performance,
+* FEs send read-only requests to just one RM
 
 
 
@@ -438,7 +502,48 @@ When the message at the front has an agreed id, it is transferred to the deliver
 It has higher latency than the sequencer method.
 
 
+## Conclusion:
 
+(1) In a replicated server system, the communications among **the front end (FE)** and the **replicas are implemented using UDP/IP (instead of TCP/IP)** in order to
+
+Avoid unnecessary marshalling and unmarshalling
+
+(2) Since all the replicas in an actively replicated server system execute a set of client requests in total order,
+
+A is strongest.
+
+1.the data in every replica will be identical after **every client request is processed**
+
+2.the data in every replica will be identical after all the client requests is processed
+
+3.the data in every replica will be identical after a specific client request is processed
+
+4.the data in every replica will be identical after none of the client requests is processed
+
+(3) The replicas in an **actively replicated server system** can only guarantee sequentially consistent data because
+
+The **replicas** may **execute client request** at **different times**.
+
+(4) In a **passively replicated primary-backup server system**, the backups should perform the data updates send by the primary in: FIFO order.
+
+(5) In a replicated server system, a software failure cannot be detected using a heart beat signal because: 
+
+the heart beat does not indicate **the result of a client request**.
+
+(6) While an **actively replicated server system** is recovering from a software failure
+* another software failure cannot be detected
+* another crash failure can be tolerated with reliable failure detection
+
+(7) In a replicated server system, each replica maintains a local copy of the application data instead of a single global copy to achieve
+* concurrent data access in multiple copies
+* correct data access
+* consistent data access
+
+(8) In an actively replicated server system, a client request should be sent to the replica using reliable multicast to faciliate
+* software failure detection
+
+(9) A passively replicated primary-backup server system cannot detect a software failure in one of the replicas because
+* multiple results for a request are required
 
 
 
