@@ -548,12 +548,152 @@ the heart beat does not indicate **the result of a client request**.
 
 
 
+## 3. Time and Global States
+
+### 3.1 Conceptions
+
+Leslie Lamport suggested that we should reduce time to its basics.
+* If A happened before B, TIME(A) < TIME(B)
+* If TIME(A) < TIME(B), A happened before B
+
+“A happens before B”, written A→B
+* A→PB according to the local ordering
+* A is a send and B is a receive and A→MB
+* A and B are related under the transitive closure of rules (1) and (2)
+
+### 3.2 Clocks
+
+#### 3.2.1 Logical Clocks
+
+A simple tool that can capture parts of **the happens before relation**.
+* Designed for big (64-bit or more) counters
+* Each process p maintains LT_p, a local counter
+* A message m will carry LT_m
+
+When an event happens at a process p it increments LT_p. Any event that matters to p. Normally, also send and receive events.
+
+When p sends m, set LT_m = LT_p.
+
+When q receives m, set LT_q = max(LT_q, LT_m)+1.
+
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/ds/lc.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/ds/lc.png" align="center"></a>
+    <figcaption>The logical time and logical clocks.</figcaption>
+</figure>
+
+If A happens before B, A→B, then LT(A)< LT(B).
+
+But converse might not be true: If LT(A)< LT(B) can’t be sure that A→ B.
+* This is because processes that don’t communicate still assign timestamps and hence events will “seem” to have an order.
+
+#### 3.2.2 Vector Clocks
+
+Clock is a vector: e.g. VT(A)=[1, 0]
+* Vector clocks require either agreement on the numbering, or that the actual process id’s be included with the vector.
+* **When event happens at p, increment VT_p[ index_p]**. also increment for send and receive events.
+* When sending a message, set VT(m)=VT_p.
+* When receiving, set VT_q=max(VT_q, VT(m)).
 
 
 
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/ds/vc.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/ds/vc.png" align="center"></a>
+    <figcaption>The vector clocks.</figcaption>
+</figure>
+
+
+We’ll say that VT_A ≤ VT_B if
+* ∀I, VT_A[i] ≤ VT_B[i]
+* [2, 4] ≤ [2, 4]
+
+And we’ll say that VT_A < VT_B if
+* VT_A ≤ VT_B but VT_A ≠ VT_B
+* That is, for some i, VT_A[i] < VT_B[i]
+* [1, 3] < [7, 3]
+
+**[1, 3] is “incomparable” to [3, 1]**.
+
+If A→B, then VT(A)< VT(B).
+
+If VT(A)< VT(B) then A→B.
+
+Otherwise A and B happened concurrently.
+
+
+### 3.3 Detecting Global Properties
+
+
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/ds/gp.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/ds/gp.png" align="center"></a>
+    <figcaption>The global properties.</figcaption>
+</figure>
 
 
 
+### 3.4 Simultaneous Actions
+
+#### 3.4.1 Simultaneous Actions
+
+Think about updating replicated data
+* Perhaps we have multiple conflicting updates
+* The need is to ensure that they will happen in the same order at all copies
+* This “looks” like a kind of simultaneous action
+
+#### 3.4.2 Temporal Distortions
+
+Things can be complicated because we can’t predict.
+* Message delays (they vary constantly)
+* Execution speeds (often a process shares a machine with many other tasks)
+* Timing of external events
+
+
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/ds/TD.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/ds/TD.png" align="center"></a>
+    <figcaption>The temporal distortions.</figcaption>
+</figure>
+
+
+#### 3.4.3 Consistent Cuts and Snapshots
+
+Idea is to identify system states that “might” have occurred in real-life
+* Need to avoid **capturing states** in which a message is received but **nobody is shown as having sent it**.
+* This the problem with the gray cuts.
+
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/ds/CC.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/ds/CC.png" align="center"></a>
+    <figcaption>The consistent cuts.</figcaption>
+</figure>
+
+
+### 3.5 The Snapshot Algorithm
+
+
+**Records a set of process and channel states** such that the combination is a consistent GS.
+
+Assumptions:
+* No failure, all messages arrive intact, exactly once
+* Communication channels are **unidirectional and FIFO-ordered**
+* There is a **comm. path between any two processes**
+* Any process may initiate the snapshot (sends Marker)
+* Snapshot does not interfere with normal execution
+* Each process records its state and the state of its incoming channels (no central collection)
+
+<figure>
+    <a href="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/ds/sa.png"><img src="https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/ds/sa.png" align="center"></a>
+    <figcaption>The snapshot algorithm.</figcaption>
+</figure>
+
+
+In practice we only record things important
+to the application running the algorithm, not
+the “whole” state. E.g. “locks currently held”, “lock release
+messages”.
+
+Idea is that the snapshot will be
+* Easy to analyze, letting us build a picture of the
+system state
+* And will have everything that matters for our real
+purpose, like deadlock detection
 
 
 
