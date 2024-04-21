@@ -24,10 +24,18 @@ Failure Meanings:
 * **Timing failures**: action early/late; clock fails, etc.
 * **Byzantine failures**: arbitrary malicious/nonmalicious behavior
 
+Categories of Failures:
+* Crash Faults, Message Loss
+    * Common in real systems; Crash failures: process simply stops, and does nothing wrong that would be externally visible before it stops
+* Fail-Stop Failure
+    *  the process fails by crashing, and the system notifies anyone who was talking to it
+    * Easy to work with… but rarely supported
+* Non-malicious Byzantine failures
+* Malicious, true Byzantine, failures
+
 Solutions:
 * Replace critical components with group of components that can each act on behalf of the original one.
-* Develop a technology by which **states can be kept consistent and processes** in system can
-agree on status (operational/failure) of components
+* Develop a technology by which **states can be kept consistent and processes** in system can agree on status (operational/failure) of components
 * Separate handling of partitioning from **handling of isolated component failures** if possible.
 
 ### 1.2 Basic Architecture Model
@@ -40,10 +48,10 @@ agree on status (operational/failure) of components
 Replication:
 * Performance Enhancement
     * Several web servers can have the same DNS name and the servers are selected in turn. To share the load.
-    * Replication of read-only data is simple, but replication of changing data has overheads.
+    * Replication of **read-only data is simple**, but replication of **changing data has overheads**.
 * High Availability
     * Server Failures
-        * Replicate data at failure-independent servers and when one
+        * Replicate data at **failure-independent servers** and when one
             fails, client may use another.
     * Network partitions and disconnected operation
         * Users of mobile computers deliberately disconnect, and then on re-connection, resolve conflicts.
