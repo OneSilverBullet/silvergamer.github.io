@@ -374,7 +374,55 @@ Points:
 
 
 
+## Part5 Review
 
+(1) **Concurrent snapshots** can be taken in a distributed system using Chandy and Lamport's algorithm becasue:
+* the markers can differentiate the concurrent snapshots
+* the algorithm is non-blocking
+
+
+(2) The Chandy and Lamport's distributed snapshot algorithm makes a cut consistent by:
+* including **all the messages in the network** at that **instance of time in the channel state of a process**.
+
+Points:
+
+instance of time in the channel state of a process: in **a specific time slot**, We want to know **what messages** are **being delivered or waiting** to be **received** in a **particular process's message channel**.
+
+(3) In a distributed system, a consistent cut represents the system states:
+* that can happen during some execution
+
+Points:
+
+A consistent cut: something that can happen when the system executes.
+
+(4) In Chandy and Lamport’s distributed snapshot algorithm, a cut is: 
+* the set of time points (one per process) at which **the processes receive the marker for the first time**.
+
+(5) In distributed system, a cut is
+* a collection of time points, one per process during an execution
+* the current time in the distributed system
+
+(6) If there is no path between some pair of process, the Chandy and Lamport’s distributed snapshot algorithm will: 
+* produce incomplete state 
+* not terminate
+
+(7) If the communication channels are not FIFO, the **set of states** collected by **Chandy and Lamport’s snapshot algorithm** will be **inconsistent**  because: 
+
+* a marker sent by a process may **overtake a message** 
+* a marker sent by a process may **arrive before a message already in the network**. 
+
+Points:
+* Overtaking is corrupting message and overwriting in arriving earlier. (Check could be opposite. 
+
+(8) **Global States** in a distributed snapshot contain the appropriate information about 
+
+All the processes and the messages among them **relevant to the snapshot**.
+
+(9) Distributed System cannot reliably use physical time because:
+* It is not possible to make the times at all the hosts always the same.
+
+(10) in distributed system, the vector clock maintained by a process corresponds to its knowledge about:
+* the relevant events in all the processes from which it has received messages
 
 
 
