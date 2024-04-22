@@ -10,6 +10,173 @@ blog: true
 feature: https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/blogHead/directX12partI.jpg
 ---
 
+## Part1 
+
+(1) Distributed Transparency:
+For a client to communicate with a server using the server's name, the communication needs to have:
+* location transparency
+
+(2) RPC Execution Semantics:
+Client-server communication middleware supports **at-most-once RPC semantics** because it simplifies:
+* server implementation
+
+(3) Inter Process Communication(IPC): In inter process communication(IPC), the communicating processes:
+* should run on the same networked host.
+* can run on different networked hosts.
+
+(4) Inter Process Communication(IPC): Implementation of inter process communication requires:
+* sockets
+* protocol
+
+Points:
+
+IPC mechanism:
+* Shared Memory
+* Socket
+* Semaphore
+* Protocol
+
+
+(5) Request-Reply Protocol: A remote procedure call(RPC) between a client and a server is typically implemented using a request-reply protocol because:
+* The client does not know whether the server is running
+* The server may not be running
+
+(6) Remote Procedure Call(RPC): For a client process to call a local server(running in the same host) the same way as a remote server(running in a different networked host), we need:
+* access transparency
+* location transparency
+
+(7) Local Procedure Call(LPC): In a local procedure call(LPC), the communicating(caller and called) processes:
+* can run on the same networked host
+* can run on the same standalone host.
+
+(8) Data marshalling and unmarshalling are required in the implementation of
+* both LPC and RPC
+
+(9) Network Communication: The **IP routing protocol** to route a packet/message between a source and a destination:
+* is a peer-to-peer distributed algorithm
+* uses **local information** about the network
+
+(10) Distributed Applications: An application is designed as a distributed application in order to achieve:
+* transparency
+* scalability
+
+Points: Why Distributed Systems?
+* Easily connect user to remote resources
+* Share resources with remote users in a controlled way
+    * Transparency: hide the fact that the resources are physically distributed over a network
+    * Open System.
+    * Scalable: Size; Geography and Administration.
+
+
+
+## Part2 
+
+(1) Middleware like RMI and Corba for distributed system achieve access transparency using 
+* Server interface definitions 
+* Stubs and skeletons
+
+(2) A corba applicatiuon deployed on a  LAN may not use
+* implementation reposity
+* corba naming service
+
+A corba application in LAN use:
+* object adapter
+* interface definition
+
+Points: 
+
+**Corba Naming Service**: is a core component in CORBA, it provides services of object naming and finding.
+
+An **implementation repository** is a central location or system for **storing and managing service implementation code**
+
+**Object Adapter**: play a role between the client and server, responsible for the initialization, delete, invoke and binding, encode, decode, transmission and respose.
+
+(3) Corba application use Corba Data Representation CDR because they:
+* can be implemented in different programming languages
+* can execute on different hosts
+
+Points:
+Common Data Representation: a coding scheme for marshalling and unmarshalling data of each IDL data type.
+* functioins:
+    * how to encode, marshalling and transmission.
+    * transmission between different hosts, operator systems, and languages.
+    * cross-platform, cross-language, cross internet.
+
+(4) Implementation repository in RMI, a RMI distributed application does not require an implementation repository because RMI applications:
+* do not use multiple language implementation
+* know the location of server implementations
+
+(5) When a distributed application is implemented in a same/single programming language and deployed on a LAN using JAVA RMI and Corba, the Corba Implementation will run
+* **slower** due to **middleware overhead**.
+
+Points: 
+
+**RMI** provides a simple, direct, and consistent API, which is integrated in JVM and Java Language.
+
+**Corba** provides a cross-language, cross platform dirstibuted communication mechanism, which supports multiple programming languages and operating systems.
+
+(6) A Java RMI application cannot be deployed on a WAN because of
+* RMI Registry
+* RMI Middleware
+
+Points:
+
+RMI Registry(Remote Method Invocation Registry): it provides a simple, light **object registration services**, which used for manage and maintain the remote object reference and address. RMI Registry is responsible for **registing, finding, binding, and unbinding the remote objects**.
+* simple flat table that cannot be used on a WAN, since it’s not hierarchical
+
+RMI Middleware: it is designed for the LAN, not for the WAN. WAN requires message exchange between networks, so it is not supported
+
+(7) Location Transparency in Distributed Systems: In distributed systems, location transparency is typically achieved by:
+* by the programmer using central directory
+
+Points:
+
+**Location transparency**: The client can access the server, **without knowing where it is**. Its difficult to do this because we always needed the know where the server is. So, its acieved by the programmer to **add a central directory to the main server for the client to access by name**.
+
+(8) Corba Applications achieve platform independence:
+* IOR and IIOP
+* object adapters
+
+Points: 
+
+Platform Independence: can execute in any hardware/operating system
+
+General Inter-ORB Protocol(GIOP): a specification which provides a general framework for protocols to be built on top of specific transport layers.
+
+Internet Inter-ORB Protocol(IIOP): is a special case of GIOP, which is the GIOP applied to the TCP/IP transport layer. The IIOP specification includes:
+* Transport Management Requirements
+* Definition of Common Data Representation
+* Message Formats
+
+The Object Request Broker(ORB): mediates the interaction between client and server objects. 
+
+As in Java RMI, **a corba distributed object** is located using an **object reference**. Since CORBA is **language-independent**, a CORBA object reference is an abstract entity mapped to **a language-specific object reference by an ORB**, in a representation chosen by the developer of the ORB.
+
+Interoperable Object Reference(IOR): An ORB compatible with the IOR protocol will allow an object reference to be **registered with and retrieved from any IOR-compliant directory service**. 
+* **CORBA object references** represented in this protocol are called: "**Interoperable Object References(IORs)**".
+* IOR is a string that contains encoding for the following information: 
+    * The type of the object
+    * The host where the object can be found
+    * The port number of the server for that object
+
+(9) Java RMI applications achieve platform independence using:
+* Java Virtual Machines
+* RMI middleware
+
+Points:
+
+Java RMI run based on JVM, which provides a abstract calculation environment and hides operating system and hardwares for users.
+
+(10) A corba application implementation in a single programming language may not require the:
+* implementation repository
+* naming service
+
+Points: 
+
+CORBA Naming Service: CORBA specifies a generic directory service, which serves as a **directory for CORBA objects**, which is **platform independent** and **programming language independent**. 
+* Name Resolving: The naming service permits ORB-based clients to obtain references to objects they wish to use. **Name asscociate with the object reference**.
+* The API for the Naming Service is specified in interfaces defined in **IDL**
+
 
 ## Part3 Review
 
@@ -20,10 +187,17 @@ feature: https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io
 (2) In web service technology, clients and servers communicate: 
 * **synchronously by sending at the request** and **reply message asynchronously**.
 
+Points: 
+
+Web Services are software components **described via WSDL** which are capable of being accessed via standard network protocols such as **SOAP over HTTP**.
+* SOAP provides rules for encoding the request and its arguments.
+* WSDL documents are used to drive object assembly, code generation, and development tools.
 
 (3) Unlike CORBA, a distributed application implemented in web service technology does not use **an implemnation repository** because:
 * servers may be implemented in any programming languages
 * requests and reply are encoded in XML.
+
+Points: An implementation repository is a central location or system for **storing and managing service implementation code**.
 
 
 (4) Unlike CORBA, **interface definitions** are not written by the server developer in **web services** because:
@@ -42,6 +216,14 @@ WSDL(Web Services Description Language)
 * SOAP message
 * XML encoding
 
+Points: 
+
+XML works as the encoding format.
+* SOAP message use XML as its default encoding format. 
+* SOAP message contains Envelope, Header and Body. 
+* Each elements in SOAP message are encoded as XML.
+
+
 (6) Unlike CORBA, **a client and client-side middleware** need not be in the **same programming language** in web services because:
 * the client and the middleware communicate using XML
 * the client and the middleware communicate using SOAP
@@ -53,6 +235,31 @@ WSDL(Web Services Description Language)
 
 (8) In web service technology, a client needs to **discover the service** because:
 * the available service changes frequently.
+
+Points: 
+
+The web services working process:
+* First the client discover the service
+* client binds to the server(binding not always need)
+    * Setting up TCP connection to the discovered address
+* Build the SOAP request(Marshalling)
+    * Fill in what service is needed, the arguments, send it to server side.
+    * XML
+* SOAP router routes the request to the appropriate server
+* Server unpacks the request, handles it, computes results
+* result sent back in the reverse direction: from the server to the SOAP router back to the client.
+
+Reposity:
+* a database listing servers
+* Each is described using the UDDI language, which is defined over XML.
+    * can be searched with XML queries.
+
+UDDI is used to write down the information that became a "row" in the repository.
+
+WSDL documents the interfaces and data types used by the service.
+
+
+
 
 (9) Unlike CORBA, stub and skeleton codes are not used in web services because:
 * their functionalities are included in **WSDL description**.
