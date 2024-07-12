@@ -6,7 +6,7 @@ excerpt: "The theory of light probe baking in modern game engine such as Unity a
 tag:
 - Computer Graphics 
 graphics: true
-feature: https://github.com/OneSilverBullet/SilverGamer.GitHub.io/blob/gh-pages/_img/graph/head.png
+feature: https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/blogHead/DOF.jpg
 
 ---
 

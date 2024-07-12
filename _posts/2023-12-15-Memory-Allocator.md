@@ -8,7 +8,7 @@ tag:
 - DirectX12
 - Graphics
 graphics: true
-feature: https://github.com/OneSilverBullet/SilverGamer.GitHub.io/blob/gh-pages/_img/blogHead/directX12partI.jpg
+feature: https://raw.githubusercontent.com/OneSilverBullet/SilverGamer.GitHub.io/gh-pages/_img/blogHead/DOF.jpg
 ---
 
 ## 1. Managing Descriptor Heaps
